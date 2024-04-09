@@ -1,9 +1,9 @@
 * {
-    -fx-font-family: "Gloria Hallelujah", cursive;
-    -fx-font-size: 24px
+	-fx-font-family: "Gloria Hallelujah", cursive;
+	-fx-font-size: 24px
 }
 
 #menuBar {
-    -fx-background-color: #1a273d;
-    -fx-color: red;
+	-fx-background-color: #1a273d;
+	-fx-color: red;
 }

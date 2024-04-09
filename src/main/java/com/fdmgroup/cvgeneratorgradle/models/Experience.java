@@ -1,0 +1,40 @@
+package com.fdmgroup.cvgeneratorgradle.models;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.List;
+
+
+@Getter
+@Setter
+@NoArgsConstructor
+public class Experience {
+
+	private int id;
+
+	private String jobTitle;
+
+	private String startDate;
+
+	private String endDate;
+
+	private List<String> positionFeatures;
+
+	private String companyName;
+
+	private String companyPlace;
+	
+	
+	public Experience(String jobTitle, String startDate, String endDate, List<String> positionsFeatures,
+			String companyName, String companyPlace) {
+		this.jobTitle = jobTitle;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.positionFeatures = positionsFeatures;
+		this.companyName = companyName;
+		this.companyPlace = companyPlace;
+	}
+
+}

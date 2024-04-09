@@ -1,5 +1,6 @@
 package com.fdmgroup.cvgeneratorgradle;
 
+import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,12 +10,14 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class CVGeneratorApp extends Application {
-
+    private CVTemplate cvTemplate;
     @Override
     public void start(Stage stage) throws Exception {
-
         FXMLLoader fxmlLoader = new FXMLLoader(CVGeneratorApp.class.getResource("welcome2.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("FDM CV-Generator");

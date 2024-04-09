@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 
 public class LeftBorderController/* implements Initializable*/ {
@@ -23,7 +24,7 @@ public class LeftBorderController/* implements Initializable*/ {
         alert.setHeaderText("Exiting");
         alert.setContentText("Do you really want to exit");
 
-        if(alert.showAndWait().get()== ButtonType.OK) {
+        if (alert.showAndWait().get() == ButtonType.OK) {
             Stage stage = (Stage) mainWindow.getScene().getWindow();
             stage.close();
         }
@@ -31,6 +32,9 @@ public class LeftBorderController/* implements Initializable*/ {
     }
 
     public void showLeftBorder(ActionEvent actionEvent) {
+        //setting center scene
+        setLabel("Fill out the specific sections of your CV");
+
         TreeItem<String> cv = new TreeItem<>("CV");
         TreeItem<String> summary = new TreeItem<>("Summary");
         TreeItem<String> details = new TreeItem<>("Details");
@@ -47,34 +51,49 @@ public class LeftBorderController/* implements Initializable*/ {
         TreeView<String> leftBorderTreeView = createTreeView(cv);
 
         //setting up app navigation
-        leftBorderTreeView.getSelectionModel().selectedItemProperty().addListener((o,oldV,newV)->{
-            System.out.println(o);
-            FXMLLoader fxmlLoader;
-            try {
-                switch (newV.getValue()) {
-                    case "Personal Information" -> {
-                        fxmlLoader = new FXMLLoader(CVGeneratorApp.class.getResource("personalInfo.fxml"));
-                        mainWindow.setCenter(fxmlLoader.load());
-                    }
-                    case "Experience" ->  {
+        leftBorderTreeView.getSelectionModel().selectedItemProperty().addListener((o, oldV, newV) -> {
 
-                    }
-                    case "Summary" -> {
-
-                    }
-                    case "Education" -> {
-
-                    }
-                    case "Skills" -> {
-
-                    }
-                    default -> {}
+            switch (newV.getValue()) {
+                case "Personal Information" -> {
+                    setCenter("personalInfo.fxml");
                 }
+                case "Experience" -> {
 
-            } catch (IOException e) {
-                e.printStackTrace();
+                }
+                case "Summary" -> {
+
+                }
+                case "Education" -> {
+                    new EducationController(mainWindow).initialize();
+                    /*setCenter("education.fxml");*/
+                }
+                case "Skills" -> {
+
+                }
+                default -> {
+                }
             }
         });
+    }
+
+    private void setLabel(String message) {
+        setCenter("centerDefault.fxml");
+        VBox centerDefault =(VBox) mainWindow.getCenter();
+        Label messageLabel = (Label) centerDefault.lookup("#centerDefaultLabel");
+        Border b = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(20), BorderWidths.DEFAULT));
+        messageLabel.setBorder(b);
+        messageLabel.setPadding(new Insets(10));
+        messageLabel.setWrapText(true);
+        messageLabel.setText(message);
+    }
+
+    private void setCenter(String resource) {
+        FXMLLoader loader = new FXMLLoader(CVGeneratorApp.class.getResource(resource));
+        try {
+            mainWindow.setCenter(loader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private TreeView<String> createTreeView(TreeItem<String> cv) {
@@ -87,15 +106,7 @@ public class LeftBorderController/* implements Initializable*/ {
     }
 
     public void showInfo(ActionEvent actionEvent) {
-        Label aboutLabel = new Label("This is the alpha version of the FDM CV Generator.\nIt is partially based on an previous full stack project.");
-        Border b = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
-        aboutLabel.setBorder(b);
-        aboutLabel.setPadding(new Insets(10));
-        aboutLabel.setWrapText(true);
-
-        VBox about = new VBox(aboutLabel);
-        about.setPadding(new Insets(10));
-        about.setAlignment(Pos.CENTER);
-        mainWindow.setCenter(about);
+        System.out.println(actionEvent);
+        setLabel("This is the alpha version of the FDM CV Generator.\nIt is partially based on an previous full stack project.");
     }
 }
