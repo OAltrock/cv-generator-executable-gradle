@@ -106,7 +106,6 @@ public class LeftBorderController/* implements Initializable*/ {
     }
 
     public void showInfo(ActionEvent actionEvent) {
-        System.out.println(actionEvent);
         setLabel("This is the alpha version of the FDM CV Generator.\nIt is partially based on an previous full stack project.");
     }
 }

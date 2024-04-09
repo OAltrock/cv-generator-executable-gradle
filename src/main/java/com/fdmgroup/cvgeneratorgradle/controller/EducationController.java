@@ -31,8 +31,6 @@ public class EducationController {
         FXMLLoader fxmlLoader = new FXMLLoader(CVGeneratorApp.class.getResource("education.fxml"));
         try {
             BorderPane borderPane = (BorderPane) parent;
-            VBox centerBox = (VBox) borderPane.getCenter();
-            centerBox.setAlignment(Pos.TOP_CENTER);
             borderPane.setCenter(fxmlLoader.load());
         } catch (IOException e) {
             System.out.println(e);
