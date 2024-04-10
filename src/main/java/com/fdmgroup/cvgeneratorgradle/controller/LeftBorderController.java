@@ -50,6 +50,8 @@ public class LeftBorderController/* implements Initializable*/ {
 
         //setting up tree view
         TreeView<String> leftBorderTreeView = createTreeView(cv);
+        leftBorderTreeView.setShowRoot(false);
+        leftBorderTreeView.getRoot().getChildren().forEach(child -> child.setExpanded(true));
 
         //setting up app navigation
         leftBorderTreeView.getSelectionModel().selectedItemProperty().addListener((o, oldV, newV) -> {
@@ -59,13 +61,13 @@ public class LeftBorderController/* implements Initializable*/ {
                     setCenter("personalInfo.fxml");
                 }
                 case "Experience" -> {
-
+                    new ExperienceController().initialize(mainWindow, "experience");
                 }
                 case "Summary" -> {
 
                 }
                 case "Education" -> {
-                    new EducationController(mainWindow).initialize();
+                    new EducationController().initialize(mainWindow, "education");
                     /*setCenter("education.fxml");*/
                 }
                 case "Skills" -> {
