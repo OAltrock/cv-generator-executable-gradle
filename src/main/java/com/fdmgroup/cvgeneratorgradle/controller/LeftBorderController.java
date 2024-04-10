@@ -42,9 +42,10 @@ public class LeftBorderController/* implements Initializable*/ {
         TreeItem<String> experience = new TreeItem<>("Experience");
         TreeItem<String> skills = new TreeItem<>("Skills");
         TreeItem<String> education = new TreeItem<>("Education");
+        TreeItem<String> profile = new TreeItem<>("Profile");
 
         //setting up tree nodes (should be populated by a cv class in the future)
-        details.getChildren().addAll(personalInformation, experience, education, skills);
+        details.getChildren().addAll(personalInformation, experience, education, skills,profile);
         cv.getChildren().addAll(details, summary);
 
         //setting up tree view

@@ -1,20 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<!-- fx:controller="com.fdmgroup.cvgeneratorgradle.controller.EducationController"
+       onAction="#addModule"-->
+
+<VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="661.0" prefWidth="789.0" spacing="20.0" stylesheets="@css/educationStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label text="Education" />
-      <TextField fx:id="university" alignment="CENTER" prefHeight="25.0" prefWidth="418.0" promptText="Degree" />
-      <TextField alignment="TOP_CENTER" promptText="Study Title" />
-      <TextField alignment="CENTER" promptText="Name of University" />
-      <TextField alignment="CENTER" promptText="Place of University" />
-      <TextField alignment="CENTER" promptText="Title of final Thesis" />
+      <Label fx:id="hintDegree" alignment="TOP_LEFT" styleClass="hintLabel">
+         <font>
+            <Font size="8.0" />
+         </font></Label>
+      <TextField fx:id="degree" alignment="CENTER" prefHeight="25.0" prefWidth="418.0" promptText="Degree" />
+      <Label fx:id="hintStudyTitle" styleClass="hintLabel">
+         <font>
+            <Font size="8.0" />
+         </font></Label>
+      <TextField fx:id="studyTitle" alignment="TOP_CENTER" promptText="Study Title" />
+      <Label fx:id="hintUniversity" styleClass="hintLabel">
+         <font>
+            <Font size="8.0" />
+         </font></Label>
+      <TextField fx:id="uni" alignment="CENTER" promptText="Name of University" />
+      <Label fx:id="hintUniPlace" styleClass="hintLabel" />
+      <TextField fx:id="uniPlace" alignment="CENTER" promptText="Place of University" />
+      <Label fx:id="hintThesis" styleClass="hintLabel" />
+      <TextField fx:id="thesis" alignment="CENTER" promptText="Title of final Thesis" />
+      <Label fx:id="hintDate" styleClass="hintLabel" />
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
          <children>
             <DatePicker promptText="Start Date" />
@@ -24,7 +47,20 @@
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
       </HBox>
-      <TextField alignment="CENTER" promptText="Key Modules" />
+      <Label fx:id="hintLabel" styleClass="hintLabel" text="Add 1-1 Key Modules" />
+      <GridPane fx:id="keyModules" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+        <columnConstraints>
+          <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="638.0" />
+          <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="369.0" minWidth="10.0" prefWidth="111.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <TextField fx:id="keyModule" promptText="Key Module" GridPane.halignment="CENTER" />
+            <Button fx:id="addModuleBtn" mnemonicParsing="false" text="Add Key Module" GridPane.columnIndex="1"/>
+         </children>
+      </GridPane>
    </children>
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

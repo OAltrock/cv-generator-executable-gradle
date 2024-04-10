@@ -16,6 +16,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CVGeneratorApp extends Application {
     private CVTemplate cvTemplate;
+    static int counter1=0;
+
+    public static int getCounter1() {
+        return counter1;
+    }
+
+    public static void setCounter1(int counter1) {
+        CVGeneratorApp.counter1 = counter1;
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(CVGeneratorApp.class.getResource("welcome2.fxml"));
@@ -24,7 +34,7 @@ public class CVGeneratorApp extends Application {
         stage.getIcons().add(new Image(getClass().getResourceAsStream("images/FDM_Logo_Black_RGB.png")));
         stage.setScene(scene);
 
-        scene.getStylesheets().add("https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Homemade+Apple&family=Inter:wght@400;600;700&family=JetBrains+Mono:ital@0;1&family=Josefin+Slab&family=Monoton&family=Permanent+Marker&family=Press+Start+2P&family=Special+Elite&family=Unbounded&family=Varela+Round&display=swap");
+        scene.getStylesheets().add("https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap");
 
         scene.getStylesheets().add(getClass().getResource("css/welcomePage.css").toExternalForm());
         stage.show();
