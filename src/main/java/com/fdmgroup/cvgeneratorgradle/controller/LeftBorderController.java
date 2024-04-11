@@ -57,7 +57,7 @@ public class LeftBorderController/* implements Initializable*/ {
 
             switch (newV.getValue()) {
                 case "Personal Information" -> {
-                    setCenter("personalInfo.fxml");
+                    new PersonalInformationController().initialize(mainWindow, "personalInfo");
                 }
                 case "Experience" -> {
                     new ExperienceController().initialize(mainWindow, "experience");
