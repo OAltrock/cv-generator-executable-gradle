@@ -1,52 +1,40 @@
 package com.fdmgroup.cvgeneratorgradle.controller;
 
-import com.fdmgroup.cvgeneratorgradle.CVGeneratorApp;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
 
-import java.io.IOException;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+
+import java.util.List;
 
 public class ExperienceController implements Initialization{
-
-    private BorderPane main;
 
     @Override
     public void initialize(BorderPane main, String resource) {
         Initialization.super.initialize(main, resource);
-        this.main = main;
+
+        VBox center = (VBox) main.getCenter();
+        List<Node> textFields = center.getChildren().stream().filter(child -> child.getClass().toString().contains("TextField")).toList();
+
+        center.getChildren().forEach(child -> {
+            if (child.getClass().toString().contains("GridPane")) {
+                child.setId("keyPositions");
+            }
+        });
+        GridPane gridPane = (GridPane) main.getCenter().lookup("#keyPositions");
+        Button saveBtn = (Button) main.getCenter().lookup("#saveBtn");
+        saveBtn.setOnAction(event -> {
+
+            Boolean mainValidated = addValidation(center);
+            Boolean gridPaneValidated = addValidation(gridPane);
+            if (mainValidated && gridPaneValidated) {
+                Label label = new Label("Saved");
+                VBox vBox = new VBox(label);
+                main.setCenter(vBox);
+            };
+        });
     }
-
-    /*@FXML
-    public void initialize() {
-        FXMLLoader fxmlLoader = new FXMLLoader(CVGeneratorApp.class.getResource(resource));
-        try {
-            parent.setCenter(fxmlLoader.load());
-        }
-        catch (Exception e) {
-
-        }
-    }*/
-
-
-
-
-
-    /*@FXML
-    public void initialize() {
-        FXMLLoader fxmlLoader = new FXMLLoader(CVGeneratorApp.class.getResource("experience.fxml"));
-        try {
-            BorderPane borderPane = (BorderPane) parent;
-            borderPane.setCenter(fxmlLoader.load());
-            Button saveBtn = (Button) borderPane.getCenter().lookup("#saveBtn");
-            createKeyModulesArea(borderPane);
-            createValidation(borderPane);
-            saveBtn.disableProperty().bind(validInput);
-        } catch (IOException e) {
-            System.out.println(e);
-        }
-
-    }*/
 }

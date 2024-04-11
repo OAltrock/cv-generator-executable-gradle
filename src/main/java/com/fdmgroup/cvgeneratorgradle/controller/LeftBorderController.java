@@ -5,7 +5,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -24,7 +23,7 @@ public class LeftBorderController/* implements Initializable*/ {
         alert.setHeaderText("Exiting");
         alert.setContentText("Do you really want to exit");
 
-        if (alert.showAndWait().get() == ButtonType.OK) {
+        if (alert.showAndWait().isPresent() && alert.showAndWait().get() == ButtonType.OK) {
             Stage stage = (Stage) mainWindow.getScene().getWindow();
             stage.close();
         }
@@ -64,7 +63,7 @@ public class LeftBorderController/* implements Initializable*/ {
                     new ExperienceController().initialize(mainWindow, "experience");
                 }
                 case "Summary" -> {
-
+                    new SummaryController().initialize(mainWindow,"summary");
                 }
                 case "Education" -> {
                     new EducationController().initialize(mainWindow, "education");
@@ -72,6 +71,9 @@ public class LeftBorderController/* implements Initializable*/ {
                 }
                 case "Skills" -> {
 
+                }
+                case "Profile" -> {
+                    new ProfileController().initialize(mainWindow, "profile");
                 }
                 default -> {
                 }
