@@ -70,7 +70,7 @@ public class LeftBorderController/* implements Initializable*/ {
                     /*setCenter("education.fxml");*/
                 }
                 case "Skills" -> {
-
+                	new SkillsController().initialize(mainWindow, "skills");
                 }
                 case "Profile" -> {
                     new ProfileController().initialize(mainWindow, "profile");
