@@ -1,6 +1,5 @@
 package com.fdmgroup.cvgeneratorgradle.controller;
 
-import javafx.scene.Parent;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;

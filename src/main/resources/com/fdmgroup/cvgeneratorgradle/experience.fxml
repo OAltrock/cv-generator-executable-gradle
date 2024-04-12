@@ -41,8 +41,8 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TextField maxWidth="1.7976931348623157E308" GridPane.rowIndex="1" />
-            <Button fx:id="addKeyPosition" mnemonicParsing="false" text="Add Position" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <TextField fx:id="keyModule" maxWidth="1.7976931348623157E308" GridPane.rowIndex="1" />
+            <Button fx:id="addTextField" mnemonicParsing="false" text="Add Position" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <Label fx:id="hintKeyPosition" />
          </children>
       </GridPane>

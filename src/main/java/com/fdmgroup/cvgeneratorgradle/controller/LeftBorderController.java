@@ -1,6 +1,7 @@
 package com.fdmgroup.cvgeneratorgradle.controller;
 
 import com.fdmgroup.cvgeneratorgradle.CVGeneratorApp;
+import com.fdmgroup.cvgeneratorgradle.models.Education;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -66,7 +67,7 @@ public class LeftBorderController/* implements Initializable*/ {
                     new SummaryController().initialize(mainWindow,"summary");
                 }
                 case "Education" -> {
-                    new EducationController().initialize(mainWindow, "education");
+                    new EducationController(new Education()).initialize(mainWindow, "education");
                     /*setCenter("education.fxml");*/
                 }
                 case "Skills" -> {

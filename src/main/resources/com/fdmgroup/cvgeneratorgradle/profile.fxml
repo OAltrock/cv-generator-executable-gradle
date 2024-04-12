@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.VBox?>
 
 
@@ -11,7 +12,11 @@
    <children>
       <Label text="Profile" />
       <Label fx:id="hintProfile" />
-      <TextArea prefHeight="200.0" prefWidth="200.0" promptText="See Global FDM CV – Support Guide for detailed guidance on this section" />
+      <TextArea prefHeight="200.0" prefWidth="200.0" promptText="See Global FDM CV – Support Guide for detailed guidance on this section">
+         <tooltip>
+            <Tooltip text="some Tooltip" />
+         </tooltip>
+      </TextArea>
       <Button mnemonicParsing="false" text="Save" />
    </children>
    <padding>

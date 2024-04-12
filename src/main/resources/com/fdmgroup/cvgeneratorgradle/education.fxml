@@ -59,7 +59,7 @@
         </rowConstraints>
          <children>
             <TextField fx:id="keyModule" prefHeight="25.0" prefWidth="101.0" promptText="Key Module" GridPane.halignment="CENTER" />
-            <Button fx:id="addModuleBtn" mnemonicParsing="false" text="Add Key Module" GridPane.columnIndex="2" />
+            <Button fx:id="addTextField" mnemonicParsing="false" text="Add Key Module" GridPane.columnIndex="2" />
          </children>
       </GridPane>
       <Button fx:id="saveBtn" mnemonicParsing="false" text="Save" />
