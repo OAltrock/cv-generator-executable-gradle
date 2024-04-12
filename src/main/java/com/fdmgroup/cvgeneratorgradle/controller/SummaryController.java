@@ -12,7 +12,7 @@ public class SummaryController implements Initialization{
         VBox center = (VBox) main.getCenter();
 
         GridPane gridPaneSummary = (GridPane) center.getChildren().get(8);
-        ListView<String> competencesListView = (ListView) gridPaneSummary.getChildren().getFirst();
+        ListView<String> competencesListView = (ListView) gridPaneSummary.getChildren();
         competencesListView.getItems().addAll("- Java", "- HTML/ CSS/ JavaScript", "- Junit", "- Eclipse", "- Maven","- Git", "- MySQL", "- UML");
 
     }
