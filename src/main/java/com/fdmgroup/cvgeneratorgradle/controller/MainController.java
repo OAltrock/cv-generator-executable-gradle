@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class LeftBorderController/* implements Initializable*/ {
+public class MainController/* implements Initializable*/ {
 
     @FXML
     private BorderPane mainWindow;
