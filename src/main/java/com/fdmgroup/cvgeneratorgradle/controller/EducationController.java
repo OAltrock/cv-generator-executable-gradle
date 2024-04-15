@@ -11,10 +11,7 @@ import com.fdmgroup.cvgeneratorgradle.models.Education;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,39 +22,44 @@ import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
+import static com.fdmgroup.cvgeneratorgradle.controller.SceneSearchUtil.findAllTextFields;
+
 public class EducationController implements InitializableFXML, HasToggleableSaveButtons, HasAddableTextFields, HasDateValidation {
 
-    private BorderPane main;
+
     @Setter
     @Getter
-    private Education education;
-    private ObservableList<TextField> textFields;
+    private List<Education> educations;
+    private ObservableList<TextInputControl> textFields;
     Predicate<String> predicate = input -> !input.matches("[a-zA-Z]+");
     @Setter
     @Getter
     private int counter=0;
 
     //ToDo: write input to education object
-    public EducationController(Education education) {
-        this.education = education;
+    public EducationController(List<Education> educations) {
+        this.educations = educations;
     }
 
     @Override
     public void initialize(BorderPane main, String resource) {
         InitializableFXML.super.initialize(main, resource);
-        this.main = main;
-        Button saveBtn = (Button) main.getCenter().lookup("#saveBtn");
+        ScrollPane center = (ScrollPane) main.getCenter();
+
+        Button saveBtn = (Button) center.getContent().lookup("#saveBtn");
+
         textFields = FXCollections.observableArrayList();
 
-        createKeyModulesArea();
 
-        VBox center = (VBox) main.getCenter();
-        List<Node> uncheckedTextFields = new ArrayList<>(center.getChildren().stream().filter(child -> child.getClass().toString().contains("TextField")).toList());
-        List<TextField> castTextFields = uncheckedTextFields.stream().map(textField -> (TextField) textField).toList();
 
-        DatePicker start = (DatePicker) center.lookup("#start");
-        DatePicker end = (DatePicker) center.lookup("#end");
-        CheckBox checkBox = (CheckBox) center.lookup("#ongoing");
+        VBox centerBox = (VBox) center.getContent();
+        createKeyModulesArea(centerBox);
+
+
+
+        DatePicker start = (DatePicker) centerBox.lookup("#start");
+        DatePicker end = (DatePicker) centerBox.lookup("#end");
+        CheckBox checkBox = (CheckBox) centerBox.lookup("#ongoing");
         BiPredicate<LocalDate, LocalDate> checkDate = (startDate, endDate) -> {
             if (startDate==null) {
                 return false;
@@ -73,17 +75,18 @@ public class EducationController implements InitializableFXML, HasToggleableSave
 
         addValidationToSaveButtons(textFields, predicate, saveBtn, start,end,checkDate,checkBox);
 
-        textFields.addAll(castTextFields);
+        textFields.addAll(findAllTextFields(centerBox));
         createValidationForTextFields(predicate, textFields, "Must contain at least one letter");
         addValidationToDates(start, end,checkDate,checkBox);
+        saveBtn.setOnAction(actionEvent -> new ExperienceController().initialize(main, "experience2"));
 
     }
 
-    private void createKeyModulesArea() {
-        TextField textField = (TextField) main.getCenter().lookup("#keyModule");
+    private void createKeyModulesArea(VBox centerBox) {
+        TextField textField = (TextField) centerBox.lookup("#keyModule");
         textFields.add(textField);
-        GridPane gridPane = (GridPane) main.getCenter().lookup("#keyModules");
-        javafx.scene.control.Button addModuleButton = (javafx.scene.control.Button) main.getCenter().lookup("#0");
+        GridPane gridPane = (GridPane) centerBox.lookup("#keyModules");
+        javafx.scene.control.Button addModuleButton = (javafx.scene.control.Button) centerBox.lookup("#0");
         addAddButtons(gridPane,textFields, addModuleButton, "Remove Key Module", "Key Module", predicate);
     }
 

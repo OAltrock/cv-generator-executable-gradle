@@ -7,19 +7,12 @@
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <Label text="Profile" />
-      <Label fx:id="hintProfile" />
-      <TextArea prefHeight="200.0" prefWidth="200.0" promptText="See Global FDM CV – Support Guide for detailed guidance on this section">
-         <tooltip>
-            <Tooltip text="some Tooltip" />
-         </tooltip>
-      </TextArea>
-      <Button mnemonicParsing="false" text="Save" />
-   </children>
+<VBox fillWidth="false" alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
    </padding>
+   <Label text="Profile" />
+   <Label fx:id="hintProfile" />
+   <TextArea maxWidth="50" promptText="See Global FDM CV – Support Guide for detailed guidance on this section" />
+   <Button fx:id="saveBtn" mnemonicParsing="false" text="Save" />
 </VBox>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="467.0" prefWidth="296.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <VBox minWidth="450" alignment="TOP_CENTER" prefHeight="456.0" prefWidth="200.0" spacing="20.0" stylesheets="@css/educationStyle.css">
+      <padding>
+         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+      </padding>
+      <Label text="Education" />
+      <TextField fx:id="degree" alignment="CENTER" promptText="Degree">
+         <tooltip>
+            <Tooltip fx:id="hintDegree" text="Can't be empty" />
+         </tooltip>
+      </TextField>
+      <TextField fx:id="studyTitle" alignment="TOP_CENTER" promptText="Study Title">
+         <tooltip>
+            <Tooltip fx:id="hintStudyTitle" text="Can't be empty" />
+         </tooltip>
+      </TextField>
+      <TextField fx:id="uni" alignment="CENTER" promptText="Name of University">
+         <tooltip>
+            <Tooltip fx:id="hintUni" text="Can't be empty" />
+         </tooltip>
+      </TextField>
+      <TextField fx:id="uniPlace" alignment="CENTER" promptText="Place of University">
+         <tooltip>
+            <Tooltip fx:id="hintUniPlace" text="Empty Tooltip" />
+         </tooltip>
+      </TextField>
+      <TextField fx:id="thesis" alignment="CENTER" promptText="Title of final Thesis">
+         <tooltip>
+            <Tooltip fx:id="hintThesis" text="Empty Tooltip" />
+         </tooltip>
+      </TextField>
+      <HBox alignment="CENTER" spacing="20.0">
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+         <DatePicker fx:id="start" promptText="Start Date" />
+         <DatePicker fx:id="end" promptText="End Date" />
+         <CheckBox fx:id="ongoing" mnemonicParsing="false" text="ongoing" />
+      </HBox>
+      <Label fx:id="hintLabel" styleClass="hintLabel" text="Add 1-1 Key Modules" />
+      <GridPane fx:id="keyModules" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+         <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="120.0" />
+            <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="410.0" minWidth="0.0" prefWidth="120.0" />
+            <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="410.0" minWidth="10.0" prefWidth="120.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="50.0" />
+         </rowConstraints>
+         <TextField fx:id="keyModule" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="50" prefWidth="101.0" promptText="Key Module" GridPane.halignment="CENTER" />
+         <Button fx:id="0" mnemonicParsing="false" text="Add Key Module" GridPane.columnIndex="2" />
+      </GridPane>
+      <Button fx:id="saveBtn" mnemonicParsing="false" text="Save" />
+   </VBox>
+</ScrollPane>

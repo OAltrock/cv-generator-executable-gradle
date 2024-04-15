@@ -8,10 +8,7 @@ import com.fdmgroup.cvgeneratorgradle.interfaces.HasToggleableSaveButtons;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -24,26 +21,26 @@ import java.util.function.Predicate;
 
 public class ExperienceController implements InitializableFXML, HasToggleableSaveButtons, HasAddableTextFields, HasDateValidation {
 
-    private ObservableList<TextField> textFields;
+    private ObservableList<TextInputControl> textFields;
     Predicate<String> predicate = input -> !input.matches("[a-zA-Z]+");
 
     @Override
     public void initialize(BorderPane main, String resource) {
         InitializableFXML.super.initialize(main, resource);
+        ScrollPane scrollPane = (ScrollPane) main.getCenter();
+        VBox centerBox = (VBox) scrollPane.getContent();
+        Button saveBtn = (Button) centerBox.lookup("#saveBtn");
 
-        Button saveBtn = (Button) main.getCenter().lookup("#saveBtn");
-
-        VBox center = (VBox) main.getCenter();
-        List<Node> uncheckedTextFields = new ArrayList<>(center.getChildren().stream().filter(child -> child.getClass().toString().contains("TextField")).toList());
+        List<Node> uncheckedTextFields = new ArrayList<>(centerBox.getChildren().stream().filter(child -> child.getClass().toString().contains("TextField")).toList());
         List<TextField> castTextFields = uncheckedTextFields.stream().map(textField -> (TextField) textField).toList();
         textFields = FXCollections.observableArrayList();
 
 
-        GridPane gridPane = (GridPane) center.getChildren().stream().filter(child -> child.getClass().toString().contains("GridPane")).toList().getFirst();
+        GridPane gridPane = (GridPane) centerBox.getChildren().stream().filter(child -> child.getClass().toString().contains("GridPane")).toList().getFirst();
         createKeySkillsArea(gridPane);
-        CheckBox checkBox = (CheckBox) center.lookup("#ongoing");
-        DatePicker start = (DatePicker) center.lookup("#start");
-        DatePicker end = (DatePicker) center.lookup("#end");
+        CheckBox checkBox = (CheckBox) centerBox.lookup("#ongoing");
+        DatePicker start = (DatePicker) centerBox.lookup("#start");
+        DatePicker end = (DatePicker) centerBox.lookup("#end");
         BiPredicate<LocalDate, LocalDate> checkDate = (startDate, endDate) -> {
             if (startDate==null) {
                 return false;

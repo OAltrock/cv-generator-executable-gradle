@@ -1,6 +1,7 @@
 package com.fdmgroup.cvgeneratorgradle.controller;
 
 import com.fdmgroup.cvgeneratorgradle.CVGeneratorApp;
+import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.models.Education;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,8 +13,11 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 
 public class MainController/* implements Initializable*/ {
+
+    private CVTemplate cvTemplate;
 
     @FXML
     private BorderPane mainWindow;
@@ -32,6 +36,10 @@ public class MainController/* implements Initializable*/ {
     }
 
     public void showLeftBorder(ActionEvent actionEvent) {
+
+        //creating
+        this.cvTemplate = new CVTemplate();
+
         //setting center scene
         setLabel("Fill out the specific sections of your CV");
 
@@ -43,13 +51,17 @@ public class MainController/* implements Initializable*/ {
         TreeItem<String> skills = new TreeItem<>("Skills");
         TreeItem<String> education = new TreeItem<>("Education");
         TreeItem<String> profile = new TreeItem<>("Profile");
+        List<TreeItem<String>> detailsItems = List.of(personalInformation, experience, education, skills, profile);
+        List<TreeItem<String>> rootItems = List.of(details, summary);
 
         //setting up tree nodes (should be populated by a cv class in the future)
-        details.getChildren().addAll(personalInformation, experience, education, skills,profile);
-        cv.getChildren().addAll(details, summary);
+        details.getChildren().addAll(detailsItems);
+        cv.getChildren().addAll(rootItems);
 
         //setting up tree view
+
         TreeView<String> leftBorderTreeView = createTreeView(cv);
+        leftBorderTreeView.setPrefWidth(300);
         leftBorderTreeView.setShowRoot(false);
         leftBorderTreeView.getRoot().getChildren().forEach(child -> child.setExpanded(true));
 
@@ -61,17 +73,17 @@ public class MainController/* implements Initializable*/ {
                     new PersonalInformationController().initialize(mainWindow, "personalInfo");
                 }
                 case "Experience" -> {
-                    new ExperienceController().initialize(mainWindow, "experience");
+                    new ExperienceController().initialize(mainWindow, "experience2");
                 }
                 case "Summary" -> {
-                    new SummaryController().initialize(mainWindow,"summary");
+                    new SummaryController().initialize(mainWindow, "test");
                 }
                 case "Education" -> {
-                    new EducationController(new Education()).initialize(mainWindow, "education");
+                    new EducationController(cvTemplate.getEducations()).initialize(mainWindow, "education2");
                     /*setCenter("education.fxml");*/
                 }
                 case "Skills" -> {
-                	new SkillsController().initialize(mainWindow, "skills");
+                    new SkillsController().initialize(mainWindow, "skills");
                 }
                 case "Profile" -> {
                     new ProfileController().initialize(mainWindow, "profile");
@@ -84,7 +96,7 @@ public class MainController/* implements Initializable*/ {
 
     private void setLabel(String message) {
         setCenter("centerDefault.fxml");
-        VBox centerDefault =(VBox) mainWindow.getCenter();
+        VBox centerDefault = (VBox) mainWindow.getCenter();
         Label messageLabel = (Label) centerDefault.lookup("#centerDefaultLabel");
         Border b = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(20), BorderWidths.DEFAULT));
         messageLabel.setBorder(b);

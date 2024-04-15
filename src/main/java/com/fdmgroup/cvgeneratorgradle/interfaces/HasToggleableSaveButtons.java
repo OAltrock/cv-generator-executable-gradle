@@ -6,24 +6,22 @@ import javafx.beans.binding.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 public interface HasToggleableSaveButtons {
 
-    default void addValidationToSaveButtons(ObservableList<TextField> list, Predicate<String> checkText, Button saveBtn, DatePicker start,
+    default void addValidationToSaveButtons(ObservableList<TextInputControl> list, Predicate<String> checkText, Button saveBtn, DatePicker start,
                                             DatePicker end, BiPredicate<LocalDate, LocalDate> checkDate, CheckBox ongoing) {
         end.valueProperty().addListener(new ChangeListener<LocalDate>() {
                                             @Override
                                             public void changed(ObservableValue<? extends LocalDate> observableValue, LocalDate localDate, LocalDate t1) {
                                                 BooleanBinding allVboxFieldsValidated = list.stream()
-                                                        .map(TextField::textProperty)
+                                                        .map(TextInputControl::textProperty)
                                                         .map(stringProperty -> Bindings.createBooleanBinding(() -> checkText.test(stringProperty.get()), stringProperty))
                                                         .reduce(Bindings::or)
                                                         .get();
@@ -36,7 +34,7 @@ public interface HasToggleableSaveButtons {
             @Override
             public void invalidated(Observable observable) {
                 BooleanBinding allVboxFieldsValidated = list.stream()
-                        .map(TextField::textProperty)
+                        .map(TextInputControl::textProperty)
                         .map(stringProperty -> Bindings.createBooleanBinding(() -> checkText.test(stringProperty.get()), stringProperty))
                         .reduce(Bindings::or)
                         .get();
@@ -49,7 +47,7 @@ public interface HasToggleableSaveButtons {
             @Override
             public void changed(ObservableValue<? extends LocalDate> observableValue, LocalDate localDate, LocalDate t1) {
                 BooleanBinding allVboxFieldsValidated = list.stream()
-                        .map(TextField::textProperty)
+                        .map(TextInputControl::textProperty)
                         .map(stringProperty -> Bindings.createBooleanBinding(() -> checkText.test(stringProperty.get()), stringProperty))
                         .reduce(Bindings::or)
                         .get();
@@ -62,7 +60,7 @@ public interface HasToggleableSaveButtons {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
                 BooleanBinding allVboxFieldsValidated = list.stream()
-                        .map(TextField::textProperty)
+                        .map(TextInputControl::textProperty)
                         .map(stringProperty -> Bindings.createBooleanBinding(() -> checkText.test(stringProperty.get()), stringProperty))
                         .reduce(Bindings::or)
                         .get();
@@ -72,6 +70,26 @@ public interface HasToggleableSaveButtons {
             }
         });
 
+    }
+
+    default void addValidationToSaveButtons(ObservableList<TextInputControl> list, Predicate<String> checkText, Button saveBtn) {
+        list.addListener(new InvalidationListener() {
+            @Override
+            public void invalidated(Observable observable) {
+                BooleanBinding validInput = validateTextFields(list, checkText);
+                saveBtn.disableProperty().bind(validInput.not());
+            }
+        });
+
+
+    };
+
+    private BooleanBinding validateTextFields(ObservableList<TextInputControl> list, Predicate<String> checkText) {
+        return list.stream()
+                .map(TextInputControl::textProperty)
+                .map(stringProperty -> Bindings.createBooleanBinding(() -> checkText.test(stringProperty.get()), stringProperty))
+                .reduce(Bindings::or)
+                .get();
 
     }
 }

@@ -6,7 +6,9 @@ import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.value.ObservableBooleanValue;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -19,7 +21,7 @@ import static com.fdmgroup.cvgeneratorgradle.CVGeneratorApp.setCounter1;
 
 public interface HasAddableTextFields {
 
-    default void addAddButtons(GridPane parent, ObservableList<javafx.scene.control.TextField> textFields, javafx.scene.control.Button addBtn, String removeBtnMessage, String promptMessage, Predicate<String> predicate) {
+    default void addAddButtons(GridPane parent, ObservableList<TextInputControl> textFields, javafx.scene.control.Button addBtn, String removeBtnMessage, String promptMessage, Predicate<String> predicate) {
         addBtn.setOnAction(event -> {
             javafx.scene.control.TextField first = (javafx.scene.control.TextField) parent.getChildrenUnmodifiable().getFirst();
             javafx.scene.control.TextField textFieldToAdd = new javafx.scene.control.TextField();
@@ -43,7 +45,7 @@ public interface HasAddableTextFields {
     }
 
     default void addListenerTooRemoveBtn(TextField textFieldToRemove, javafx.scene.control.Button removeButton,
-                                         GridPane gridPane, javafx.scene.control.Button addModuleBtn, ObservableList<TextField> textFields) {
+                                         GridPane gridPane, javafx.scene.control.Button addModuleBtn, ObservableList<TextInputControl> textFields) {
         removeButton.setOnAction(event -> {
             textFields.remove(textFieldToRemove);
             gridPane.getChildren().removeAll(addModuleBtn, removeButton,textFieldToRemove);
@@ -52,20 +54,22 @@ public interface HasAddableTextFields {
         });
     }
 
-    default void createValidationForTextFields(Predicate<String> predicate, ObservableList<TextField> textFields) {
+    default void createValidationForTextFields(Predicate<String> predicate, ObservableList<TextInputControl> textFields) {
         validationHelper(predicate, textFields, null);
     }
 
-    default void validationHelper(Predicate<String> predicate, ObservableList<TextField> textFields, String o) {
+    default void validationHelper(Predicate<String> predicate, ObservableList<TextInputControl> textFields, String o) {
         String message = (o == null) ? "cant' be empty" : o;
+        textFields.forEach(System.out::println);
         textFields.forEach(textField -> {
+
             ObservableBooleanValue validInput = Bindings.createBooleanBinding(() -> predicate.test(textField.getText()), textField.textProperty());
 
 
-            StringBinding stringBinding = Bindings.createStringBinding(() -> {
+            /*StringBinding stringBinding = Bindings.createStringBinding(() -> {
                 if (validInput.get()) return message;
                 else return "";
-            }, textField.textProperty());
+            }, textField.textProperty());*/
 
 
             ObjectBinding<Border> objectBinding = Bindings.createObjectBinding(() -> {
@@ -83,14 +87,14 @@ public interface HasAddableTextFields {
             textField.tooltipProperty().bind(tooltipObjectBinding);
             Tooltip.install(textField, tooltipToAdd);
             textField.borderProperty().bind(objectBinding);
-            tooltipToAdd.textProperty().bind(stringBinding);
+            /*tooltipToAdd.textProperty().bind(stringBinding);*/
         });
     }
 
     ;
 
 
-    default void createValidationForTextFields(Predicate<String> predicate, ObservableList<TextField> textFields, String message) {
+    default void createValidationForTextFields(Predicate<String> predicate, ObservableList<TextInputControl> textFields, String message) {
         validationHelper(predicate, textFields, message);
     }
 }
