@@ -10,14 +10,11 @@ import com.fdmgroup.cvgeneratorgradle.models.Education;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
@@ -40,6 +37,8 @@ public class EducationController implements InitializableFXML, HasToggleableSave
     public EducationController(List<Education> educations) {
         this.educations = educations;
     }
+
+
 
     @Override
     public void initialize(BorderPane main, String resource) {

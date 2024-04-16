@@ -11,10 +11,18 @@ import javafx.scene.paint.Color;
 
 import java.time.LocalDate;
 import java.util.function.BiPredicate;
-import java.util.function.Predicate;
+
 
 public interface HasDateValidation {
 
+    /**
+     * Binds the BorderProperty of a Region {@link Region} which is wrapping the given two DatePickers and a CheckBox to the validation of said Nodes {@link javafx.scene.Node},
+     * making it green if all are validated and red otherwise.
+     * @param start DatePicker {@link DatePicker} representing a start date of an occupation
+     * @param end DatePicker representing an end date of an occupation
+     * @param checkDate BiPredicate &lt;LocalDate, LocalDate&gt; {@link LocalDate} {@link BiPredicate} to validate the given start and end date by.
+     * @param ongoing CheckBox {@link CheckBox} representing an ongoing occupation therefore ignoring the end-date-picker if checked
+     */
     default void addValidationToDates(DatePicker start, DatePicker end, BiPredicate<LocalDate, LocalDate> checkDate, CheckBox ongoing) {
 
         ObservableBooleanValue validInput = Bindings.createBooleanBinding(() -> checkDate.test(start.getValue(), end.getValue()), start.valueProperty(), ongoing.selectedProperty(), end.valueProperty());
@@ -74,7 +82,7 @@ public interface HasDateValidation {
                 }, start.valueProperty(), ongoing.selectedProperty(),  end.valueProperty()
         );
 
-        HBox hBox = (HBox) start.getParent();
+        Region hBox = (Region) start.getParent();
         hBox.borderProperty().bind(dateBorderBinding);
 
         start.tooltipProperty().

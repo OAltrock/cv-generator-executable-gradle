@@ -6,6 +6,7 @@ import com.fdmgroup.cvgeneratorgradle.models.Education;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -13,9 +14,11 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class MainController/* implements Initializable*/ {
+public class MainController implements Initializable {
 
     private CVTemplate cvTemplate;
 
@@ -35,12 +38,13 @@ public class MainController/* implements Initializable*/ {
 
     }
 
+
     public void showLeftBorder(ActionEvent actionEvent) {
 
         //creating
-        this.cvTemplate = new CVTemplate();
 
-        //setting center scene
+
+        //setting center scene (will be deprecated once we use classes (CVTemplate)
         setLabel("Fill out the specific sections of your CV");
 
         TreeItem<String> cv = new TreeItem<>("CV");
@@ -66,6 +70,7 @@ public class MainController/* implements Initializable*/ {
         leftBorderTreeView.getRoot().getChildren().forEach(child -> child.setExpanded(true));
 
         //setting up app navigation
+        //o is observable, oldV is old value (those two are not being used); newV is new value (ie: what the user has selected)
         leftBorderTreeView.getSelectionModel().selectedItemProperty().addListener((o, oldV, newV) -> {
 
             switch (newV.getValue()) {
@@ -94,6 +99,10 @@ public class MainController/* implements Initializable*/ {
         });
     }
 
+    /**
+     * sets up the label in the center (ie: the about-label)
+     * @param message custom message for the center-label
+     */
     private void setLabel(String message) {
         setCenter("centerDefault.fxml");
         VBox centerDefault = (VBox) mainWindow.getCenter();
@@ -105,6 +114,10 @@ public class MainController/* implements Initializable*/ {
         messageLabel.setText(message);
     }
 
+    /**
+     * sets center of the main BorderPane ({@link BorderPane}
+     * @param resource String of the FXML file name (eg: centerDefault.fxml) {@link FXMLLoader}
+     */
     private void setCenter(String resource) {
         FXMLLoader loader = new FXMLLoader(CVGeneratorApp.class.getResource(resource));
         try {
@@ -114,6 +127,12 @@ public class MainController/* implements Initializable*/ {
         }
     }
 
+    /**
+     * sets up the tree view. The given root is set as the root of new tree view, which is wrapped in a HBox {@link HBox}.
+     * This HBox is than set as the left of the BorderPane {@link BorderPane}
+     * @param cv root TreeItem {@link TreeItem}
+     * @return {@link TreeView}
+     */
     private TreeView<String> createTreeView(TreeItem<String> cv) {
         TreeView<String> ret = new TreeView<>();
         ret.setRoot(cv);
@@ -125,5 +144,11 @@ public class MainController/* implements Initializable*/ {
 
     public void showInfo(ActionEvent actionEvent) {
         setLabel("This is the alpha version of the FDM CV Generator.\nIt is partially based on an previous full stack project.");
+    }
+
+    //Option to initialize a cvtemplate object without any bound actions (ie: load last edited cv automatically)
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        this.cvTemplate = new CVTemplate();
     }
 }

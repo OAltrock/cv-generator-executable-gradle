@@ -26,17 +26,15 @@ public class ProfileController implements InitializableFXML, HasToggleableSaveBu
         textArea.setWrapText(true);
         textArea.maxWidth(100);
         textArea.setPromptText("See Global FDM CV – Support Guide for detailed guidance on this section");
-        System.out.println(textArea.getClass());
+
         VBox centerBox = new VBox(label, textArea,saveBtn);
         centerBox.setAlignment(Pos.TOP_CENTER);
         centerBox.setFillWidth(false);
         centerBox.setPadding(new Insets(20));
         centerBox.setSpacing(20);
         main.setCenter(centerBox);
-        //VBox centerBox = (VBox) main.getCenter();
-        //Button saveBtn = (Button) centerBox.getChildren().getLast();
         textAreas = FXCollections.observableArrayList();
-        //TextArea textArea = (TextArea) centerBox.getChildren().get(2);
+
         Predicate<String> atLeast50Chars = (string -> string.length()>=50 && string.matches("^.*\\w+.*$"));
 
         addValidationToSaveButtons(textAreas,atLeast50Chars,saveBtn);
