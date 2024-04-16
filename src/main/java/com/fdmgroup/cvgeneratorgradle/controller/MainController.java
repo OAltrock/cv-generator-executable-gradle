@@ -15,12 +15,13 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
 
-    private CVTemplate cvTemplate;
+    CVTemplate cvTemplate;
 
     @FXML
     private BorderPane mainWindow;
@@ -84,7 +85,7 @@ public class MainController implements Initializable {
                     new SummaryController().initialize(mainWindow, "test");
                 }
                 case "Education" -> {
-                    new EducationController(cvTemplate.getEducations()).initialize(mainWindow, "education2");
+                    new EducationController(cvTemplate).initialize(mainWindow, "education2");
                     /*setCenter("education.fxml");*/
                 }
                 case "Skills" -> {

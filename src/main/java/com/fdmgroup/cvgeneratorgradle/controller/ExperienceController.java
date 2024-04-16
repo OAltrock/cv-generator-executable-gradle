@@ -23,6 +23,7 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
 
     private ObservableList<TextInputControl> textFields;
     Predicate<String> predicate = input -> !input.matches("[a-zA-Z]+");
+    private String forFutureReference = "3";
 
     @Override
     public void initialize(BorderPane main, String resource) {
@@ -64,6 +65,6 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
         Button addBtn = (Button) gridPane.lookup("#0");
         TextField textField = (TextField) gridPane.lookup("#keySkill");
         textFields.add(textField);
-        addAddButtons(gridPane, textFields, addBtn, "Remove Position", "Position", predicate);
+        addAddButtons(gridPane, textFields, addBtn, "Remove Position", "Position", predicate, forFutureReference);
     }
 }
