@@ -37,15 +37,16 @@ public interface HasAddableTextFields {
      */
     default void addAddButtons(GridPane parent, ObservableList<TextInputControl> textFields,
                                Button addBtn, String removeBtnMessage, String promptMessage, Predicate<String> predicate, String forFutureReference) {
-        System.out.println(parent.getRowCount());
+
             addBtn.setOnAction(event -> {
                 if (parent.getChildren().size()/2+1<=Integer.parseInt(forFutureReference)) {
-                    javafx.scene.control.TextField first = (javafx.scene.control.TextField) parent.getChildrenUnmodifiable().getFirst();
+                    //javafx.scene.control.TextField first = (javafx.scene.control.TextField) parent.getChildrenUnmodifiable().getFirst();
                     javafx.scene.control.TextField textFieldToAdd = new javafx.scene.control.TextField();
                     int rowCount = parent.getRowCount() + 1;
                     setCounter1(CVGeneratorApp.getCounter1() + 1);
                     textFieldToAdd.setStyle("-fx-pref-width: 300;");
                     textFieldToAdd.setPromptText(promptMessage);
+                    textFieldToAdd.setId(String.valueOf(parent.getRowCount()+1));
                     javafx.scene.control.Button removeButton = new javafx.scene.control.Button(removeBtnMessage);
                     removeButton.setId(Integer.toString(rowCount));
 
@@ -56,13 +57,13 @@ public interface HasAddableTextFields {
                     parent.add(addBtn, 2, rowCount);
 
                     addListenerTooRemoveBtn(textFieldToAdd, removeButton, parent, addBtn, textFields);
-                    textFields.addAll(Stream.of(textFieldToAdd, first).toList());
+                    textFields.add(textFieldToAdd);
                     createValidationForTextFields(predicate, textFields);
                 }
             });
     }
 
-    default void addListenerTooRemoveBtn(TextField textFieldToRemove, javafx.scene.control.Button removeButton,
+    default void addListenerTooRemoveBtn(TextInputControl textFieldToRemove, javafx.scene.control.Button removeButton,
                                          GridPane gridPane, javafx.scene.control.Button addModuleBtn, ObservableList<TextInputControl> textFields) {
         removeButton.setOnAction(event -> {
             textFields.remove(textFieldToRemove);

@@ -37,13 +37,18 @@ public class EducationController implements InitializableFXML, HasToggleableSave
     CVTemplate cvTemplate;
 
     private ObservableList<TextInputControl> textFields;
-    private String forFutureReference = "3";
-    Predicate<String> predicate = input -> !input.matches("[a-zA-Z]+");
-    @Setter
-    @Getter
-    private int counter=0;
+    /**
+     * emulating variable loaded from template
+     */
+    private final String forFutureReference = "3";
+    Predicate<String> predicate = input -> !input.matches("^.*[a-zA-Z]+.*$");
 
     //ToDo: write input to education object
+
+    /**
+     *
+     * @param cvTemplate {@link CVTemplate}
+     */
     public EducationController(CVTemplate cvTemplate) {
         this.cvTemplate=cvTemplate;
         educations = cvTemplate.getEducations();
@@ -59,10 +64,10 @@ public class EducationController implements InitializableFXML, HasToggleableSave
         VBox centerBox;
         DatePicker start;
         DatePicker end;
-        Button saveBtn = (Button) center.getContent().lookup("#saveBtn");
+        Button saveBtn;
 
         textFields = FXCollections.observableArrayList();
-        System.out.println((educations== null) ? null : educations.getLast());
+        textFields.forEach(System.out::println);
         if (educations!=null) {
             EducationPage educationPage = new EducationPage(educations.getLast(),forFutureReference, textFields);
             main.setCenter(educationPage.createCenterPage());
@@ -70,6 +75,7 @@ public class EducationController implements InitializableFXML, HasToggleableSave
             checkBox = educationPage.getOngoing();
             start=educationPage.getStartDate();
             end=educationPage.getEndDate();
+            saveBtn = educationPage.getSaveBtn();
         }
         else {
             centerBox = (VBox) center.getContent();
@@ -79,6 +85,7 @@ public class EducationController implements InitializableFXML, HasToggleableSave
             start = (DatePicker) centerBox.lookup("#start");
             end = (DatePicker) centerBox.lookup("#end");
             checkBox = (CheckBox) centerBox.lookup("#ongoing");
+            saveBtn = (Button) center.getContent().lookup("#saveBtn");
         }
 
 
@@ -101,8 +108,7 @@ public class EducationController implements InitializableFXML, HasToggleableSave
         createValidationForTextFields(predicate, textFields, "Must contain at least one letter");
         addValidationToDates(start, end,checkDate,checkBox);
         saveBtn.setOnAction(actionEvent -> {
-            assignEducationInput(start, end, checkBox);
-            System.out.println(educations.getLast());
+            assignEducationInput(start, end);
         });
 
     }
@@ -115,15 +121,40 @@ public class EducationController implements InitializableFXML, HasToggleableSave
         addAddButtons(gridPane,textFields, addModuleButton, "Remove Key Module", "Key Module", predicate, forFutureReference);
     }
 
-    private void assignEducationInput(DatePicker start, DatePicker end, CheckBox ongoing){
-        List<String> keyModules = textFields.subList(5, textFields.size()).stream().map(TextInputControl::getText).toList();
+    private void assignEducationInput(DatePicker start, DatePicker end){
+
         if (educations==null) educations = new ArrayList<>();
-        educations.add(new Education(textFields.getFirst().getText(), textFields.get(1).getText(),
-                textFields.get(2).getText(),textFields.get(3).getText(),
-                textFields.get(4).getText(), start.getValue().toString(),
-                (ongoing.selectedProperty().get()) ? LocalDate.now().plusMonths(1).toString() :
-                end.getValue().toString(), keyModules));
+        if (educations.isEmpty()) educations.add(new Education());
+
+        educations.getLast().setKeyModules(new ArrayList<>());
+
+        textFields.forEach(textInputControl -> {
+            switch (textInputControl.getId()) {
+                case "degree" -> {
+                    educations.getLast().setDegree(textInputControl.getText());
+                }
+                case "studyTitle" -> {
+                    educations.getLast().setStudyTitle(textInputControl.getText());
+                }
+                case "universityName" -> {
+                    educations.getLast().setUniversityName(textInputControl.getText());
+                }
+                case "universityPlace" -> {
+                    educations.getLast().setUniversityPlace(textInputControl.getText());
+                }
+                case "thesisTitle" -> {
+                    educations.getLast().setThesisTitle(textInputControl.getText());
+                }
+                default -> {
+                    educations.getLast().getKeyModules().add(textInputControl.getText());
+                }
+            }
+        });
+        educations.getLast().setStartDate(start.getValue().toString());
+        educations.getLast().setEndDate((end.getValue()!=null) ? end.getValue().toString() : LocalDate.now().plusMonths(1).toString());
+
         cvTemplate.setEducations(educations);
+        System.out.println(educations);
 
     }
 

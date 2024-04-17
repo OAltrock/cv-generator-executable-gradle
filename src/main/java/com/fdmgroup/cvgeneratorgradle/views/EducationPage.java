@@ -17,56 +17,80 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class EducationPage implements HasAddableTextFields, HasToggleableSaveButtons, HasDateValidation {
-    @Getter
+    private final Education education;
     private ScrollPane center;
-    @Getter
     private VBox centerBox;
     private TextField degree;
     private TextField studyTitle;
     private TextField universityName;
     private TextField universityPlace;
     private TextField thesisTitle;
-    @Getter
     private DatePicker startDate;
-    @Getter
     private DatePicker endDate;
-    private List<TextField> keyModules;
+    private List<TextInputControl> keyModules;
     private Label pageTitle;
     private Label keyModuleLabel;
     private GridPane keyModuleGridPane;
-    @Getter
     private CheckBox ongoing;
     private HBox dateWrapper;
     private Button saveBtn;
+    private final ObservableList<TextInputControl> textFields;
+    private final String forFutureReference;
 
-    public EducationPage() {
+    //alternative way to create views (to fxml). scene builder can be weird. not used yet.
+    public EducationPage(ObservableList<TextInputControl> textFields, String forFutureReference) {
+        education = new Education();
+        this.textFields = textFields;
+        this.forFutureReference = forFutureReference;
+        keyModules = new ArrayList<>();
+        initialize();
     }
 
     public EducationPage(Education education, String forFutureReference, ObservableList<TextInputControl> textFields) {
-        this.degree = new TextField(education.getDegree());
-        this.studyTitle = new TextField(education.getStudyTitle());
-        this.universityName = new TextField(education.getUniversityName());
-        this.universityPlace = new TextField(education.getUniversityPlace());
-        this.thesisTitle = new TextField(education.getThesisTitle());
-        this.startDate = new DatePicker(LocalDate.parse(education.getStartDate()));
-        this.endDate = new DatePicker(LocalDate.parse(education.getEndDate()));
+        this.education = education;
+        this.textFields = textFields;
+        this.forFutureReference = forFutureReference;
+        keyModules = new ArrayList<>();
+        initialize();
+
+
+    }
+
+    private void initialize() {
+        degree = new TextField(education.getDegree());
+        degree.setId("degree");
+        studyTitle = new TextField(education.getStudyTitle());
+        studyTitle.setId("studyTitle");
+        universityName = new TextField(education.getUniversityName());
+        universityName.setId("universityName");
+        universityPlace = new TextField(education.getUniversityPlace());
+        universityPlace.setId("universityPlace");
+        thesisTitle = new TextField(education.getThesisTitle());
+        thesisTitle.setId("thesisTitle");
+        startDate = new DatePicker(LocalDate.parse(education.getStartDate()));
+        endDate = new DatePicker(LocalDate.parse(education.getEndDate()));
         if (endDate.getValue().isAfter(LocalDate.now())) endDate.setDisable(true);
-        this.keyModules = education.getKeyModules().stream()
+        /*keyModules = education.getKeyModules().stream()
                 .map(TextField::new)
-                .toList();
-        this.pageTitle = new Label("Education");
-        this.keyModuleLabel = new Label("Add " + forFutureReference + " key modules");
-        this.keyModuleGridPane = new GridPane(3, keyModules.size());
-        this.ongoing = new CheckBox();
+                .toList();*/
+
+        education.getKeyModules().forEach(keyModule -> {
+            TextField textField = new TextField(keyModule);
+            textField.setId(keyModule);
+            keyModules.add(textField);
+        });
+        pageTitle = new Label("Education");
+        keyModuleLabel = new Label("Add " + forFutureReference + " key modules");
+        keyModuleGridPane = new GridPane(3, keyModules.size());
+        ongoing = new CheckBox();
         ongoing.setSelected(endDate.getValue().isAfter(LocalDate.now()));
-        this.dateWrapper = new HBox(startDate, endDate, ongoing);
+        dateWrapper = new HBox(startDate, endDate, ongoing);
         dateWrapper.setSpacing(20);
         dateWrapper.setAlignment(Pos.CENTER);
         dateWrapper.setPadding(new Insets(20));
 
-
-        //textFields.addAll(degree, studyTitle, universityName, universityPlace, thesisTitle);
         textFields.addAll(keyModules);
         createGridPane(textFields, forFutureReference);
         saveBtn = new Button("Save");
@@ -84,18 +108,24 @@ public class EducationPage implements HasAddableTextFields, HasToggleableSaveBut
 
     private void createGridPane(ObservableList<TextInputControl> textFields, String forFutureReference) {
         Button addBtn = new Button("Add key module");
+        keyModules.forEach(System.out::println);
         keyModules.forEach(textField -> {
-            if (textField == keyModules.getFirst()) {
+            if (textField == keyModules.getFirst() && textField!=keyModules.getLast()) {
+                Button removeBtn = new Button("Remove key module");
                 keyModuleGridPane.add(textField, 0, 0);
-                keyModuleGridPane.add(addBtn, 2, 0);
-            } else if (textField == keyModules.getLast()) {
+                keyModuleGridPane.add(removeBtn, 1, 0);
+                addListenerTooRemoveBtn(textField, removeBtn,keyModuleGridPane,addBtn,textFields);
+            } else if (textField == keyModules.getLast() && textField!=keyModules.getFirst()) {
                 int rowCount = keyModuleGridPane.getRowCount();
                 Button removeBtn = new Button("Remove key module");
-
                 keyModuleGridPane.add(textField, 0, rowCount);
                 keyModuleGridPane.add(removeBtn, 1, rowCount);
                 keyModuleGridPane.add(addBtn, 2, rowCount);
                 addListenerTooRemoveBtn(textField, removeBtn, keyModuleGridPane, addBtn, textFields);
+            } else if (textField == keyModules.getFirst()) {
+                int rowCount = keyModuleGridPane.getRowCount();
+                keyModuleGridPane.add(textField, 0, rowCount);
+                keyModuleGridPane.add(addBtn, 2, rowCount);
             } else {
                 int rowCount = keyModuleGridPane.getRowCount();
                 Button removeBtn = new Button("Remove key module");

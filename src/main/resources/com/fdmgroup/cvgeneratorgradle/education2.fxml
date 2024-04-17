@@ -30,17 +30,17 @@
             <Tooltip fx:id="hintStudyTitle" text="Can't be empty" />
          </tooltip>
       </TextField>
-      <TextField fx:id="uni" alignment="CENTER" promptText="Name of University">
+      <TextField fx:id="universityName" alignment="CENTER" promptText="Name of University">
          <tooltip>
             <Tooltip fx:id="hintUni" text="Can't be empty" />
          </tooltip>
       </TextField>
-      <TextField fx:id="uniPlace" alignment="CENTER" promptText="Place of University">
+      <TextField fx:id="universityPlace" alignment="CENTER" promptText="Place of University">
          <tooltip>
             <Tooltip fx:id="hintUniPlace" text="Empty Tooltip" />
          </tooltip>
       </TextField>
-      <TextField fx:id="thesis" alignment="CENTER" promptText="Title of final Thesis">
+      <TextField fx:id="thesisTitle" alignment="CENTER" promptText="Title of final Thesis">
          <tooltip>
             <Tooltip fx:id="hintThesis" text="Empty Tooltip" />
          </tooltip>
