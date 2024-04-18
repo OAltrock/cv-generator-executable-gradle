@@ -75,7 +75,7 @@ public class MainController implements Initializable {
 
             switch (newV.getValue()) {
                 case "Personal Information" -> {
-                    new PersonalInformationController().initialize(mainWindow, "personalInfo");
+                    new PersonalInfoController().initialize(mainWindow, "personalInfo");
                 }
                 case "Experience" -> {
                     new ExperienceController().initialize(mainWindow, "experience2");

@@ -42,25 +42,34 @@ javafx {
 }
 
 dependencies {
-  implementation('org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0')
-  // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
-  implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.5'
+    implementation('org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0')
 
+    implementation 'com.google.code.gson:gson:2.8.8'
 
-  // https://mvnrepository.com/artifact/fr.opensagres.xdocreport/xdocreport
-  implementation group: 'fr.opensagres.xdocreport', name: 'xdocreport', version: '2.0.4'
+    implementation 'org.slf4j:slf4j-api:1.7.32'
 
-  // https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
-  implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.4.0-b180830.0359'
+    implementation 'ch.qos.logback:logback-classic:1.2.6'
 
-  /* // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
-  implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.17.0' */
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
 
-  testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
-  runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:win"
-  runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:linux"
-  runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:mac"
+    // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.5'
+
+    // https://mvnrepository.com/artifact/fr.opensagres.xdocreport/xdocreport
+    implementation group: 'fr.opensagres.xdocreport', name: 'xdocreport', version: '2.0.4'
+    implementation('org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0')
+
+    // https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
+    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.4.0-b180830.0359'
+
+    /* // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.17.0' */
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+    runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:win"
+    runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:linux"
+    runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:mac"
 }
 
 test {
