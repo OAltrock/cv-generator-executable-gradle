@@ -18,7 +18,6 @@ import java.util.List;
 public class EducationPage extends FDMPage implements HasAddableTextFields, HasToggleableSaveButtons, HasDateValidation {
     private final Education education;
 
-    private FDMScrollPaneWrapper center;
     private FDMCenterVBoxWrapper centerBox;
 
     private Label pageTitle;
@@ -43,7 +42,7 @@ public class EducationPage extends FDMPage implements HasAddableTextFields, HasT
     private final ObservableList<TextInputControl> textFields;
     private final String forFutureReference;
 
-    //alternative way to create views (to fxml). scene builder can be weird. not used yet.
+    //alternative way to create views (to fxml). scene builder can be weird.
     public EducationPage(ObservableList<TextInputControl> textFields, String forFutureReference) {
         education = new Education();
         this.textFields = textFields;
@@ -98,7 +97,7 @@ public class EducationPage extends FDMPage implements HasAddableTextFields, HasT
         textFields.addAll(keyModules);
         FDMButton addBtn = new FDMButton("Add key module");
         addBtn.setDesign();
-        createAddableAreaFromModel(keyModules, keyModuleGridPane, addBtn, textFields, forFutureReference);
+        createAddableAreaFromModel(keyModules, keyModuleGridPane, addBtn, textFields, forFutureReference, "Remove key module", "Key module");
         saveBtn = new FDMButton("Save");
         centerBox = new FDMCenterVBoxWrapper(pageTitle, degree,
                 studyTitle,
@@ -107,10 +106,4 @@ public class EducationPage extends FDMPage implements HasAddableTextFields, HasT
                 thesisTitle, dateWrapper, keyModuleLabel, keyModuleGridPane, saveBtn);
         centerBox.setDesign();
     }
-
-    /*public ScrollPane createCenterPage() {
-        center = new FDMScrollPaneWrapper(centerBox);
-        center.setDesign();
-        return center;
-    }*/
 }

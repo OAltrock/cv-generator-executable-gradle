@@ -41,31 +41,18 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
     @Override
     public void initialize(BorderPane main, String resource) {
 
-
-        /*InitializableFXML.super.initialize(main, resource);
-        ScrollPane scrollPane = (ScrollPane) main.getCenter();
-        VBox centerBox = (VBox) scrollPane.getContent();
-        Button saveBtn = (Button) centerBox.lookup("#saveBtn");
-
-        List<Node> uncheckedTextFields = new ArrayList<>(centerBox.getChildren().stream().filter(child -> child.getClass().toString().contains("TextField")).toList());
-        List<TextField> castTextFields = uncheckedTextFields.stream().map(textField -> (TextField) textField).toList();*/
         textFields = FXCollections.observableArrayList();
         GridPane gridPane;
         if (experiences!=null  && !experiences.isEmpty()) {
             experiencePage = new ExperiencePage(experiences.getLast(),textFields,forFutureReference);
-            //gridPane = experiencePage.getKeySkillsGridPane();
         }
         else {
             experiencePage = new ExperiencePage(textFields,forFutureReference);
-
-            //createKeySkillsArea(gridPane);
         }
 
         main.setCenter(experiencePage.createCenterPage(experiencePage.getCenterBox()));
         VBox centerBox = experiencePage.getCenterBox();
         gridPane = experiencePage.getKeySkillsGridPane();
-        //GridPane gridPane = (GridPane) centerBox.getChildren().stream().filter(child -> child.getClass().toString().contains("GridPane")).toList().getFirst();
-        //createKeySkillsArea(gridPane);
         CheckBox checkBox = experiencePage.getOngoing();
         DatePicker start = experiencePage.getStartDate();
         DatePicker end = experiencePage.getEndDate();
@@ -98,7 +85,6 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
         if (experiences==null) experiences = new ArrayList<>();
         if (experiences.isEmpty()) experiences.add(new Experience());
         Experience experience = experiences.getLast();
-        //ToDo: rest of textFields (use page fields)
         experience.setCompanyName(experiencePage.getCompanyName().getText());
         experience.setJobTitle(experiencePage.getJobTitle().getText());
         experience.setCompanyPlace(experiencePage.getCompanyPlace().getText());

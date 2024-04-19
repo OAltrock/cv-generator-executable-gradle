@@ -54,7 +54,9 @@ public interface HasAddableTextFields {
 
                 parent.add(textFieldToAdd, 0, rowCount);
                 parent.add(removeButton, 1, rowCount);
-                if (parent.getChildren().size() > 3) {
+
+                //ToDo: maybe there is a better way (includes the whole system of adding and removing removeBtns)
+                if (parent.getChildren().size() > 3 && parent.getChildren().size()<6) {
                     FDMButton lastRemoveBtn = new FDMButton(removeBtnMessage);
                     parent.add(lastRemoveBtn, 1, rowCount - 2);
                     TextField lastTextField = (TextField) parent.getChildren().stream().filter(child -> (GridPane.getColumnIndex(child) == 0 &&
@@ -79,11 +81,12 @@ public interface HasAddableTextFields {
             textFields.remove(textFieldToRemove);
             addableTextFields.remove(textFieldToRemove);
             gridPane.getChildren().removeAll(addModuleBtn, removeButton, textFieldToRemove);
+            gridPane.add(addModuleBtn, 2, gridPane.getRowCount() - 1);
+            //ToDo: bug with remove middle of 3
             if (gridPane.getChildren().size() <= 3 && gridPane.getChildren().size()>1) {
                 Button rmvBtn = (Button) gridPane.getChildren().get(1);
                 if (rmvBtn != null) gridPane.getChildren().remove(rmvBtn);
             }
-            gridPane.add(addModuleBtn, 2, gridPane.getRowCount() - 1);
 
         });
     }
@@ -146,8 +149,9 @@ public interface HasAddableTextFields {
      * @param textFields         {@link ObservableList}&lt;TextInputControls&gt; of validatable TextInputControls
      * @param forFutureReference emulating template limits for when those will be implemented
      */
-    default void createAddableAreaFromModel(List<TextInputControl> keyProperty, GridPane gridPane, Button addBtn, ObservableList<TextInputControl> textFields,
-                                            String forFutureReference) {
+    default void createAddableAreaFromModel(List<TextInputControl> keyProperty, GridPane gridPane, Button addBtn,
+                                            ObservableList<TextInputControl> textFields,
+                                            String forFutureReference, String removeButtonMsg, String textFieldPromptMsg) {
         if (keyProperty.isEmpty()) {
             TextField newTextField = new TextField();
             newTextField.setPromptText("Key skill");
@@ -156,18 +160,18 @@ public interface HasAddableTextFields {
             gridPane.add(addBtn, 2, 0);
             textFields.add(newTextField);
             keyProperty.add(newTextField);
-            createAddableArea(gridPane, textFields, addBtn, "Remove Key Module", "Key Module",
+            createAddableArea(gridPane, textFields, addBtn, removeButtonMsg, textFieldPromptMsg,
                     (string -> !string.matches("^.*[a-zA-Z]+.*$")), forFutureReference, keyProperty);
         } else {
             keyProperty.forEach(textField -> {
                 if (textField == keyProperty.getFirst() && textField != keyProperty.getLast()) {
-                    Button removeBtn = new Button("Remove key module");
+                    Button removeBtn = new Button(removeButtonMsg);
                     gridPane.add(textField, 0, 0);
                     gridPane.add(removeBtn, 1, 0);
                     addListenerTooRemoveBtn(textField, removeBtn, gridPane, addBtn, textFields, keyProperty);
                 } else if (textField == keyProperty.getLast() && textField != keyProperty.getFirst()) {
                     int rowCount = gridPane.getRowCount();
-                    Button removeBtn = new Button("Remove key module");
+                    Button removeBtn = new Button(removeButtonMsg);
                     gridPane.add(textField, 0, rowCount);
                     gridPane.add(removeBtn, 1, rowCount);
                     gridPane.add(addBtn, 2, rowCount);
@@ -178,12 +182,12 @@ public interface HasAddableTextFields {
                     gridPane.add(addBtn, 2, rowCount);
                 } else {
                     int rowCount = gridPane.getRowCount();
-                    Button removeBtn = new Button("Remove key module");
+                    Button removeBtn = new Button(removeButtonMsg);
                     gridPane.add(textField, 0, rowCount);
                     gridPane.add(removeBtn, 1, rowCount);
                     addListenerTooRemoveBtn(textField, removeBtn, gridPane, addBtn, textFields, keyProperty);
                 }
-                createAddableArea(gridPane, textFields, addBtn, "Remove Key Module", "Key Module",
+                createAddableArea(gridPane, textFields, addBtn, removeButtonMsg, textFieldPromptMsg,
                         (string -> !string.matches("^.*[a-zA-Z]+.*$")), forFutureReference, keyProperty);
             });
         }

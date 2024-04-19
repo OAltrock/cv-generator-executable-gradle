@@ -89,7 +89,7 @@ public class ExperiencePage extends FDMPage implements HasAddableTextFields {
 
         textFields.addAll(keySkills);
 
-        createAddableAreaFromModel(keySkills, keySkillsGridPane, addBtn, textFields, forFutureReference);
+        createAddableAreaFromModel(keySkills, keySkillsGridPane, addBtn, textFields, forFutureReference, "Remove key skill", "Key skill");
 
         saveBtn = new FDMButton("Save");
 
