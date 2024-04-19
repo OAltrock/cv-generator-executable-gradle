@@ -11,7 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
 import java.util.function.Predicate;
-import static com.fdmgroup.cvgeneratorgradle.controller.SceneSearchUtil.findAllTextFields;
+import static com.fdmgroup.cvgeneratorgradle.controller.AppUtils.findAllTextFields;
 
 public class ProfileController implements InitializableFXML, HasToggleableSaveButtons, HasAddableTextFields {
 

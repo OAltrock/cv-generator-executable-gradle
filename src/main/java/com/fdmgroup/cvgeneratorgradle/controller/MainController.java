@@ -79,14 +79,13 @@ public class MainController implements Initializable {
                     new PersonalInformationController().initialize(mainWindow, "personalInfo");
                 }
                 case "Experience" -> {
-                    new ExperienceController().initialize(mainWindow, "experience2");
+                    new ExperienceController(cvTemplate).initialize(mainWindow, "experience2");
                 }
                 case "Summary" -> {
                     new SummaryController().initialize(mainWindow, "test");
                 }
                 case "Education" -> {
                     new EducationController(cvTemplate).initialize(mainWindow, "education2");
-                    /*setCenter("education.fxml");*/
                 }
                 case "Skills" -> {
                     new SkillsController().initialize(mainWindow, "skills");

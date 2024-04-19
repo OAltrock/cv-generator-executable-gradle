@@ -10,10 +10,9 @@ import com.fdmgroup.cvgeneratorgradle.models.Education;
 
 
 import com.fdmgroup.cvgeneratorgradle.views.EducationPage;
+import com.fdmgroup.cvgeneratorgradle.views.FDMButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import lombok.Getter;
@@ -25,7 +24,7 @@ import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-import static com.fdmgroup.cvgeneratorgradle.controller.SceneSearchUtil.findAllTextFields;
+import static com.fdmgroup.cvgeneratorgradle.controller.AppUtils.findAllTextFields;
 
 public class EducationController implements InitializableFXML, HasToggleableSaveButtons, HasAddableTextFields, HasDateValidation {
 
@@ -42,8 +41,6 @@ public class EducationController implements InitializableFXML, HasToggleableSave
      */
     private final String forFutureReference = "3";
     Predicate<String> predicate = input -> !input.matches("^.*[a-zA-Z]+.*$");
-
-    //ToDo: write input to education object
 
     /**
      *
@@ -64,31 +61,39 @@ public class EducationController implements InitializableFXML, HasToggleableSave
         VBox centerBox;
         DatePicker start;
         DatePicker end;
-        Button saveBtn;
+        FDMButton saveBtn;
 
+        EducationPage educationPage;
         textFields = FXCollections.observableArrayList();
-        textFields.forEach(System.out::println);
+
         if (educations!=null) {
-            EducationPage educationPage = new EducationPage(educations.getLast(),forFutureReference, textFields);
-            main.setCenter(educationPage.createCenterPage());
+             educationPage = new EducationPage(educations.getLast(),forFutureReference, textFields);
+            /*main.setCenter(educationPage.createCenterPage());
             centerBox = educationPage.getCenterBox();
             checkBox = educationPage.getOngoing();
             start=educationPage.getStartDate();
             end=educationPage.getEndDate();
             saveBtn = educationPage.getSaveBtn();
+            saveBtn.setDesign();*/
         }
         else {
-            centerBox = (VBox) center.getContent();
-            createKeyModulesArea(centerBox);
+            educationPage = new EducationPage(textFields,forFutureReference);
+            /*centerBox = (VBox) center.getContent();
+            //createKeyModulesArea(centerBox);
             Label hintLabel = (Label) centerBox.lookup("#hintLabel");
             hintLabel.setText("Add " + forFutureReference + " key modules");
             start = (DatePicker) centerBox.lookup("#start");
             end = (DatePicker) centerBox.lookup("#end");
             checkBox = (CheckBox) centerBox.lookup("#ongoing");
-            saveBtn = (Button) center.getContent().lookup("#saveBtn");
+            saveBtn = new FDMButton("Save");
+            centerBox.getChildren().add(saveBtn);*/
         }
 
-
+        main.setCenter(educationPage.createCenterPage(educationPage.getCenterBox()));
+        centerBox = educationPage.getCenterBox();
+        start = educationPage.getStartDate();
+        end = educationPage.getEndDate();
+        checkBox = educationPage.getOngoing();
         BiPredicate<LocalDate, LocalDate> checkDate = (startDate, endDate) -> {
             if (startDate==null) {
                 return false;
@@ -101,6 +106,8 @@ public class EducationController implements InitializableFXML, HasToggleableSave
                 return startDate.isBefore(endDate) || startDate.isEqual(endDate);
             }
         };
+        saveBtn = educationPage.getSaveBtn();
+
 
         addValidationToSaveButtons(textFields, predicate, saveBtn, start,end,checkDate,checkBox);
 
@@ -113,13 +120,13 @@ public class EducationController implements InitializableFXML, HasToggleableSave
 
     }
 
-    private void createKeyModulesArea(VBox centerBox) {
+    /*private void createKeyModulesArea(VBox centerBox) {
         TextField textField = (TextField) centerBox.lookup("#keyModule");
         textFields.add(textField);
         GridPane gridPane = (GridPane) centerBox.lookup("#keyModules");
         javafx.scene.control.Button addModuleButton = (javafx.scene.control.Button) centerBox.lookup("#0");
-        addAddButtons(gridPane,textFields, addModuleButton, "Remove Key Module", "Key Module", predicate, forFutureReference);
-    }
+        createAddableArea(gridPane,textFields, addModuleButton, "Remove Key Module", "Key Module", predicate, forFutureReference, );
+    }*/
 
     private void assignEducationInput(DatePicker start, DatePicker end){
 
@@ -127,7 +134,7 @@ public class EducationController implements InitializableFXML, HasToggleableSave
         if (educations.isEmpty()) educations.add(new Education());
 
         educations.getLast().setKeyModules(new ArrayList<>());
-
+        System.out.println(textFields);
         textFields.forEach(textInputControl -> {
             switch (textInputControl.getId()) {
                 case "degree" -> {
