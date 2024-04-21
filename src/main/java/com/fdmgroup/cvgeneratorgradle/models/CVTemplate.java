@@ -40,6 +40,8 @@ public class CVTemplate {
 
 	private User user;
 
+	private String profile;
+
 	private Location location;
 
 	private Stream stream;

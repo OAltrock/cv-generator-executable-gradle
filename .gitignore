@@ -3,6 +3,7 @@ build/
 ## build executables
 *.msi
 *.exe
+/app-test
 
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/

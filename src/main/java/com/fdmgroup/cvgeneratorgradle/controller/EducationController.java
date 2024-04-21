@@ -56,7 +56,6 @@ public class EducationController implements InitializableFXML, HasToggleableSave
     @Override
     public void initialize(BorderPane main, String resource) {
         InitializableFXML.super.initialize(main, resource);
-        ScrollPane center = (ScrollPane) main.getCenter();
         CheckBox checkBox;
         VBox centerBox;
         DatePicker start;
@@ -68,25 +67,9 @@ public class EducationController implements InitializableFXML, HasToggleableSave
 
         if (educations!=null) {
              educationPage = new EducationPage(educations.getLast(),forFutureReference, textFields);
-            /*main.setCenter(educationPage.createCenterPage());
-            centerBox = educationPage.getCenterBox();
-            checkBox = educationPage.getOngoing();
-            start=educationPage.getStartDate();
-            end=educationPage.getEndDate();
-            saveBtn = educationPage.getSaveBtn();
-            saveBtn.setDesign();*/
         }
         else {
             educationPage = new EducationPage(textFields,forFutureReference);
-            /*centerBox = (VBox) center.getContent();
-            //createKeyModulesArea(centerBox);
-            Label hintLabel = (Label) centerBox.lookup("#hintLabel");
-            hintLabel.setText("Add " + forFutureReference + " key modules");
-            start = (DatePicker) centerBox.lookup("#start");
-            end = (DatePicker) centerBox.lookup("#end");
-            checkBox = (CheckBox) centerBox.lookup("#ongoing");
-            saveBtn = new FDMButton("Save");
-            centerBox.getChildren().add(saveBtn);*/
         }
 
         main.setCenter(educationPage.createCenterPage(educationPage.getCenterBox()));
@@ -119,14 +102,6 @@ public class EducationController implements InitializableFXML, HasToggleableSave
         });
 
     }
-
-    /*private void createKeyModulesArea(VBox centerBox) {
-        TextField textField = (TextField) centerBox.lookup("#keyModule");
-        textFields.add(textField);
-        GridPane gridPane = (GridPane) centerBox.lookup("#keyModules");
-        javafx.scene.control.Button addModuleButton = (javafx.scene.control.Button) centerBox.lookup("#0");
-        createAddableArea(gridPane,textFields, addModuleButton, "Remove Key Module", "Key Module", predicate, forFutureReference, );
-    }*/
 
     private void assignEducationInput(DatePicker start, DatePicker end){
 

@@ -3,10 +3,12 @@ package com.fdmgroup.cvgeneratorgradle.controller;
 import com.fdmgroup.cvgeneratorgradle.interfaces.HasAddableTextFields;
 import com.fdmgroup.cvgeneratorgradle.interfaces.HasToggleableSaveButtons;
 import com.fdmgroup.cvgeneratorgradle.interfaces.InitializableFXML;
+import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
+import com.fdmgroup.cvgeneratorgradle.views.FDMButton;
+import com.fdmgroup.cvgeneratorgradle.views.FDMCenterVBoxWrapper;
+import com.fdmgroup.cvgeneratorgradle.views.ProfilePage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
@@ -15,34 +17,33 @@ import static com.fdmgroup.cvgeneratorgradle.controller.AppUtils.findAllTextFiel
 
 public class ProfileController implements InitializableFXML, HasToggleableSaveButtons, HasAddableTextFields {
 
+    private CVTemplate cvTemplate;
+    private String profile;
     private ObservableList<TextInputControl> textAreas;
+
+    public ProfileController(CVTemplate cvTemplate) {
+        this.cvTemplate = cvTemplate;
+        profile = cvTemplate.getProfile();
+    }
 
     @Override
     public void initialize(BorderPane main, String resource) {
-        InitializableFXML.super.initialize(main, resource);
-        Label label = new Label("Profile");
-        Button saveBtn = new Button("Save");
-        TextArea textArea = new TextArea();
-        textArea.setWrapText(true);
-        textArea.maxWidth(100);
-        textArea.setPromptText("See Global FDM CV – Support Guide for detailed guidance on this section");
-
-        VBox centerBox = new VBox(label, textArea,saveBtn);
-        centerBox.setAlignment(Pos.TOP_CENTER);
-        centerBox.setFillWidth(false);
-        centerBox.setPadding(new Insets(20));
-        centerBox.setSpacing(20);
-        main.setCenter(centerBox);
         textAreas = FXCollections.observableArrayList();
+        ProfilePage page = new ProfilePage(profile, textAreas);
+
+        main.setCenter(page.createCenterPage(page.getCenterBox()));
+        FDMCenterVBoxWrapper centerBox = page.getCenterBox();
+        FDMButton saveBtn = page.getNext();
 
         Predicate<String> atLeast50Chars = (string -> string.length()>=50 && string.matches("^.*\\w+.*$"));
 
         addValidationToSaveButtons(textAreas,atLeast50Chars,saveBtn);
 
-
         textAreas.addAll(findAllTextFields(centerBox));
         createValidationForTextFields(atLeast50Chars.negate(), textAreas, "Write at least 50 letters.");
 
-
+        saveBtn.setOnAction(actionEvent -> {
+            cvTemplate.setProfile(page.getProfile().getText());
+        });
     }
 }

@@ -91,7 +91,7 @@ public class MainController implements Initializable {
                     new SkillsController().initialize(mainWindow, "skills");
                 }
                 case "Profile" -> {
-                    new ProfileController().initialize(mainWindow, "profile");
+                    new ProfileController(cvTemplate).initialize(mainWindow, "profile");
                 }
                 default -> {
                 }

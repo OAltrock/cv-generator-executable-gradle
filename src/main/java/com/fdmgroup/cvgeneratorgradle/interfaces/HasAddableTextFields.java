@@ -6,7 +6,6 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.value.ObservableBooleanValue;
 import javafx.collections.ObservableList;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
@@ -16,7 +15,6 @@ import javafx.scene.paint.Color;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Predicate;
 
 import static com.fdmgroup.cvgeneratorgradle.CVGeneratorApp.setCounter1;

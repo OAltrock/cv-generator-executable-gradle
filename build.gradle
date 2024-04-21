@@ -1,7 +1,7 @@
 plugins {
   id 'java'
   id 'application'
-  /* id 'org.javamodularity.moduleplugin' version '1.8.12' */
+  id 'org.javamodularity.moduleplugin' version '1.8.12'
   id 'org.openjfx.javafxplugin' version '0.0.13'
   id 'org.beryx.runtime' version '1.13.1'
   id("io.freefair.lombok") version "8.6"
@@ -14,8 +14,8 @@ repositories {
   //mavenLocal()
   mavenCentral()
 }
-apply plugin: 'java'
-apply plugin: 'eclipse'
+/* apply plugin: 'java'
+apply plugin: 'eclipse' */
 
 ext {
   junitVersion = '5.10.0'
@@ -37,8 +37,6 @@ application {
 javafx {
   version = '22'
   modules = ['javafx.controls', 'javafx.fxml']
-  //sdk = '%JAVA_HOME%'
-
 }
 
 dependencies {
@@ -106,7 +104,7 @@ runtime {
                installerOptions += ['--mac-package-name', 'fdm-cv-generator']
                     }
       }
-  options = ['--strip-debug', '--compress', '--no-header-files', '--no-man-pages']
+  options = ['--strip-debug', '--no-header-files', '--no-man-pages']
 
 }
 /* tasks.jpackage.doFirst {
