@@ -48,12 +48,14 @@ public class PersonalInformationController implements InitializableFXML, HasTogg
         page = new PersonalInfoPage(user, location, stream, textFields);
         main.setCenter(page.createCenterPage(page.getCenterBox()));
         Button[] buttons = new Button[] {page.getPrevBtn(), page.getNextBtn()};
+
         addValidationToSaveButtons(textFields, List.of(page.getStreamChooser(),page.getLocationChooser()),string->!string.matches("^.*[a-zA-Z]+.*$"),buttons);
 
         textFields.addAll(List.of(page.getFirstName(),page.getLastName(), page.getEmail()));
-        System.out.println(textFields);
-        createValidationForTextFields(string->!string.matches("^.*[a-zA-Z]+.*$"), textFields, "Must contain at least one letter");
 
+        createValidationForTextFields(string->!string.matches("^.*[a-zA-Z]+.*$"), textFields, "Must contain at least one letter");
+        page.getStreamChooser().setValue((stream.getStreamName()!=null)?stream.getStreamName():"");
+        page.getLocationChooser().setValue((location.getLocationName()!=null)?location.getLocationName():"");
         page.getStreamChooser().setOnAction(actionEvent-> {
             if (Objects.equals(page.getStreamChooser().getValue(), "Technical")) {
                 //ToDo: list should be addable
