@@ -18,6 +18,7 @@ import javafx.scene.layout.VBox;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
@@ -56,7 +57,8 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
         CheckBox checkBox = experiencePage.getOngoing();
         DatePicker start = experiencePage.getStartDate();
         DatePicker end = experiencePage.getEndDate();
-        FDMButton saveBtn = experiencePage.getSaveBtn();
+        Button[] buttons = new Button[]{experiencePage.getPrevBtn(),experiencePage.getNextBtn()};
+
         BiPredicate<LocalDate, LocalDate> checkDate = (startDate, endDate) -> {
             if (startDate==null) {
                 return false;
@@ -69,14 +71,21 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
                 return startDate.isBefore(endDate) || startDate.isEqual(endDate);
             }
         };
-        addValidationToSaveButtons(textFields, predicate, saveBtn, start, end,checkDate, checkBox);
+        addValidationToSaveButtons(textFields, predicate, start, end,checkDate, checkBox, buttons);
         textFields.addAll(findAllTextFields(centerBox));
 
         createValidationForTextFields(predicate, textFields, "Must contain at least one Letter");
         addValidationToDates(start,end,checkDate, checkBox);
 
-        saveBtn.setOnAction(actionEvent -> {
+
+        buttons[1].setOnAction(actionEvent -> {
             assignExperienceInput(start, end);
+            new EducationController(cvTemplate).initialize(main, "");
+        });
+
+        buttons[0].setOnAction(actionEvent -> {
+            assignExperienceInput(start,end);
+            new PersonalInformationController(cvTemplate).initialize(main,"");
         });
 
     }

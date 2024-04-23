@@ -37,13 +37,18 @@ public class ProfileController implements InitializableFXML, HasToggleableSaveBu
 
         Predicate<String> atLeast50Chars = (string -> string.length()>=50 && string.matches("^.*\\w+.*$"));
 
-        addValidationToSaveButtons(textAreas,atLeast50Chars,saveBtn);
+        addValidationToSaveButtons(textAreas,atLeast50Chars, saveBtn);
+
 
         textAreas.addAll(findAllTextFields(centerBox));
+
         createValidationForTextFields(atLeast50Chars.negate(), textAreas, "Write at least 50 letters.");
 
         saveBtn.setOnAction(actionEvent -> {
             cvTemplate.setProfile(page.getProfile().getText());
+            new PersonalInformationController(cvTemplate).initialize(main,"");
         });
+
+        page.getPrev().setVisible(false);
     }
 }

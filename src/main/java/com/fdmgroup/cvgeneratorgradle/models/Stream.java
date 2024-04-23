@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 
 @Getter
@@ -14,11 +15,9 @@ import java.util.List;
 @AllArgsConstructor
 public class Stream {
 
-	private int id;
-
 	private String streamName;
 
 	private List<String> presetTraining;
 
-	private List<String> presetCompetences;
+	private Set<String> presetCompetences;
 }

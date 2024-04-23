@@ -41,10 +41,6 @@ public class MainController implements Initializable {
 
 
     public void showLeftBorder(ActionEvent actionEvent) {
-
-        //creating
-
-
         //setting center scene (will be deprecated once we use classes (CVTemplate)
         setLabel("Fill out the specific sections of your CV");
 
@@ -56,7 +52,7 @@ public class MainController implements Initializable {
         TreeItem<String> skills = new TreeItem<>("Skills");
         TreeItem<String> education = new TreeItem<>("Education");
         TreeItem<String> profile = new TreeItem<>("Profile");
-        List<TreeItem<String>> detailsItems = List.of(personalInformation, experience, education, skills, profile);
+        List<TreeItem<String>> detailsItems = List.of(profile, personalInformation, experience, education, skills);
         List<TreeItem<String>> rootItems = List.of(details, summary);
 
         //setting up tree nodes (should be populated by a cv class in the future)
@@ -76,13 +72,13 @@ public class MainController implements Initializable {
 
             switch (newV.getValue()) {
                 case "Personal Information" -> {
-                    new PersonalInformationController().initialize(mainWindow, "personalInfo");
+                    new PersonalInformationController(cvTemplate).initialize(mainWindow, "personalInfo");
                 }
                 case "Experience" -> {
                     new ExperienceController(cvTemplate).initialize(mainWindow, "experience2");
                 }
                 case "Summary" -> {
-                    new SummaryController().initialize(mainWindow, "test");
+                    new SummaryController(cvTemplate).initialize(mainWindow, "test");
                 }
                 case "Education" -> {
                     new EducationController(cvTemplate).initialize(mainWindow, "education2");

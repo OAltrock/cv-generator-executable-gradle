@@ -12,6 +12,8 @@ public class ProfilePage extends FDMPage{
     private FDMCenterVBoxWrapper centerBox;
     private final javafx.scene.control.Label pageTitle = new Label("Profile");
     private javafx.scene.control.TextArea profile;
+    private FDMHBox buttonWrapper;
+    private FDMButton prev;
     private FDMButton next;
     private ObservableList<TextInputControl> textfields;
 
@@ -34,10 +36,15 @@ public class ProfilePage extends FDMPage{
     private void initialize() {
         next = new FDMButton("Next");
         next.setDesign();
+        prev = new FDMButton("Previous");
+        prev.setDesign();
+        buttonWrapper = new FDMHBox(prev, next);
+        buttonWrapper.setDesign();
+
         profile.setPromptText("See Global FDM CV – Support Guide for detailed guidance on this section");
         profile.setWrapText(true);
         textfields.add(profile);
-        centerBox = new FDMCenterVBoxWrapper(pageTitle, profile, next);
+        centerBox = new FDMCenterVBoxWrapper(pageTitle, profile, buttonWrapper);
     }
 
 

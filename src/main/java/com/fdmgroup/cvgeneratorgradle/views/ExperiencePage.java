@@ -35,7 +35,9 @@ public class ExperiencePage extends FDMPage implements HasAddableTextFields {
     private final List<TextInputControl> keySkills;
 
     private FDMButton addBtn;
-    private FDMButton saveBtn;
+    private FDMButton nextBtn;
+    private FDMButton prevBtn;
+    private FDMHBox buttonWrapper;
 
     private final ObservableList<TextInputControl> textFields;
     private final String forFutureReference;
@@ -91,11 +93,13 @@ public class ExperiencePage extends FDMPage implements HasAddableTextFields {
 
         createAddableAreaFromModel(keySkills, keySkillsGridPane, addBtn, textFields, forFutureReference, "Remove key skill", "Key skill");
 
-        saveBtn = new FDMButton("Save");
-
+        nextBtn = new FDMButton("Next");
+        prevBtn = new FDMButton("Previous");
+        buttonWrapper = new FDMHBox(prevBtn,nextBtn);
+        buttonWrapper.setDesign();
 
         centerBox = new FDMCenterVBoxWrapper(pageTitle, jobTitle, companyName, companyPlace,
-                dateWrapper, keySkillsGridPane, saveBtn);
+                dateWrapper, keySkillsGridPane, buttonWrapper);
         centerBox.setDesign();
         center = new ScrollPane(centerBox);
     }

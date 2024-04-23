@@ -10,7 +10,6 @@ import com.fdmgroup.cvgeneratorgradle.models.Education;
 
 
 import com.fdmgroup.cvgeneratorgradle.views.EducationPage;
-import com.fdmgroup.cvgeneratorgradle.views.FDMButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -60,9 +59,10 @@ public class EducationController implements InitializableFXML, HasToggleableSave
         VBox centerBox;
         DatePicker start;
         DatePicker end;
-        FDMButton saveBtn;
+
 
         EducationPage educationPage;
+
         textFields = FXCollections.observableArrayList();
 
         if (educations!=null) {
@@ -71,7 +71,7 @@ public class EducationController implements InitializableFXML, HasToggleableSave
         else {
             educationPage = new EducationPage(textFields,forFutureReference);
         }
-
+        Button[] buttons = new Button[]{educationPage.getPrevBtn(), educationPage.getNextBtn()};
         main.setCenter(educationPage.createCenterPage(educationPage.getCenterBox()));
         centerBox = educationPage.getCenterBox();
         start = educationPage.getStartDate();
@@ -89,16 +89,19 @@ public class EducationController implements InitializableFXML, HasToggleableSave
                 return startDate.isBefore(endDate) || startDate.isEqual(endDate);
             }
         };
-        saveBtn = educationPage.getSaveBtn();
 
-
-        addValidationToSaveButtons(textFields, predicate, saveBtn, start,end,checkDate,checkBox);
+        addValidationToSaveButtons(textFields, predicate, start,end,checkDate,checkBox, buttons);
 
         textFields.addAll(findAllTextFields(centerBox));
         createValidationForTextFields(predicate, textFields, "Must contain at least one letter");
         addValidationToDates(start, end,checkDate,checkBox);
-        saveBtn.setOnAction(actionEvent -> {
+        buttons[0].setOnAction(actionEvent -> {
             assignEducationInput(start, end);
+            new ExperienceController(cvTemplate).initialize(main,"");
+        });
+        buttons[1].setOnAction(actionEvent -> {
+            assignEducationInput(start, end);
+            new SummaryController(cvTemplate).initialize(main,"summary");
         });
 
     }

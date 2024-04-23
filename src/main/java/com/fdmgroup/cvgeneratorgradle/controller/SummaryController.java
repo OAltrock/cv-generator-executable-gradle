@@ -1,6 +1,7 @@
 package com.fdmgroup.cvgeneratorgradle.controller;
 
 import com.fdmgroup.cvgeneratorgradle.interfaces.InitializableFXML;
+import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollBar;
@@ -10,6 +11,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 public class SummaryController implements InitializableFXML {
+    CVTemplate cvTemplate;
+    public SummaryController(CVTemplate cvTemplate) {
+        this.cvTemplate = cvTemplate;
+    }
+
     @Override
     public void initialize(BorderPane main, String resource) {
         InitializableFXML.super.initialize(main, resource);
