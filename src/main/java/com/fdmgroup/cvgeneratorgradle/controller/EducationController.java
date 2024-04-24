@@ -95,6 +95,8 @@ public class EducationController implements InitializableFXML, HasToggleableSave
         addValidationToSaveButtons(textFields, predicate, start,end,checkDate,checkBox, buttons);
 
         textFields.addAll(findAllTextFields(centerBox));
+        textFields.addAll(findAllTextFields(educationPage.getKeyModuleGridPane()));
+
         createValidationForTextFields(predicate, textFields, "Must contain at least one letter");
         addValidationToDates(start, end,checkDate,checkBox);
         buttons[0].setOnAction(actionEvent -> {

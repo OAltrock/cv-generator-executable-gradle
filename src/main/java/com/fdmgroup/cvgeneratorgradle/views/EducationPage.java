@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class EducationPage extends FDMPage implements HasAddableTextFields, HasToggleableSaveButtons, HasDateValidation {
+public class EducationPage extends FDMPage implements HasAddableTextFields/*, HasToggleableSaveButtons, HasDateValidation*/ {
     private final Education education;
 
     private FDMCenterVBoxWrapper centerBox;
@@ -67,14 +67,19 @@ public class EducationPage extends FDMPage implements HasAddableTextFields, HasT
     private void initialize() {
         degree = (education.getDegree() != null) ? new TextField(education.getDegree()) : new TextField("");
         degree.setId("degree");
+        degree.setPromptText("Degree");
         studyTitle = (education.getDegree() != null) ? new TextField(education.getStudyTitle()) : new TextField("");
         studyTitle.setId("studyTitle");
+        studyTitle.setPromptText("Study title");
         universityName = (education.getDegree() != null) ? new TextField(education.getUniversityName()) : new TextField("");
         universityName.setId("universityName");
+        universityName.setPromptText("University name");
         universityPlace = (education.getDegree() != null) ? new TextField(education.getUniversityPlace()) : new TextField("");
         universityPlace.setId("universityPlace");
+        universityPlace.setPromptText("Place of university");
         thesisTitle = (education.getDegree() != null) ? new TextField(education.getThesisTitle()) : new TextField("");
         thesisTitle.setId("thesisTitle");
+        thesisTitle.setPromptText("Title of thesis");
         startDate = (education.getStartDate() != null) ? new DatePicker(LocalDate.parse(education.getStartDate())) : new DatePicker();
         endDate = (education.getStartDate() != null) ? new DatePicker(LocalDate.parse(education.getEndDate())) : new DatePicker();
         ongoing = new CheckBox("ongoing");

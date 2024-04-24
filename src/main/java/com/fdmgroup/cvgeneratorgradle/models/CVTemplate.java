@@ -52,16 +52,16 @@ public class CVTemplate {
 
 	private List<String> competences;
 
-	private List<Certificate> certificates;
+	private List<String> certificates;
 
 	private List<Language> languages;
 
-	private List<Interest> interests;
+	private List<String> interests;
 
 	public CVTemplate(User user, String firstName, String lastName, Location location, Stream stream,
 			ProfilePicture profilePicture, List<Experience> experience, List<Education> education,
-			List<String> competence, List<Certificate> certificate, List<Language> language,
-			List<Interest> interest) {
+			List<String> competence, List<String> certificate, List<Language> language,
+			List<String> interest) {
 		this.user = user;
 		this.location = location;
 		this.stream = stream;

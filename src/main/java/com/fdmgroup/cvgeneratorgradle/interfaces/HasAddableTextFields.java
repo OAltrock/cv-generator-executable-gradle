@@ -152,11 +152,10 @@ public interface HasAddableTextFields {
                                             String forFutureReference, String removeButtonMsg, String textFieldPromptMsg) {
         if (keyProperty.isEmpty()) {
             TextField newTextField = new TextField();
-            newTextField.setPromptText("Key skill");
-            newTextField.setId("DefaultKeyProperty");
+            newTextField.setPromptText(textFieldPromptMsg);
             gridPane.add(newTextField, 0, 0);
             gridPane.add(addBtn, 2, 0);
-            textFields.add(newTextField);
+            //textFields.add(newTextField);
             keyProperty.add(newTextField);
             createAddableArea(gridPane, textFields, addBtn, removeButtonMsg, textFieldPromptMsg,
                     (string -> !string.matches("^.*[a-zA-Z]+.*$")), forFutureReference, keyProperty);

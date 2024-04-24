@@ -75,7 +75,7 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
         };
         addValidationToSaveButtons(textFields, predicate, start, end,checkDate, checkBox, buttons);
         textFields.addAll(findAllTextFields(centerBox));
-
+        textFields.addAll(findAllTextFields(experiencePage.getKeySkillsGridPane()));
         createValidationForTextFields(predicate, textFields, "Must contain at least one Letter");
         addValidationToDates(start,end,checkDate, checkBox);
 

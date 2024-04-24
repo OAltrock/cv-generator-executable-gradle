@@ -30,8 +30,8 @@ public interface HasToggleableSaveButtons {
             list.addListener(new InvalidationListener() {
                 @Override
                 public void invalidated(Observable observable) {
-                    BooleanBinding validInput = validateTextFields(list, checkText);
-                    button.disableProperty().bind(validInput.not());
+                    BooleanBinding validInput = validateTextFields(list, checkText.negate());
+                    button.disableProperty().bind(validInput);
                 }
             });
         });

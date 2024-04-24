@@ -64,9 +64,13 @@ public class ExperiencePage extends FDMPage implements HasAddableTextFields {
     private void initialize() {
         pageTitle = new Label("Experience");
         jobTitle = (experience.getJobTitle()!=null) ? new javafx.scene.control.TextField(experience.getJobTitle()) : new TextField("");
+        jobTitle.setPromptText("Title of job");
         companyName = (experience.getJobTitle()!=null) ? new javafx.scene.control.TextField(experience.getCompanyName()): new TextField("");
+        companyName.setPromptText("Name of company");
         companyPlace = (experience.getJobTitle()!=null) ? new javafx.scene.control.TextField(experience.getCompanyName()): new TextField("");
+        companyPlace.setPromptText("Place of company");
         description = (experience.getJobTitle()!=null) ? new TextArea(experience.getDescription()): new TextField("");
+        description.setPromptText("Description");
 
         startDate = (experience.getStartDate() != null) ? new DatePicker(LocalDate.parse(experience.getStartDate()))
                 : new DatePicker();
