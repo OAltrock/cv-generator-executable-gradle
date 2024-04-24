@@ -23,6 +23,8 @@ public class MainController implements Initializable {
 
     CVTemplate cvTemplate;
 
+    TreeView<String> treeView;
+
     @FXML
     private BorderPane mainWindow;
 
@@ -61,33 +63,33 @@ public class MainController implements Initializable {
 
         //setting up tree view
 
-        TreeView<String> leftBorderTreeView = createTreeView(cv);
-        leftBorderTreeView.setPrefWidth(300);
-        leftBorderTreeView.setShowRoot(false);
-        leftBorderTreeView.getRoot().getChildren().forEach(child -> child.setExpanded(true));
+        treeView = createTreeView(cv);
+        treeView.setPrefWidth(300);
+        treeView.setShowRoot(false);
+        treeView.getRoot().getChildren().forEach(child -> child.setExpanded(true));
 
         //setting up app navigation
         //o is observable, oldV is old value (those two are not being used); newV is new value (ie: what the user has selected)
-        leftBorderTreeView.getSelectionModel().selectedItemProperty().addListener((o, oldV, newV) -> {
+        treeView.getSelectionModel().selectedItemProperty().addListener((o, oldV, newV) -> {
 
             switch (newV.getValue()) {
                 case "Personal Information" -> {
-                    new PersonalInformationController(cvTemplate).initialize(mainWindow, "personalInfo");
+                    new PersonalInformationController(cvTemplate, treeView).initialize(mainWindow, "personalInfo");
                 }
                 case "Experience" -> {
-                    new ExperienceController(cvTemplate).initialize(mainWindow, "experience2");
+                    new ExperienceController(cvTemplate,treeView).initialize(mainWindow, "experience2");
                 }
                 case "Summary" -> {
-                    new SummaryController(cvTemplate).initialize(mainWindow, "test");
+                    new SummaryController(cvTemplate,treeView).initialize(mainWindow, "test");
                 }
                 case "Education" -> {
-                    new EducationController(cvTemplate).initialize(mainWindow, "education2");
+                    new EducationController(cvTemplate,treeView).initialize(mainWindow, "education2");
                 }
                 case "Skills" -> {
                     new SkillsController().initialize(mainWindow, "skills");
                 }
                 case "Profile" -> {
-                    new ProfileController(cvTemplate).initialize(mainWindow, "profile");
+                    new ProfileController(cvTemplate,treeView).initialize(mainWindow, "profile");
                 }
                 default -> {
                 }

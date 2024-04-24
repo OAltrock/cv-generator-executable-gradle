@@ -40,21 +40,23 @@ public class EducationController implements InitializableFXML, HasToggleableSave
      */
     private final String forFutureReference = "3";
     Predicate<String> predicate = input -> !input.matches("^.*[a-zA-Z]+.*$");
+    TreeView<String> treeView;
 
     /**
      *
      * @param cvTemplate {@link CVTemplate}
      */
-    public EducationController(CVTemplate cvTemplate) {
+    public EducationController(CVTemplate cvTemplate, TreeView<String> treeView) {
         this.cvTemplate=cvTemplate;
         educations = cvTemplate.getEducations();
+        this.treeView = treeView;
     }
 
 
 
     @Override
     public void initialize(BorderPane main, String resource) {
-        InitializableFXML.super.initialize(main, resource);
+        //InitializableFXML.super.initialize(main, resource);
         CheckBox checkBox;
         VBox centerBox;
         DatePicker start;
@@ -97,11 +99,13 @@ public class EducationController implements InitializableFXML, HasToggleableSave
         addValidationToDates(start, end,checkDate,checkBox);
         buttons[0].setOnAction(actionEvent -> {
             assignEducationInput(start, end);
-            new ExperienceController(cvTemplate).initialize(main,"");
+            treeView.getSelectionModel().select(3);
+            new ExperienceController(cvTemplate, treeView).initialize(main,"");
         });
         buttons[1].setOnAction(actionEvent -> {
             assignEducationInput(start, end);
-            new SummaryController(cvTemplate).initialize(main,"summary");
+            treeView.getSelectionModel().select(6);
+            new SummaryController(cvTemplate, treeView).initialize(main,"summary");
         });
 
     }

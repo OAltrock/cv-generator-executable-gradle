@@ -12,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextInputControl;
+import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
@@ -29,12 +30,14 @@ public class PersonalInformationController implements InitializableFXML, HasTogg
     private ObservableList<TextInputControl> textFields;
 
     private CVTemplate cvTemplate;
+    private TreeView<String> treeView;
 
-    public PersonalInformationController(CVTemplate cvTemplate) {
+    public PersonalInformationController(CVTemplate cvTemplate, TreeView<String> treeView) {
         this.cvTemplate = cvTemplate;
         user = cvTemplate.getUser();
         stream= cvTemplate.getStream();
         location = cvTemplate.getLocation();
+        this.treeView = treeView;
     }
 
     @Override
@@ -69,20 +72,22 @@ public class PersonalInformationController implements InitializableFXML, HasTogg
 
         page.getLocationChooser().setOnAction(actionEvent -> {
             if (Objects.equals(page.getLocationChooser().getValue(), "Germany")) {
-                new Location("Germany", 1, 1, 1, 3, 1, 3, 1, 3, 0, 1, 0, 1, 1, 3, 0, 3, false);
+                location = new Location("Germany", 1, 1, 1, 3, 1, 3, 1, 3, 0, 1, 0, 1, 1, 3, 0, 3, false);
             } else if (Objects.equals(page.getStreamChooser().getValue(), "International")) {
-                new Location("International", 1, 1, 1, 3, 1, 3, 1, 3, 0, 1, 0, 1, 1, 3, 0, 3, false);
+                location = new Location("International", 1, 1, 1, 3, 1, 3, 1, 3, 0, 1, 0, 1, 1, 3, 0, 3, false);
             }
         });
 
         buttons[1].setOnAction(actionEvent -> {
             assignInfoInput();
-            new ExperienceController(cvTemplate).initialize(main, "");
+            treeView.getSelectionModel().select(3);
+            new ExperienceController(cvTemplate, treeView).initialize(main, "");
         });
 
         buttons[0].setOnAction(actionEvent -> {
             assignInfoInput();
-            new ProfileController(cvTemplate).initialize(main,"");
+            treeView.getSelectionModel().select(1);
+            new ProfileController(cvTemplate, treeView).initialize(main,"");
         });
 
 
@@ -102,5 +107,6 @@ public class PersonalInformationController implements InitializableFXML, HasTogg
         //ToDo: add addable competences
 
         cvTemplate.setLocation(location);
+        System.out.println(location.getLocationName());
     }
 }

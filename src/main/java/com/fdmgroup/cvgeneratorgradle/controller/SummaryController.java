@@ -6,14 +6,17 @@ import javafx.beans.binding.Bindings;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 public class SummaryController implements InitializableFXML {
     CVTemplate cvTemplate;
-    public SummaryController(CVTemplate cvTemplate) {
+    TreeView<String> treeView;
+    public SummaryController(CVTemplate cvTemplate, TreeView<String> treeView) {
         this.cvTemplate = cvTemplate;
+        this.treeView = treeView;
     }
 
     @Override

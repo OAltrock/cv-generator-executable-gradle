@@ -53,7 +53,7 @@ public interface HasToggleableSaveButtons {
                         BooleanBinding oneChoiceBoxIsEmpty = choiceBoxes.stream()
                                 .map(ChoiceBox::getValue)
                                 .map(string -> Bindings.createBooleanBinding(()->!string.isEmpty()))
-                                .reduce(Bindings::or)
+                                .reduce(Bindings::and)
                                 .get();
                         button.disableProperty().bind(allVboxFieldsValidated.or(oneChoiceBoxIsEmpty.not()));
                     }

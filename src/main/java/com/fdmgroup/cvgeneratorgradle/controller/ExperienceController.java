@@ -33,10 +33,12 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
     private ObservableList<TextInputControl> textFields;
     Predicate<String> predicate = input -> !input.matches("^.*[a-zA-Z]+.*$");
     private final String forFutureReference = "3";
+    TreeView<String> treeView;
 
-    public ExperienceController(CVTemplate cvTemplate) {
+    public ExperienceController(CVTemplate cvTemplate, TreeView<String> treeView) {
         this.cvTemplate = cvTemplate;
         experiences = cvTemplate.getExperiences();
+        this.treeView = treeView;
     }
 
     @Override
@@ -80,12 +82,14 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
 
         buttons[1].setOnAction(actionEvent -> {
             assignExperienceInput(start, end);
-            new EducationController(cvTemplate).initialize(main, "");
+            treeView.getSelectionModel().select(4);
+            new EducationController(cvTemplate, treeView).initialize(main, "");
         });
 
         buttons[0].setOnAction(actionEvent -> {
             assignExperienceInput(start,end);
-            new PersonalInformationController(cvTemplate).initialize(main,"");
+            treeView.getSelectionModel().select(2);
+            new PersonalInformationController(cvTemplate, treeView).initialize(main,"");
         });
 
     }
