@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Location {
-	private int id;
+
 	private String locationName;
 
 	private int minExperience;
