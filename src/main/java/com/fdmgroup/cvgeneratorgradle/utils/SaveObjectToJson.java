@@ -13,16 +13,18 @@ public class SaveObjectToJson {
         String json = gson.toJson(object);
 
         // create file path with user and his local documents folder e.g. C:\Users\Username\Documents
+        //todo: let user choose the storage folder
         String documentsFolderPath = System.getProperty("user.home") + File.separator + "Documents";
-        String filePath = documentsFolderPath + File.separator + "cvTemplate.json";
+        String filePath = documentsFolderPath + File.separator + "CvAutoSave.json";
         System.out.println(filePath);
 
+        // create json locally
         try (FileWriter writer = new FileWriter(filePath)) {
             writer.write(json);
         } catch (IOException e) {
-            throw new RuntimeException("Fehler beim Speichern des Objekts als JSON: " + e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
 
-        System.out.println(object.getClass().getSimpleName() + " wurde als JSON gespeichert.");
+        System.out.println(object.getClass().getSimpleName() + " saved as JSON");
     }
 }
