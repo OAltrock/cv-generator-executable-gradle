@@ -7,6 +7,7 @@ import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.models.Location;
 import com.fdmgroup.cvgeneratorgradle.models.Stream;
 import com.fdmgroup.cvgeneratorgradle.models.User;
+import com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson;
 import com.fdmgroup.cvgeneratorgradle.views.PersonalInfoPage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,7 +15,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -108,5 +108,8 @@ public class PersonalInformationController implements InitializableFXML, HasTogg
 
         cvTemplate.setLocation(location);
         System.out.println(location.getLocationName());
+
+        //Save cvTemplate as Json
+        SaveObjectToJson.saveObjectAsJson(cvTemplate);
     }
 }
