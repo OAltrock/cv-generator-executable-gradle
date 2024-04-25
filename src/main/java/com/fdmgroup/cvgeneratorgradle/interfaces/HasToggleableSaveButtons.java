@@ -30,7 +30,7 @@ public interface HasToggleableSaveButtons {
             list.addListener(new InvalidationListener() {
                 @Override
                 public void invalidated(Observable observable) {
-                    BooleanBinding validInput = validateTextFields(list, checkText);
+                    BooleanBinding validInput = validateTextFields(list, checkText.negate());
                     button.disableProperty().bind(validInput);
                 }
             });
@@ -50,6 +50,19 @@ public interface HasToggleableSaveButtons {
                                 .map(stringProperty -> Bindings.createBooleanBinding(() -> checkText.test(stringProperty.get()), stringProperty))
                                 .reduce(Bindings::or)
                                 .get();
+                        BooleanBinding oneChoiceBoxIsEmpty = choiceBoxes.stream()
+                                .map(ChoiceBox::getValue)
+                                .map(string -> Bindings.createBooleanBinding(()->!string.isEmpty()))
+                                .reduce(Bindings::and)
+                                .get();
+                        button.disableProperty().bind(allVboxFieldsValidated.or(oneChoiceBoxIsEmpty.not()));
+                    }
+                });
+
+                list.addListener(new InvalidationListener() {
+                    @Override
+                    public void invalidated(Observable observable) {
+                        BooleanBinding allVboxFieldsValidated = validateTextFields(list, checkText);
                         BooleanBinding oneChoiceBoxIsEmpty = choiceBoxes.stream()
                                 .map(ChoiceBox::getValue)
                                 .map(string -> Bindings.createBooleanBinding(()->!string.isEmpty()))

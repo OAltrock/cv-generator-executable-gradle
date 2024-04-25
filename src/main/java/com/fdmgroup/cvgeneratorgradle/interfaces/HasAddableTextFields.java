@@ -34,13 +34,14 @@ public interface HasAddableTextFields {
      * @param removeBtnMessage   {@link String}-message for the newly created remove-{@link Button}.
      * @param promptMessage      {@link String}-message for the prompt of the newly created {@link TextField}.
      * @param predicate          {@link Predicate}&lt;String&gt; to validate the newly created {@link TextField}.
-     * @param forFutureReference limit for adding Modules
+     * @param limit limit for adding Modules
      */
     default void createAddableArea(GridPane parent, ObservableList<TextInputControl> textFields,
-                                   Button addBtn, String removeBtnMessage, String promptMessage, Predicate<String> predicate, String forFutureReference, List<TextInputControl> addableTextFields) {
+                                   Button addBtn, String removeBtnMessage, String promptMessage, Predicate<String> predicate,
+                                   int limit, List<TextInputControl> addableTextFields) {
 
         addBtn.setOnAction(event -> {
-            if (parent.getChildren().size() / 2 + 1 <= Integer.parseInt(forFutureReference)) {
+            if (parent.getChildren().size() / 2 + 1 <= limit) {
                 javafx.scene.control.TextField textFieldToAdd = new javafx.scene.control.TextField();
                 int rowCount = parent.getRowCount() + 1;
                 setCounter1(CVGeneratorApp.getCounter1() + 1);
@@ -54,7 +55,7 @@ public interface HasAddableTextFields {
                 parent.add(removeButton, 1, rowCount);
 
                 //ToDo: maybe there is a better way (includes the whole system of adding and removing removeBtns)
-                if (parent.getChildren().size() > 3 && parent.getChildren().size()<6) {
+                if (parent.getChildren().size() > 3 && parent.getChildren().size() < 6) {
                     FDMButton lastRemoveBtn = new FDMButton(removeBtnMessage);
                     parent.add(lastRemoveBtn, 1, rowCount - 2);
                     TextField lastTextField = (TextField) parent.getChildren().stream().filter(child -> (GridPane.getColumnIndex(child) == 0 &&
@@ -81,7 +82,7 @@ public interface HasAddableTextFields {
             gridPane.getChildren().removeAll(addModuleBtn, removeButton, textFieldToRemove);
             gridPane.add(addModuleBtn, 2, gridPane.getRowCount() - 1);
             //ToDo: bug with remove middle of 3
-            if (gridPane.getChildren().size() <= 3 && gridPane.getChildren().size()>1) {
+            if (gridPane.getChildren().size() <= 3 && gridPane.getChildren().size() > 1) {
                 Button rmvBtn = (Button) gridPane.getChildren().get(1);
                 if (rmvBtn != null) gridPane.getChildren().remove(rmvBtn);
             }
@@ -141,25 +142,25 @@ public interface HasAddableTextFields {
      * Creates the {@link GridPane} with addable and removable {@link TextField}s from model
      * (eg: {@link com.fdmgroup.cvgeneratorgradle.models.Experience}, {@link com.fdmgroup.cvgeneratorgradle.models.Education} etc.)
      *
-     * @param keyProperty        List of {@link TextInputControl}s
-     * @param gridPane           {@link GridPane}-wrapper
-     * @param addBtn             {@link Button} to add more TextInputControls
-     * @param textFields         {@link ObservableList}&lt;TextInputControls&gt; of validatable TextInputControls
-     * @param forFutureReference emulating template limits for when those will be implemented
+     * @param keyProperty List of {@link TextInputControl}s
+     * @param gridPane    {@link GridPane}-wrapper
+     * @param addBtn      {@link Button} to add more TextInputControls
+     * @param textFields  {@link ObservableList}&lt;TextInputControls&gt; of validatable TextInputControls
+     * @param limit       template limit stored in {@link com.fdmgroup.cvgeneratorgradle.models.Location}.
      */
     default void createAddableAreaFromModel(List<TextInputControl> keyProperty, GridPane gridPane, Button addBtn,
                                             ObservableList<TextInputControl> textFields,
-                                            String forFutureReference, String removeButtonMsg, String textFieldPromptMsg) {
+                                            int limit, String removeButtonMsg, String textFieldPromptMsg) {
         if (keyProperty.isEmpty()) {
             TextField newTextField = new TextField();
-            newTextField.setPromptText("Key skill");
-            newTextField.setId("DefaultKeyProperty");
+            newTextField.setPromptText(textFieldPromptMsg);
+            newTextField.setId("bottom");
             gridPane.add(newTextField, 0, 0);
             gridPane.add(addBtn, 2, 0);
-            textFields.add(newTextField);
+            //textFields.add(newTextField);
             keyProperty.add(newTextField);
             createAddableArea(gridPane, textFields, addBtn, removeButtonMsg, textFieldPromptMsg,
-                    (string -> !string.matches("^.*[a-zA-Z]+.*$")), forFutureReference, keyProperty);
+                    (string -> !string.matches("^.*[a-zA-Z]+.*$")), limit, keyProperty);
         } else {
             keyProperty.forEach(textField -> {
                 if (textField == keyProperty.getFirst() && textField != keyProperty.getLast()) {
@@ -186,7 +187,7 @@ public interface HasAddableTextFields {
                     addListenerTooRemoveBtn(textField, removeBtn, gridPane, addBtn, textFields, keyProperty);
                 }
                 createAddableArea(gridPane, textFields, addBtn, removeButtonMsg, textFieldPromptMsg,
-                        (string -> !string.matches("^.*[a-zA-Z]+.*$")), forFutureReference, keyProperty);
+                        (string -> !string.matches("^.*[a-zA-Z]+.*$")), limit, keyProperty);
             });
         }
     }

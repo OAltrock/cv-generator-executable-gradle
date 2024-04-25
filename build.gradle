@@ -1,112 +1,117 @@
 plugins {
-  id 'java'
-  id 'application'
-  /* id 'org.javamodularity.moduleplugin' version '1.8.12' */
-  id 'org.openjfx.javafxplugin' version '0.0.13'
-  id 'org.beryx.runtime' version '1.13.1'
-  id("io.freefair.lombok") version "8.6"
-  }
+    id 'java'
+    id 'application'
+    /* id 'org.javamodularity.moduleplugin' version '1.8.12' */
+    id 'org.openjfx.javafxplugin' version '0.0.13'
+    id 'org.beryx.runtime' version '1.13.1'
+    id("io.freefair.lombok") version "8.6"
+}
 
 group 'com.fdmgroup'
 version '0.0.1'
 
 repositories {
-  //mavenLocal()
-  mavenCentral()
+    //mavenLocal()
+    mavenCentral()
 }
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
 ext {
-  junitVersion = '5.10.0'
+    junitVersion = '5.10.0'
 }
 
 sourceCompatibility = '21'
 targetCompatibility = '21'
 
 tasks.withType(JavaCompile) {
-  options.encoding = 'UTF-8'
+    options.encoding = 'UTF-8'
 }
 
 application {
-  /* mainModule = 'com.fdmgroup.cvgeneratorgradle' */
-  mainClass = 'com.fdmgroup.cvgeneratorgradle.Main'
-  applicationName = 'fdm-cv-generator-app'
+    /* mainModule = 'com.fdmgroup.cvgeneratorgradle' */
+    mainClass = 'com.fdmgroup.cvgeneratorgradle.Main'
+    applicationName = 'fdm-cv-generator-app'
 }
 
 javafx {
-  version = '22'
-  modules = ['javafx.controls', 'javafx.fxml']
-  //sdk = '%JAVA_HOME%'
+    version = '22'
+    modules = ['javafx.controls', 'javafx.fxml']
+    //sdk = '%JAVA_HOME%'
 
 }
 
 dependencies {
-  implementation('org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0')
-  // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
-  implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.5'
+    implementation('org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0')
+    // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.5'
 
 
-  // https://mvnrepository.com/artifact/fr.opensagres.xdocreport/xdocreport
-  implementation group: 'fr.opensagres.xdocreport', name: 'xdocreport', version: '2.0.4'
+    // https://mvnrepository.com/artifact/fr.opensagres.xdocreport/xdocreport
+    implementation group: 'fr.opensagres.xdocreport', name: 'xdocreport', version: '2.0.4'
 
-  // https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
-  implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.4.0-b180830.0359'
+    // Gson dependency
+    implementation 'com.google.code.gson:gson:2.8.8'
 
-  /* // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
-  implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.17.0' */
+    // SLF4J dependency
+    implementation 'org.slf4j:slf4j-api:1.7.32'
 
-  testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
-  runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:win"
-  runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:linux"
-  runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:mac"
+    // https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
+    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.4.0-b180830.0359'
+
+    /* // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.17.0' */
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+    runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:win"
+    runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:linux"
+    runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:mac"
 }
 
 test {
-useJUnitPlatform()}
+    useJUnitPlatform()}
 
 
 runtime {
-  /* targetPlatform("lin") {
-          jdkHome = jdkDownload("https://github.com/AdoptOpenJDK/openjdk15-binaries/releases/download/jdk-15.0.2%2B7/OpenJDK15U-jdk_x64_linux_hotspot_15.0.2_7.tar.gz")
-      }
+    /* targetPlatform("lin") {
+            jdkHome = jdkDownload("https://github.com/AdoptOpenJDK/openjdk15-binaries/releases/download/jdk-15.0.2%2B7/OpenJDK15U-jdk_x64_linux_hotspot_15.0.2_7.tar.gz")
+        }
 
-      targetPlatform("mac") {
-          jdkHome = jdkDownload("https://github.com/AdoptOpenJDK/openjdk15-binaries/releases/download/jdk-15.0.2%2B7/OpenJDK15U-jdk_x64_mac_hotspot_15.0.2_7.tar.gz") {
-              downloadDir = "$buildDir/myMac"
-              archiveName = "my-mac-jdk"
-              archiveExtension = "tar.gz"
-              pathToHome = "jdk-15.0.2+7/Contents/Home"
-              overwrite = true
-          }
-      } */
+        targetPlatform("mac") {
+            jdkHome = jdkDownload("https://github.com/AdoptOpenJDK/openjdk15-binaries/releases/download/jdk-15.0.2%2B7/OpenJDK15U-jdk_x64_mac_hotspot_15.0.2_7.tar.gz") {
+                downloadDir = "$buildDir/myMac"
+                archiveName = "my-mac-jdk"
+                archiveExtension = "tar.gz"
+                pathToHome = "jdk-15.0.2+7/Contents/Home"
+                overwrite = true
+            }
+        } */
 
-      targetPlatform("win") {
-          jdkHome = jdkDownload("https://www.azul.com/core-post-download/?endpoint=zulu&uuid=7f936d1e-9e02-43ae-8079-de2d879aaf4c")
-      }
+    targetPlatform("win") {
+        jdkHome = jdkDownload("https://www.azul.com/core-post-download/?endpoint=zulu&uuid=7f936d1e-9e02-43ae-8079-de2d879aaf4c")
+    }
 
-  jpackage {
-          def currentOs = org.gradle.internal.os.OperatingSystem.current()
-          def imgType = currentOs.windows ? 'ico' : currentOs.macOsX ? 'icns' : 'png'
-          println(imgType)
-          imageOptions += ["--icon", file("src/main/resources/com/fdmgroup/cvgeneratorgradle/images/FDM_Logo_Black_RGB.$imgType")]
-          installerOptions += ["--resource-dir", "src/main/resources"]
-          if (currentOs.windows) {
-              installerOptions += ["--win-per-user-install", "--win-dir-chooser", "--win-menu", "--win-shortcut"]
+    jpackage {
+        def currentOs = org.gradle.internal.os.OperatingSystem.current()
+        def imgType = currentOs.windows ? 'ico' : currentOs.macOsX ? 'icns' : 'png'
+        imageOptions += ["--icon", file("src/main/resources/com/fdmgroup/cvgeneratorgradle/images/FDM_Logo_Black_RGB.$imgType")]
+        installerOptions += ["--resource-dir", "src/main/resources"]
+        if (currentOs.windows) {
+            installerOptions += ["--win-per-user-install", "--win-dir-chooser", "--win-menu", "--win-shortcut"]
 
-          }
-          if(currentOs.linux) {
-               installerOptions += ['--linux-package-name', 'fdm-cv-generator','--linux-shortcut']
-          }
-          if(currentOs.macOsX) {
-               installerOptions += ['--mac-package-name', 'fdm-cv-generator']
-                    }
-      }
-  options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
-  launcher {
-    noConsole = true
-  }
+        }
+        if(currentOs.linux) {
+            installerOptions += ['--linux-package-name', 'fdm-cv-generator','--linux-shortcut']
+        }
+        if(currentOs.macOsX) {
+            installerOptions += ['--mac-package-name', 'fdm-cv-generator']
+        }
+    }
+    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+    launcher {
+        noConsole = true
+    }
 }
 /* tasks.jpackage.doFirst {
     def currentOs = org.gradle.internal.os.OperatingSystem.current()

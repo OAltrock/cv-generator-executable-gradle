@@ -20,10 +20,12 @@ public class ProfileController implements InitializableFXML, HasToggleableSaveBu
     private CVTemplate cvTemplate;
     private String profile;
     private ObservableList<TextInputControl> textAreas;
+    private TreeView<String> treeView;
 
-    public ProfileController(CVTemplate cvTemplate) {
+    public ProfileController(CVTemplate cvTemplate, TreeView<String> treeView) {
         this.cvTemplate = cvTemplate;
         profile = cvTemplate.getProfile();
+        this.treeView = treeView;
     }
 
     @Override
@@ -46,7 +48,8 @@ public class ProfileController implements InitializableFXML, HasToggleableSaveBu
 
         saveBtn.setOnAction(actionEvent -> {
             cvTemplate.setProfile(page.getProfile().getText());
-            new PersonalInformationController(cvTemplate).initialize(main,"");
+            treeView.getSelectionModel().select(2);
+            new PersonalInformationController(cvTemplate, treeView).initialize(main,"");
         });
 
         page.getPrev().setVisible(false);

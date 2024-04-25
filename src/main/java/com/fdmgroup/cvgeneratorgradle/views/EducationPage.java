@@ -1,9 +1,9 @@
 package com.fdmgroup.cvgeneratorgradle.views;
 
 import com.fdmgroup.cvgeneratorgradle.interfaces.HasAddableTextFields;
-import com.fdmgroup.cvgeneratorgradle.interfaces.HasDateValidation;
-import com.fdmgroup.cvgeneratorgradle.interfaces.HasToggleableSaveButtons;
+import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.models.Education;
+import com.fdmgroup.cvgeneratorgradle.models.Location;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -15,7 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class EducationPage extends FDMPage implements HasAddableTextFields, HasToggleableSaveButtons, HasDateValidation {
+public class EducationPage extends FDMPage implements HasAddableTextFields/*, HasToggleableSaveButtons, HasDateValidation*/ {
+
+    private final CVTemplate cvTemplate;
     private final Education education;
 
     private FDMCenterVBoxWrapper centerBox;
@@ -42,22 +44,29 @@ public class EducationPage extends FDMPage implements HasAddableTextFields, HasT
     private FDMHBox buttonWrapper;
 
     private final ObservableList<TextInputControl> textFields;
-    private final String forFutureReference;
 
     //alternative way to create views (to fxml). scene builder can be weird.
-    public EducationPage(ObservableList<TextInputControl> textFields, String forFutureReference) {
+    /*public EducationPage(CVTemplate cvTemplate, ObservableList<TextInputControl> textFields, String forFutureReference) {
         education = new Education();
         this.textFields = textFields;
         this.forFutureReference = forFutureReference;
         keyModules = new ArrayList<>();
         education.setKeyModules(new ArrayList<>());
         initialize();
-    }
+    }*/
 
-    public EducationPage(Education education, String forFutureReference, ObservableList<TextInputControl> textFields) {
-        this.education = education;
+    public EducationPage(CVTemplate cvTemplate, ObservableList<TextInputControl> textFields) {
+        this.cvTemplate = cvTemplate;
+        if (cvTemplate.getEducations() != null && !cvTemplate.getEducations().isEmpty())
+            education = cvTemplate.getEducations().getLast();
+        else {
+            List<Education> educations = new ArrayList<>(List.of(new Education("", "",
+                    "", "", "", "", "", new ArrayList<>())));
+            //educations.getLast().setKeyModules(new ArrayList<>());
+            cvTemplate.setEducations(educations);
+            education = cvTemplate.getEducations().getLast();
+        }
         this.textFields = textFields;
-        this.forFutureReference = forFutureReference;
         keyModules = new ArrayList<>();
         initialize();
 
@@ -65,18 +74,24 @@ public class EducationPage extends FDMPage implements HasAddableTextFields, HasT
     }
 
     private void initialize() {
+        assert education != null;
         degree = (education.getDegree() != null) ? new TextField(education.getDegree()) : new TextField("");
         degree.setId("degree");
+        degree.setPromptText("Degree");
         studyTitle = (education.getDegree() != null) ? new TextField(education.getStudyTitle()) : new TextField("");
         studyTitle.setId("studyTitle");
+        studyTitle.setPromptText("Study title");
         universityName = (education.getDegree() != null) ? new TextField(education.getUniversityName()) : new TextField("");
         universityName.setId("universityName");
+        universityName.setPromptText("University name");
         universityPlace = (education.getDegree() != null) ? new TextField(education.getUniversityPlace()) : new TextField("");
         universityPlace.setId("universityPlace");
+        universityPlace.setPromptText("Place of university");
         thesisTitle = (education.getDegree() != null) ? new TextField(education.getThesisTitle()) : new TextField("");
         thesisTitle.setId("thesisTitle");
-        startDate = (education.getStartDate() != null) ? new DatePicker(LocalDate.parse(education.getStartDate())) : new DatePicker();
-        endDate = (education.getStartDate() != null) ? new DatePicker(LocalDate.parse(education.getEndDate())) : new DatePicker();
+        thesisTitle.setPromptText("Title of thesis");
+        startDate = (education.getStartDate() != null && !education.getStartDate().isEmpty()) ? new DatePicker(LocalDate.parse(education.getStartDate())) : new DatePicker();
+        endDate = (education.getStartDate() != null && !education.getStartDate().isEmpty()) ? new DatePicker(LocalDate.parse(education.getEndDate())) : new DatePicker();
         ongoing = new CheckBox("ongoing");
         if (endDate.getValue() != null) {
             ongoing.setSelected(endDate.getValue().isAfter(LocalDate.now()));
@@ -89,7 +104,9 @@ public class EducationPage extends FDMPage implements HasAddableTextFields, HasT
             keyModules.add(textField);
         });
         pageTitle = new Label("Education");
-        keyModuleLabel = new Label("Add " + forFutureReference + " key modules");
+        if (cvTemplate.getLocation() == null)
+            cvTemplate.setLocation(new Location("", 1, 1, 1, 3, 1, 3, 1, 3, 0, 1, 0, 1, 1, 3, 0, 3, false));
+        keyModuleLabel = new Label("Add " + cvTemplate.getLocation().getMinKeyModule() + " to " + cvTemplate.getLocation().getMaxKeyModule() + " key modules");
         keyModuleGridPane = new GridPane(3, keyModules.size());
 
         dateWrapper = new FDMDateWrapper(startDate, endDate, ongoing);
@@ -99,11 +116,11 @@ public class EducationPage extends FDMPage implements HasAddableTextFields, HasT
         textFields.addAll(keyModules);
         FDMButton addBtn = new FDMButton("Add key module");
         addBtn.setDesign();
-        createAddableAreaFromModel(keyModules, keyModuleGridPane, addBtn, textFields, forFutureReference, "Remove key module", "Key module");
+        createAddableAreaFromModel(keyModules, keyModuleGridPane, addBtn, textFields, cvTemplate.getLocation().getMaxKeyModule(), "Remove key module", "Key module");
 
         prevBtn = new FDMButton("Previous");
         nextBtn = new FDMButton("Next");
-        buttonWrapper = new FDMHBox(prevBtn,nextBtn);
+        buttonWrapper = new FDMHBox(prevBtn, nextBtn);
         buttonWrapper.setDesign();
 
         centerBox = new FDMCenterVBoxWrapper(pageTitle, degree,

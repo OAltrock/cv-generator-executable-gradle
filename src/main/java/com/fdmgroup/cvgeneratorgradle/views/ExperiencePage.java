@@ -1,7 +1,9 @@
 package com.fdmgroup.cvgeneratorgradle.views;
 
 import com.fdmgroup.cvgeneratorgradle.interfaces.HasAddableTextFields;
+import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.models.Experience;
+import com.fdmgroup.cvgeneratorgradle.models.Location;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -14,7 +16,7 @@ import java.util.List;
 
 @Getter
 public class ExperiencePage extends FDMPage implements HasAddableTextFields {
-
+    private CVTemplate cvTemplate;
     private final Experience experience;
     private javafx.scene.control.ScrollPane center;
     private FDMCenterVBoxWrapper centerBox;
@@ -40,21 +42,26 @@ public class ExperiencePage extends FDMPage implements HasAddableTextFields {
     private FDMHBox buttonWrapper;
 
     private final ObservableList<TextInputControl> textFields;
-    private final String forFutureReference;
 
-    public ExperiencePage(ObservableList<TextInputControl> textFields, String forFutureReference) {
+    /*public ExperiencePage(ObservableList<TextInputControl> textFields, String forFutureReference) {
         this.forFutureReference = forFutureReference;
         this.textFields = textFields;
         keySkills = new ArrayList<>();
         experience = new Experience();
         experience.setPositionFeatures(new ArrayList<>());
         initialize();
-    }
+    }*/
 
-    public ExperiencePage(Experience experience, ObservableList<TextInputControl> textFields, String forFutureReference) {
-        this.experience = experience;
+    public ExperiencePage(CVTemplate cvTemplate, ObservableList<TextInputControl> textFields) {
+        this.cvTemplate = cvTemplate;
+        if (cvTemplate.getExperiences() != null && cvTemplate.getExperiences().getLast() != null)
+            experience = cvTemplate.getExperiences().getLast();
+        else {
+            experience = new Experience();
+            experience.setPositionFeatures(new ArrayList<>());
+        }
         this.textFields = textFields;
-        this.forFutureReference = forFutureReference;
+
         keySkills = new ArrayList<>();
 
         initialize();
@@ -63,14 +70,18 @@ public class ExperiencePage extends FDMPage implements HasAddableTextFields {
 
     private void initialize() {
         pageTitle = new Label("Experience");
-        jobTitle = (experience.getJobTitle()!=null) ? new javafx.scene.control.TextField(experience.getJobTitle()) : new TextField("");
-        companyName = (experience.getJobTitle()!=null) ? new javafx.scene.control.TextField(experience.getCompanyName()): new TextField("");
-        companyPlace = (experience.getJobTitle()!=null) ? new javafx.scene.control.TextField(experience.getCompanyName()): new TextField("");
-        description = (experience.getJobTitle()!=null) ? new TextArea(experience.getDescription()): new TextField("");
+        jobTitle = (experience.getJobTitle() != null) ? new javafx.scene.control.TextField(experience.getJobTitle()) : new TextField("");
+        jobTitle.setPromptText("Title of job");
+        companyName = (experience.getJobTitle() != null) ? new javafx.scene.control.TextField(experience.getCompanyName()) : new TextField("");
+        companyName.setPromptText("Name of company");
+        companyPlace = (experience.getJobTitle() != null) ? new javafx.scene.control.TextField(experience.getCompanyName()) : new TextField("");
+        companyPlace.setPromptText("Place of company");
+        description = (experience.getJobTitle() != null) ? new TextArea(experience.getDescription()) : new TextField("");
+        description.setPromptText("Description");
 
-        startDate = (experience.getStartDate() != null) ? new DatePicker(LocalDate.parse(experience.getStartDate()))
+        startDate = (experience.getStartDate()!=null && !experience.getStartDate().isEmpty()) ? new DatePicker(LocalDate.parse(experience.getStartDate()))
                 : new DatePicker();
-        endDate = (experience.getStartDate() != null) ? new DatePicker(LocalDate.parse(experience.getEndDate()))
+        endDate = (experience.getStartDate()!=null && !experience.getStartDate().isEmpty()) ? new DatePicker(LocalDate.parse(experience.getEndDate()))
                 : new DatePicker();
         ongoing = new CheckBox("ongoing");
         if (endDate.getValue() != null) {
@@ -90,12 +101,13 @@ public class ExperiencePage extends FDMPage implements HasAddableTextFields {
         addBtn = new FDMButton("Add key skills");
 
         textFields.addAll(keySkills);
-
-        createAddableAreaFromModel(keySkills, keySkillsGridPane, addBtn, textFields, forFutureReference, "Remove key skill", "Key skill");
+        if (cvTemplate.getLocation() == null)
+            cvTemplate.setLocation(new Location("", 1, 1, 1, 3, 1, 3, 1, 3, 0, 1, 0, 1, 1, 3, 0, 3, false));
+        createAddableAreaFromModel(keySkills, keySkillsGridPane, addBtn, textFields, cvTemplate.getLocation().getMaxPositionFeature(), "Remove key skill", "Key skill");
 
         nextBtn = new FDMButton("Next");
         prevBtn = new FDMButton("Previous");
-        buttonWrapper = new FDMHBox(prevBtn,nextBtn);
+        buttonWrapper = new FDMHBox(prevBtn, nextBtn);
         buttonWrapper.setDesign();
 
         centerBox = new FDMCenterVBoxWrapper(pageTitle, jobTitle, companyName, companyPlace,
