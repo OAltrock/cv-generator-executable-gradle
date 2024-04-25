@@ -6,6 +6,7 @@ import com.fdmgroup.cvgeneratorgradle.interfaces.InitializableFXML;
 import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.models.Language;
 import com.fdmgroup.cvgeneratorgradle.models.enums.LanguageLevel;
+import com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson;
 import com.fdmgroup.cvgeneratorgradle.views.FDMPage;
 import com.fdmgroup.cvgeneratorgradle.views.SkillsPage;
 import javafx.collections.FXCollections;
@@ -94,5 +95,8 @@ public class SkillsController implements InitializableFXML, HasToggleableSaveBut
 			interestsToAdd.add(interest.getText());
 		});
 		cvTemplate.setInterests(interestsToAdd);
+
+		//Save cvTemplate as Json
+		SaveObjectToJson.saveObjectAsJson(cvTemplate);
 	}
 }

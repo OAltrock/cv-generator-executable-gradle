@@ -124,7 +124,6 @@ public class PersonalInformationController implements InitializableFXML, HasTogg
         cvTemplate.setLocation(location);
         System.out.println(location.getLocationName());
 
-        //Save cvTemplate as Json
-        SaveObjectToJson.saveObjectAsJson(cvTemplate);
+
     }
 }
