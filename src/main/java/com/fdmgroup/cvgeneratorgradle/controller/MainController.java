@@ -86,7 +86,7 @@ public class MainController implements Initializable {
                     new EducationController(cvTemplate,treeView).initialize(mainWindow, "education2");
                 }
                 case "Skills" -> {
-                    new SkillsController(cvTemplate).initialize(mainWindow, "skills");
+                    new SkillsController(cvTemplate, treeView).initialize(mainWindow, "skills");
                 }
                 case "Profile" -> {
                     new ProfileController(cvTemplate,treeView).initialize(mainWindow, "profile");

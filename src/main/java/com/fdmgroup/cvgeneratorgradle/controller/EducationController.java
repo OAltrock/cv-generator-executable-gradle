@@ -34,6 +34,8 @@ public class EducationController implements InitializableFXML, HasToggleableSave
 
     CVTemplate cvTemplate;
 
+    EducationPage educationPage;
+
     private ObservableList<TextInputControl> textFields;
     /**
      * emulating variable loaded from template
@@ -43,15 +45,13 @@ public class EducationController implements InitializableFXML, HasToggleableSave
     TreeView<String> treeView;
 
     /**
-     *
      * @param cvTemplate {@link CVTemplate}
      */
     public EducationController(CVTemplate cvTemplate, TreeView<String> treeView) {
-        this.cvTemplate=cvTemplate;
+        this.cvTemplate = cvTemplate;
         educations = cvTemplate.getEducations();
         this.treeView = treeView;
     }
-
 
 
     @Override
@@ -62,17 +62,13 @@ public class EducationController implements InitializableFXML, HasToggleableSave
         DatePicker start;
         DatePicker end;
 
-
-        EducationPage educationPage;
-
         textFields = FXCollections.observableArrayList();
+        educationPage = new EducationPage(cvTemplate, textFields);
+        /*if (educations != null) {
 
-        if (educations!=null) {
-             educationPage = new EducationPage(educations.getLast(),forFutureReference, textFields);
-        }
-        else {
-            educationPage = new EducationPage(textFields,forFutureReference);
-        }
+        } else {
+            educationPage = new EducationPage(textFields, forFutureReference);
+        }*/
         Button[] buttons = new Button[]{educationPage.getPrevBtn(), educationPage.getNextBtn()};
         main.setCenter(educationPage.createCenterPage(educationPage.getCenterBox()));
         centerBox = educationPage.getCenterBox();
@@ -80,69 +76,51 @@ public class EducationController implements InitializableFXML, HasToggleableSave
         end = educationPage.getEndDate();
         checkBox = educationPage.getOngoing();
         BiPredicate<LocalDate, LocalDate> checkDate = (startDate, endDate) -> {
-            if (startDate==null) {
+            if (startDate == null) {
                 return false;
-            }
-            else if (checkBox.isSelected()) {
+            } else if (checkBox.isSelected()) {
                 return !startDate.isAfter(LocalDate.now());
-            }
-            else if (endDate==null) return false;
-            else  {
+            } else if (endDate == null) return false;
+            else {
                 return startDate.isBefore(endDate) || startDate.isEqual(endDate);
             }
         };
 
-        addValidationToSaveButtons(textFields, predicate, start,end,checkDate,checkBox, buttons);
+        addValidationToSaveButtons(textFields, predicate, start, end, checkDate, checkBox, buttons);
 
         textFields.addAll(findAllTextFields(centerBox));
         textFields.addAll(findAllTextFields(educationPage.getKeyModuleGridPane()));
 
         createValidationForTextFields(predicate, textFields, "Must contain at least one letter");
-        addValidationToDates(start, end,checkDate,checkBox);
+        addValidationToDates(start, end, checkDate, checkBox);
         buttons[0].setOnAction(actionEvent -> {
             assignEducationInput(start, end);
             treeView.getSelectionModel().select(3);
-            new ExperienceController(cvTemplate, treeView).initialize(main,"");
+            new ExperienceController(cvTemplate, treeView).initialize(main, "");
         });
         buttons[1].setOnAction(actionEvent -> {
             assignEducationInput(start, end);
-            treeView.getSelectionModel().select(6);
-            new SummaryController(cvTemplate, treeView).initialize(main,"summary");
+            treeView.getSelectionModel().select(5);
+            new SkillsController(cvTemplate, treeView).initialize(main, "summary");
         });
 
     }
 
-    private void assignEducationInput(DatePicker start, DatePicker end){
+    private void assignEducationInput(DatePicker start, DatePicker end) {
 
-        if (educations==null) educations = new ArrayList<>();
+        if (educations == null) educations = new ArrayList<>();
         if (educations.isEmpty()) educations.add(new Education());
 
-        educations.getLast().setKeyModules(new ArrayList<>());
-        System.out.println(textFields);
-        textFields.forEach(textInputControl -> {
-            switch (textInputControl.getId()) {
-                case "degree" -> {
-                    educations.getLast().setDegree(textInputControl.getText());
-                }
-                case "studyTitle" -> {
-                    educations.getLast().setStudyTitle(textInputControl.getText());
-                }
-                case "universityName" -> {
-                    educations.getLast().setUniversityName(textInputControl.getText());
-                }
-                case "universityPlace" -> {
-                    educations.getLast().setUniversityPlace(textInputControl.getText());
-                }
-                case "thesisTitle" -> {
-                    educations.getLast().setThesisTitle(textInputControl.getText());
-                }
-                default -> {
-                    educations.getLast().getKeyModules().add(textInputControl.getText());
-                }
-            }
-        });
+        Education education = educations.getLast();
+        education.setDegree(educationPage.getDegree().getText());
+        education.setStudyTitle(educationPage.getStudyTitle().getText());
+        education.setUniversityName(educationPage.getUniversityName().getText());
+        education.setUniversityPlace(educationPage.getUniversityPlace().getText());
+        education.setThesisTitle(educationPage.getThesisTitle().getText());
+        education.setKeyModules(educationPage.getKeyModules().stream().map(TextInputControl::getText).toList());
+
         educations.getLast().setStartDate(start.getValue().toString());
-        educations.getLast().setEndDate((end.getValue()!=null) ? end.getValue().toString() : LocalDate.now().plusMonths(1).toString());
+        educations.getLast().setEndDate((end.getValue() != null) ? end.getValue().toString() : LocalDate.now().plusMonths(1).toString());
 
         cvTemplate.setEducations(educations);
         System.out.println(educations);

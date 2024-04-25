@@ -15,6 +15,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -50,18 +51,18 @@ public class CVTemplate {
 
 	private List<Education> educations;
 
-	private List<String> competences;
+	private HashSet<String> competences;
 
-	private List<String> certificates;
+	private HashSet<String> certificates;
 
-	private List<Language> languages;
+	private HashSet<Language> languages;
 
-	private List<String> interests;
+	private HashSet<String> interests;
 
 	public CVTemplate(User user, String firstName, String lastName, Location location, Stream stream,
 			ProfilePicture profilePicture, List<Experience> experience, List<Education> education,
-			List<String> competence, List<String> certificate, List<Language> language,
-			List<String> interest) {
+			HashSet<String> competence, HashSet<String> certificate, HashSet<Language> language,
+			HashSet<String> interest) {
 		this.user = user;
 		this.location = location;
 		this.stream = stream;

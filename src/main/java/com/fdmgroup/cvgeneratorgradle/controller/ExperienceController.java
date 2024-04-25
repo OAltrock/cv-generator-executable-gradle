@@ -46,12 +46,13 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
 
         textFields = FXCollections.observableArrayList();
         GridPane gridPane;
-        if (experiences!=null  && !experiences.isEmpty()) {
-            experiencePage = new ExperiencePage(experiences.getLast(),textFields,forFutureReference);
+        experiencePage = new ExperiencePage(cvTemplate,textFields);
+        /*if (experiences!=null  && !experiences.isEmpty()) {
+
         }
         else {
             experiencePage = new ExperiencePage(textFields,forFutureReference);
-        }
+        }*/
 
         main.setCenter(experiencePage.createCenterPage(experiencePage.getCenterBox()));
         VBox centerBox = experiencePage.getCenterBox();

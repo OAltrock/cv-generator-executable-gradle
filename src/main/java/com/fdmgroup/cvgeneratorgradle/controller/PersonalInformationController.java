@@ -31,11 +31,13 @@ public class PersonalInformationController implements InitializableFXML, HasTogg
 
     private CVTemplate cvTemplate;
     private TreeView<String> treeView;
+    private final HashSet<String> TECHNICAL = new HashSet<>(List.of("Java", "HTML/CSS/JavaScript", "JUnit", "Eclipse", "Maven", "Git", "MySQL", "UML"));
+    private final HashSet<String> BUSINESS = new HashSet<>(List.of("MySQL", "BPMN", "UML"));
 
     public PersonalInformationController(CVTemplate cvTemplate, TreeView<String> treeView) {
         this.cvTemplate = cvTemplate;
         user = cvTemplate.getUser();
-        stream= cvTemplate.getStream();
+        stream = cvTemplate.getStream();
         location = cvTemplate.getLocation();
         this.treeView = treeView;
     }
@@ -50,31 +52,43 @@ public class PersonalInformationController implements InitializableFXML, HasTogg
         if (location == null) location = new Location("", 1, 1, 1, 3, 1, 3, 1, 3, 0, 1, 0, 1, 1, 3, 0, 3, false);
         page = new PersonalInfoPage(user, location, stream, textFields);
         main.setCenter(page.createCenterPage(page.getCenterBox()));
-        Button[] buttons = new Button[] {page.getPrevBtn(), page.getNextBtn()};
+        Button[] buttons = new Button[]{page.getPrevBtn(), page.getNextBtn()};
 
-        addValidationToSaveButtons(textFields, List.of(page.getStreamChooser(),page.getLocationChooser()),string->!string.matches("^.*[a-zA-Z]+.*$"),buttons);
+        addValidationToSaveButtons(textFields, List.of(page.getStreamChooser(), page.getLocationChooser()), string -> !string.matches("^.*[a-zA-Z]+.*$"), buttons);
 
-        textFields.addAll(List.of(page.getFirstName(),page.getLastName(), page.getEmail()));
+        textFields.addAll(List.of(page.getFirstName(), page.getLastName(), page.getEmail()));
 
-        createValidationForTextFields(string->!string.matches("^.*[a-zA-Z]+.*$"), textFields, "Must contain at least one letter");
-        page.getStreamChooser().setValue((stream.getStreamName()!=null)?stream.getStreamName():"");
-        page.getLocationChooser().setValue((location.getLocationName()!=null)?location.getLocationName():"");
-        page.getStreamChooser().setOnAction(actionEvent-> {
+        createValidationForTextFields(string -> !string.matches("^.*[a-zA-Z]+.*$"), textFields, "Must contain at least one letter");
+        page.getStreamChooser().setValue((stream.getStreamName() != null) ? stream.getStreamName() : "");
+        page.getLocationChooser().setValue((location.getLocationName() != null) ? location.getLocationName() : "");
+        if (cvTemplate.getCompetences()==null) cvTemplate.setCompetences(new HashSet<>());
+        page.getStreamChooser().setOnAction(actionEvent -> {
             if (Objects.equals(page.getStreamChooser().getValue(), "Technical")) {
                 //ToDo: list should be addable
-                stream.getPresetCompetences().add("Java, HTML/CSS/JavaScript, JUnit, Eclipse, Maven, Git, MySQL, UML");
+                cvTemplate.getCompetences().removeAll(BUSINESS);
+                System.out.println(stream.getPresetCompetences());
+                cvTemplate.getCompetences().addAll(TECHNICAL);
                 stream.setStreamName("Technical");
             } else if (Objects.equals(page.getStreamChooser().getValue(), "Business")) {
-                stream.getPresetCompetences().add("MySQL, BPMN, UML");
+                cvTemplate.getCompetences().removeAll(TECHNICAL);
+                cvTemplate.getCompetences().addAll(BUSINESS);
                 stream.setStreamName("Business");
             }
         });
 
         page.getLocationChooser().setOnAction(actionEvent -> {
             if (Objects.equals(page.getLocationChooser().getValue(), "Germany")) {
-                location = new Location("Germany", 1, 1, 1, 3, 1, 3, 1, 3, 0, 1, 0, 1, 1, 3, 0, 3, false);
-            } else if (Objects.equals(page.getStreamChooser().getValue(), "International")) {
-                location = new Location("International", 1, 1, 1, 3, 1, 3, 1, 3, 0, 1, 0, 1, 1, 3, 0, 3, false);
+                location = new Location("Germany", 1, 1, 1, 3,
+                        1, 3, 1,
+                        3, 0, 1, 0,
+                        1, 1, 3, 0,
+                        3, false);
+            } else if (Objects.equals(page.getLocationChooser().getValue(), "International")) {
+                location = new Location("International", 1, 1, 1,
+                        3, 1, 3,
+                        1, 3, 0,
+                        1, 0, 1, 1,
+                        3, 0, 3, false);
             }
         });
 
@@ -87,7 +101,7 @@ public class PersonalInformationController implements InitializableFXML, HasTogg
         buttons[0].setOnAction(actionEvent -> {
             assignInfoInput();
             treeView.getSelectionModel().select(1);
-            new ProfileController(cvTemplate, treeView).initialize(main,"");
+            new ProfileController(cvTemplate, treeView).initialize(main, "");
         });
 
 
@@ -101,10 +115,11 @@ public class PersonalInformationController implements InitializableFXML, HasTogg
         cvTemplate.setUser(user);
 
         cvTemplate.setStream(stream);
-        List<String> temp = cvTemplate.getCompetences();
-        if (temp==null) temp=new ArrayList<>();
+        HashSet<String> temp = cvTemplate.getCompetences();
+        if (temp == null) temp = new HashSet<>();
         temp.addAll(stream.getPresetCompetences());
         //ToDo: add addable competences
+        cvTemplate.setCompetences(temp);
 
         cvTemplate.setLocation(location);
         System.out.println(location.getLocationName());
