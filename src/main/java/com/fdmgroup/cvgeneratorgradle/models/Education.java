@@ -30,8 +30,8 @@ public class Education {
 	private List<String> keyModules;
 
 
-	public Education(String degree, String studyTitle, String universityName, String universityPlace, String startDate,
-			String endDate, String thesisTitle, List<String> keyModules) {
+	public Education(String degree, String studyTitle, String universityName, String universityPlace, String thesisTitle, String startDate,
+			String endDate, List<String> keyModules) {
 		this.degree = degree;
 		this.studyTitle = studyTitle;
 		this.universityName = universityName;
@@ -42,4 +42,17 @@ public class Education {
 		this.keyModules = keyModules;
 	}
 
+	@Override
+	public String toString() {
+		return "Education{" +
+				"degree='" + degree + '\'' +
+				", studyTitle='" + studyTitle + '\'' +
+				", universityName='" + universityName + '\'' +
+				", universityPlace='" + universityPlace + '\'' +
+				", startDate='" + startDate + '\'' +
+				", endDate='" + endDate + '\'' +
+				", thesisTitle='" + thesisTitle + '\'' +
+				", keyModules=" + keyModules +
+				'}';
+	}
 }

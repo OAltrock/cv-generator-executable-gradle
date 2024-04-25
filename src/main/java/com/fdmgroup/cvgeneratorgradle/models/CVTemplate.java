@@ -40,6 +40,8 @@ public class CVTemplate {
 
 	private User user;
 
+	private String profile;
+
 	private Location location;
 
 	private Stream stream;
@@ -48,7 +50,7 @@ public class CVTemplate {
 
 	private List<Education> educations;
 
-	private List<Competence> competences;
+	private List<String> competences;
 
 	private List<Certificate> certificates;
 
@@ -58,7 +60,7 @@ public class CVTemplate {
 
 	public CVTemplate(User user, String firstName, String lastName, Location location, Stream stream,
 			ProfilePicture profilePicture, List<Experience> experience, List<Education> education,
-			List<Competence> competence, List<Certificate> certificate, List<Language> language,
+			List<String> competence, List<Certificate> certificate, List<Language> language,
 			List<Interest> interest) {
 		this.user = user;
 		this.location = location;

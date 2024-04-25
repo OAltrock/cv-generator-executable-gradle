@@ -15,12 +15,15 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
 
-    private CVTemplate cvTemplate;
+    CVTemplate cvTemplate;
+
+    TreeView<String> treeView;
 
     @FXML
     private BorderPane mainWindow;
@@ -40,10 +43,6 @@ public class MainController implements Initializable {
 
 
     public void showLeftBorder(ActionEvent actionEvent) {
-
-        //creating
-
-
         //setting center scene (will be deprecated once we use classes (CVTemplate)
         setLabel("Fill out the specific sections of your CV");
 
@@ -55,7 +54,7 @@ public class MainController implements Initializable {
         TreeItem<String> skills = new TreeItem<>("Skills");
         TreeItem<String> education = new TreeItem<>("Education");
         TreeItem<String> profile = new TreeItem<>("Profile");
-        List<TreeItem<String>> detailsItems = List.of(personalInformation, experience, education, skills, profile);
+        List<TreeItem<String>> detailsItems = List.of(profile, personalInformation, experience, education, skills);
         List<TreeItem<String>> rootItems = List.of(details, summary);
 
         //setting up tree nodes (should be populated by a cv class in the future)
@@ -64,34 +63,33 @@ public class MainController implements Initializable {
 
         //setting up tree view
 
-        TreeView<String> leftBorderTreeView = createTreeView(cv);
-        leftBorderTreeView.setPrefWidth(300);
-        leftBorderTreeView.setShowRoot(false);
-        leftBorderTreeView.getRoot().getChildren().forEach(child -> child.setExpanded(true));
+        treeView = createTreeView(cv);
+        treeView.setPrefWidth(300);
+        treeView.setShowRoot(false);
+        treeView.getRoot().getChildren().forEach(child -> child.setExpanded(true));
 
         //setting up app navigation
         //o is observable, oldV is old value (those two are not being used); newV is new value (ie: what the user has selected)
-        leftBorderTreeView.getSelectionModel().selectedItemProperty().addListener((o, oldV, newV) -> {
+        treeView.getSelectionModel().selectedItemProperty().addListener((o, oldV, newV) -> {
 
             switch (newV.getValue()) {
                 case "Personal Information" -> {
-                    new PersonalInformationController().initialize(mainWindow, "personalInfo");
+                    new PersonalInformationController(cvTemplate, treeView).initialize(mainWindow, "personalInfo");
                 }
                 case "Experience" -> {
-                    new ExperienceController().initialize(mainWindow, "experience2");
+                    new ExperienceController(cvTemplate,treeView).initialize(mainWindow, "experience2");
                 }
                 case "Summary" -> {
-                    new SummaryController().initialize(mainWindow, "test");
+                    new SummaryController(cvTemplate,treeView).initialize(mainWindow, "test");
                 }
                 case "Education" -> {
-                    new EducationController(cvTemplate.getEducations()).initialize(mainWindow, "education2");
-                    /*setCenter("education.fxml");*/
+                    new EducationController(cvTemplate,treeView).initialize(mainWindow, "education2");
                 }
                 case "Skills" -> {
                     new SkillsController().initialize(mainWindow, "skills");
                 }
                 case "Profile" -> {
-                    new ProfileController().initialize(mainWindow, "profile");
+                    new ProfileController(cvTemplate,treeView).initialize(mainWindow, "profile");
                 }
                 default -> {
                 }

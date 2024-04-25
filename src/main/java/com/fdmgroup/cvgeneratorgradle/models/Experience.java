@@ -25,16 +25,19 @@ public class Experience {
 	private String companyName;
 
 	private String companyPlace;
+
+	private String description;
 	
 	
 	public Experience(String jobTitle, String startDate, String endDate, List<String> positionsFeatures,
-			String companyName, String companyPlace) {
+			String companyName, String companyPlace, String description) {
 		this.jobTitle = jobTitle;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.positionFeatures = positionsFeatures;
 		this.companyName = companyName;
 		this.companyPlace = companyPlace;
+		this.description = description;
 	}
 
 }
