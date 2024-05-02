@@ -21,13 +21,13 @@
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
         </padding>
         <Label text="Profile"/>
-        <TextArea prefHeight="80.0" />
+        <TextArea fx:id="profile" prefHeight="80.0" />
         <Label text="Personal Information"/>
-        <ListView prefHeight="80.0" />
+        <ListView fx:id="personalInformationLV" prefHeight="80.0" />
         <Label text="Experience"/>
-        <ListView prefHeight="80.0" />
+        <ListView fx:id="experienceLV" prefHeight="80.0" />
         <Label text="Education"/>
-        <ListView prefHeight="80.0" />
+        <ListView fx:id="educationLV" prefHeight="80.0" />
         <GridPane fx:id="summaryGrid" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
             <columnConstraints>
                 <ColumnConstraints fx:id="gridPaneSummary" halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"

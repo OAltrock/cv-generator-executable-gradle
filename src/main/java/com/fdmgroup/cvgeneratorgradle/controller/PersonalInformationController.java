@@ -53,7 +53,7 @@ public class PersonalInformationController implements InitializableFXML, HasTogg
         page = new PersonalInfoPage(user, location, stream, textFields);
         main.setCenter(page.createCenterPage(page.getCenterBox()));
         Button[] buttons = new Button[]{page.getPrevBtn(), page.getNextBtn()};
-        page.getPrevBtn();
+        //page.getPrevBtn().setDesign("primary");
 
         addValidationToSaveButtons(textFields, List.of(page.getStreamChooser(), page.getLocationChooser()), string -> !string.matches("^.*[a-zA-Z]+.*$"), buttons);
 
