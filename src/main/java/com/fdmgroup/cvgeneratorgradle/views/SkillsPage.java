@@ -5,14 +5,14 @@ import com.fdmgroup.cvgeneratorgradle.interfaces.HasAddableTextFields;
 import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.models.Language;
 import com.fdmgroup.cvgeneratorgradle.models.Location;
+import com.fdmgroup.cvgeneratorgradle.models.enums.LanguageLevel;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputControl;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -81,9 +81,15 @@ public class SkillsPage extends FDMPage implements HasAddableTextFields {
         });
         //textFields.addAll(languagesToAdd);
         //ToDo: language level
-        languageGridPane = new GridPane(3, languagesToAdd.size());
+        languageGridPane = new GridPane(4, languagesToAdd.size());
+        languageGridPane.setMinWidth(600);
+        MenuButton languageLevelButton = new MenuButton("Choose language level");
+        //languageLevelButton.setMinWidth(100);
+        List<MenuItem> languageLevels = Arrays.stream(LanguageLevel.values()).map(languageLevel -> new MenuItem(languageLevel.toString())).toList();
+        languageLevelButton.getItems().addAll(languageLevels);
+
         FDMButton addLanguageBtn = new FDMButton("Add language");
-        createAddableAreaFromModel(languagesToAdd, languageGridPane, addLanguageBtn, textFields, location.getMaxLanguage(), "Remove language", "Language");
+        createAddableAreaFromModel(languagesToAdd, languageGridPane,  addLanguageBtn, languageLevelButton, textFields, location.getMaxLanguage(), "Remove language", "Language", cvTemplate);
 
         hobbiesLabel = new Label("Add " + location.getMinInterest() + " to " + location.getMaxInterest() + " Hobbies or Interests");
         List<TextInputControl> hobbiesToAdd = new ArrayList<>();

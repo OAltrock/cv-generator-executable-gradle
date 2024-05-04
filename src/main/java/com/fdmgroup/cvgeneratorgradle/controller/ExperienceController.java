@@ -9,6 +9,7 @@ import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.models.Experience;
 import com.fdmgroup.cvgeneratorgradle.views.ExperiencePage;
 import com.fdmgroup.cvgeneratorgradle.views.FDMButton;
+import com.fdmgroup.cvgeneratorgradle.views.FDMPage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -46,14 +47,7 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
 
         textFields = FXCollections.observableArrayList();
         GridPane gridPane;
-        experiencePage = new ExperiencePage(cvTemplate,textFields);
-        /*if (experiences!=null  && !experiences.isEmpty()) {
-
-        }
-        else {
-            experiencePage = new ExperiencePage(textFields,forFutureReference);
-        }*/
-
+        experiencePage = new ExperiencePage(cvTemplate, textFields);
         main.setCenter(experiencePage.createCenterPage(experiencePage.getCenterBox()));
         VBox centerBox = experiencePage.getCenterBox();
         gridPane = experiencePage.getKeySkillsGridPane();
@@ -97,7 +91,7 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
 
     private void assignExperienceInput(DatePicker start, DatePicker end){
         if (experiences==null) experiences = new ArrayList<>();
-        if (experiences.isEmpty()) experiences.add(new Experience());
+        experiences.add(new Experience());
         Experience experience = experiences.getLast();
         experience.setCompanyName(experiencePage.getCompanyName().getText());
         experience.setJobTitle(experiencePage.getJobTitle().getText());
@@ -105,6 +99,7 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
         experience.setPositionFeatures(experiencePage.getKeySkills().stream().map(TextInputControl::getText).toList());
         experiences.getLast().setStartDate(start.getValue().toString());
         experiences.getLast().setEndDate((end.getValue()!=null) ? end.getValue().toString() : LocalDate.now().plusMonths(1).toString());
+        System.out.println(experiences);
         cvTemplate.setExperiences(experiences);
     }
 }

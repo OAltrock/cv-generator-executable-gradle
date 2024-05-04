@@ -79,11 +79,11 @@ public class PersonalInformationController implements InitializableFXML, HasTogg
 
         page.getLocationChooser().setOnAction(actionEvent -> {
             if (Objects.equals(page.getLocationChooser().getValue(), "Germany")) {
-                location = new Location("Germany", 1, 1, 1, 3,
+                location = new Location("Germany", 1, 5, 1, 1,
                         1, 3, 1,
-                        3, 0, 1, 0,
-                        1, 1, 3, 0,
-                        3, false);
+                        3, 1, 5, 1,
+                        5, 1, 5, 0,
+                        5, false);
             } else if (Objects.equals(page.getLocationChooser().getValue(), "International")) {
                 location = new Location("International", 1, 1, 1,
                         3, 1, 3,
@@ -121,10 +121,6 @@ public class PersonalInformationController implements InitializableFXML, HasTogg
         temp.addAll(stream.getPresetCompetences());
         //ToDo: add addable competences
         cvTemplate.setCompetences(temp);
-
         cvTemplate.setLocation(location);
-        System.out.println(location.getLocationName());
-
-
     }
 }

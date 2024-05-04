@@ -45,16 +45,6 @@ public class EducationPage extends FDMPage implements HasAddableTextFields/*, Ha
 
     private final ObservableList<TextInputControl> textFields;
 
-    //alternative way to create views (to fxml). scene builder can be weird.
-    /*public EducationPage(CVTemplate cvTemplate, ObservableList<TextInputControl> textFields, String forFutureReference) {
-        education = new Education();
-        this.textFields = textFields;
-        this.forFutureReference = forFutureReference;
-        keyModules = new ArrayList<>();
-        education.setKeyModules(new ArrayList<>());
-        initialize();
-    }*/
-
     public EducationPage(CVTemplate cvTemplate, ObservableList<TextInputControl> textFields) {
         this.cvTemplate = cvTemplate;
         if (cvTemplate.getEducations() != null && !cvTemplate.getEducations().isEmpty())
