@@ -23,7 +23,6 @@ import static com.fdmgroup.cvgeneratorgradle.CVGeneratorApp.setCounter1;
 
 public interface HasAddableTextFields {
 
-
     /**
      * Adds functionality to the add-Button which creates a new row within the given GridPane. This row contains a {@link TextField}, a remove-Button and moves the
      * add-Button to the newly created row.
@@ -44,8 +43,6 @@ public interface HasAddableTextFields {
 
         addBtn.setOnAction(event -> {
             MenuButton languageLevelButton = null;
-            System.out.println(parent.getChildren());
-            System.out.println(languageLevelButton);
             if (parent.getChildren().size() / 3 + 1 <= limit) {
                 javafx.scene.control.TextField textFieldToAdd = new javafx.scene.control.TextField();
                 int rowCount = parent.getRowCount() + 1;

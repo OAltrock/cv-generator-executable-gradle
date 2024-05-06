@@ -12,9 +12,11 @@ import com.fdmgroup.cvgeneratorgradle.views.SkillsPage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
@@ -50,7 +52,7 @@ public class SkillsController implements InitializableFXML, HasToggleableSaveBut
 		addValidationToSaveButtons(textFields,predicate.negate(), buttons);
 		textFields.addAll(findAllTextFields(page.getCompetenceGridPane()));
 		textFields.addAll(findAllTextFields(page.getCertificateGridPane()));
-		textFields.addAll(findAllTextFields(page.getLanguageGridPane()));
+		//textFields.addAll(findAllTextFields(page.getLanguageGridPane()));
 		textFields.addAll(findAllTextFields(page.getHobbiesGridPane()));
 
 		createValidationForTextFields(string -> !string.matches("^.*[a-zA-Z]+.*$"),textFields,"Must contain at least one letter");
@@ -85,10 +87,14 @@ public class SkillsController implements InitializableFXML, HasToggleableSaveBut
 		List<TextInputControl> languageInput = findAllTextFields(page.getLanguageGridPane());
 		HashSet<Language> languagesToAdd = new HashSet<>();
 		languageInput.forEach(language -> {
-			languagesToAdd.add(new Language(language.getText(), LanguageLevel.C2));
+			if (language.getText()!=null && !language.getText().isEmpty()) {
+				MenuButton languageLlvBtn = (MenuButton) page.getLanguageGridPane().getChildren().get(page.getLanguageGridPane().getChildren().indexOf(language) + 1);
+				languagesToAdd.add(new Language(language.getText(), (languageLlvBtn.getText()!=null)? LanguageLevel.valueOf(languageLlvBtn.getText()):LanguageLevel.C2));
+			}
 		});
 		cvTemplate.setLanguages(languagesToAdd);
-
+		//cvTemplate.getLanguages().forEach(language-> System.out.println(language.getLanguageLevel().toString()));
+		System.out.println(cvTemplate.getLanguages());
 		List<TextInputControl> interestsInput = findAllTextFields(page.getHobbiesGridPane());
 		HashSet<String> interestsToAdd = new HashSet<>();
 		interestsInput.forEach(interest -> {
