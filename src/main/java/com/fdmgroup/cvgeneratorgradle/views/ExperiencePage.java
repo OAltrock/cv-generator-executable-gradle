@@ -1,6 +1,7 @@
 package com.fdmgroup.cvgeneratorgradle.views;
 
 import com.fdmgroup.cvgeneratorgradle.interfaces.HasAddableTextFields;
+
 import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.models.Experience;
 import com.fdmgroup.cvgeneratorgradle.models.Location;
@@ -8,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import lombok.Getter;
+
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -52,8 +54,9 @@ public class ExperiencePage extends FDMPage implements HasAddableTextFields {
         initialize();
     }*/
 
-    public ExperiencePage(CVTemplate cvTemplate, ObservableList<TextInputControl> textFields) {
+    public ExperiencePage(CVTemplate cvTemplate, ObservableList<TextInputControl> textFields, Experience experience) {
         this.cvTemplate = cvTemplate;
+
         if (cvTemplate.getExperiences() != null && !cvTemplate.getExperiences().isEmpty())
             experiences = cvTemplate.getExperiences();
         else {
@@ -106,13 +109,13 @@ public class ExperiencePage extends FDMPage implements HasAddableTextFields {
                         cvTemplate.setLocation(new Location("", 1, 1, 1, 3, 1, 3, 1, 3, 0, 1, 0, 1, 1, 3, 0, 3, false));
                     createAddableAreaFromModel(keySkills, keySkillsGridPane, addBtn, textFields, cvTemplate.getLocation().getMaxPositionFeature(), "Remove key skill", "Key skill");
 
-                    nextBtn = new FDMButton("Next");
+                    /*nextBtn = new FDMButton("Next");
                     prevBtn = new FDMButton("Previous");
                     buttonWrapper = new FDMHBox(prevBtn, nextBtn);
-                    buttonWrapper.setDesign();
+                    buttonWrapper.setDesign();*/
                     centerBox = new FDMCenterVBoxWrapper();
                     centerBox.getChildren().addAll(pageTitle, jobTitle, companyName, companyPlace,
-                            dateWrapper, keySkillsGridPane, buttonWrapper);
+                            dateWrapper, keySkillsGridPane);
                 }
         );
         centerBox.setDesign();

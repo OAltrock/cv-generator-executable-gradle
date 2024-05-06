@@ -3,14 +3,15 @@ package com.fdmgroup.cvgeneratorgradle.models;
 /*import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;*/
 
-import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
-import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.apache.poi.util.Units;
-import org.apache.poi.xwpf.usermodel.*;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -510,7 +511,7 @@ public class CVTemplate {
 			if (key.matches("EducationDate_\\d") || key.matches("ExperienceDate_\\d") || key.matches("Firstname")
 					|| key.matches("Lastname") || key.matches("ExperienceTitle_\\d")
 					|| key.matches("EducationTitle_\\d")) {
-				newRun.setBold(true);
+				((XWPFRun) newRun).setBold(true);
 			}
 
 		}

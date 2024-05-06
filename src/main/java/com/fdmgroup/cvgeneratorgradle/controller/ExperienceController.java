@@ -7,9 +7,7 @@ import com.fdmgroup.cvgeneratorgradle.interfaces.InitializableFXML;
 import com.fdmgroup.cvgeneratorgradle.interfaces.HasToggleableSaveButtons;
 import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.models.Experience;
-import com.fdmgroup.cvgeneratorgradle.views.ExperiencePage;
-import com.fdmgroup.cvgeneratorgradle.views.FDMButton;
-import com.fdmgroup.cvgeneratorgradle.views.FDMPage;
+import com.fdmgroup.cvgeneratorgradle.views.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -36,70 +34,104 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
     private final String forFutureReference = "3";
     TreeView<String> treeView;
 
+    private List<ExperiencePage> experiencePages;
+
     public ExperienceController(CVTemplate cvTemplate, TreeView<String> treeView) {
         this.cvTemplate = cvTemplate;
         experiences = cvTemplate.getExperiences();
         this.treeView = treeView;
+        experiencePages = new ArrayList<>();
     }
 
     @Override
     public void initialize(BorderPane main, String resource) {
 
         textFields = FXCollections.observableArrayList();
-        GridPane gridPane;
-        experiencePage = new ExperiencePage(cvTemplate, textFields);
-        main.setCenter(experiencePage.createCenterPage(experiencePage.getCenterBox()));
-        VBox centerBox = experiencePage.getCenterBox();
-        gridPane = experiencePage.getKeySkillsGridPane();
-        CheckBox checkBox = experiencePage.getOngoing();
-        DatePicker start = experiencePage.getStartDate();
-        DatePicker end = experiencePage.getEndDate();
-        Button[] buttons = new Button[]{experiencePage.getPrevBtn(),experiencePage.getNextBtn()};
+        FDMCenterVBoxWrapper wrapper = new FDMCenterVBoxWrapper();
+        //experiencePage = new ExperiencePage(cvTemplate, textFields);
+        if (experiences != null && !experiences.isEmpty()) {
+            experiences.forEach(experience -> {
+                experiencePages.add(new ExperiencePage(cvTemplate, textFields, experience));
+            });
+        } else
+            experiencePages.add(new ExperiencePage(cvTemplate, textFields, new Experience("", "", "", new ArrayList<>(), "", "", "")));
 
-        BiPredicate<LocalDate, LocalDate> checkDate = (startDate, endDate) -> {
-            if (startDate==null) {
-                return false;
-            }
-            else if (checkBox.isSelected()) {
-                return !startDate.isAfter(LocalDate.now());
-            }
-            else if (endDate==null) return false;
-            else  {
-                return startDate.isBefore(endDate) || startDate.isEqual(endDate);
-            }
-        };
-        addValidationToSaveButtons(textFields, predicate, start, end,checkDate, checkBox, buttons);
-        textFields.addAll(findAllTextFields(centerBox));
-        textFields.addAll(findAllTextFields(experiencePage.getKeySkillsGridPane()));
-        createValidationForTextFields(predicate, textFields, "Must contain at least one Letter");
-        addValidationToDates(start,end,checkDate, checkBox);
+        Button[] buttons = new Button[]{new FDMButton("Previous"), new FDMButton("Next")};
+        FDMHBox buttonWrapper = new FDMHBox(buttons[0],buttons[1]);
+        buttonWrapper.setDesign();
+
+        experiencePages.forEach(experiencePage1 -> {
+            wrapper.getChildren().add(experiencePage1.getCenterBox());
+            CheckBox checkBox = experiencePage1.getOngoing();
+            DatePicker start = experiencePage1.getStartDate();
+            DatePicker end = experiencePage1.getEndDate();
+
+            VBox centerBox = experiencePage1.getCenterBox();
+            BiPredicate<LocalDate, LocalDate> checkDate = (startDate, endDate) -> {
+                if (startDate == null) {
+                    return false;
+                } else if (checkBox.isSelected()) {
+                    return !startDate.isAfter(LocalDate.now());
+                } else if (endDate == null) return false;
+                else {
+                    return startDate.isBefore(endDate) || startDate.isEqual(endDate);
+                }
+            };
+            addValidationToSaveButtons(textFields, predicate, start, end, checkDate, checkBox, buttons);
+            textFields.addAll(findAllTextFields(centerBox));
+            textFields.addAll(findAllTextFields(experiencePage1.getKeySkillsGridPane()));
+            createValidationForTextFields(predicate, textFields, "Must contain at least one Letter");
+            addValidationToDates(start, end, checkDate, checkBox);
+
+        });
+        wrapper.getChildren().addLast(buttonWrapper);
+        main.setCenter(experiencePages.getLast().createCenterPage(wrapper));
+
+
+        //GridPane gridPane = experiencePage.getKeySkillsGridPane();
 
 
         buttons[1].setOnAction(actionEvent -> {
-            assignExperienceInput(start, end);
+            assignExperienceInput(experiencePages);
             treeView.getSelectionModel().select(4);
             new EducationController(cvTemplate, treeView).initialize(main, "");
         });
 
         buttons[0].setOnAction(actionEvent -> {
-            assignExperienceInput(start,end);
+            assignExperienceInput(experiencePages);
             treeView.getSelectionModel().select(2);
-            new PersonalInformationController(cvTemplate, treeView).initialize(main,"");
+            new PersonalInformationController(cvTemplate, treeView).initialize(main, "");
         });
 
     }
 
-    private void assignExperienceInput(DatePicker start, DatePicker end){
-        if (experiences==null) experiences = new ArrayList<>();
-        experiences.add(new Experience());
-        Experience experience = experiences.getLast();
+    private void assignExperienceInput(List<ExperiencePage> experiencePages) {
+        if (experiences == null) experiences = new ArrayList<>();
+        //experiences.add(new Experience());
+        //List<Experience> experienceList = new ArrayList<>();
+        for (ExperiencePage page : experiencePages) {
+            List<String> keySkills = new ArrayList<>();
+            for (TextInputControl keySkill : page.getKeySkills()) {
+                keySkills.add(keySkill.getText());
+            }
+            //(end.getValue() != null) ? end.getValue().toString() : LocalDate.now().plusMonths(1).toString()
+            cvTemplate.getExperiences().add(new Experience(page.getJobTitle().getText(), page.getStartDate().getValue().toString(),
+                    (page.getEndDate().getValue() != null) ?
+                            page.getEndDate().getValue().toString() :
+                            LocalDate.now().plusMonths(1).toString(),
+                    keySkills, page.getCompanyName().getText(),
+                    page.getCompanyPlace().getText(), page.getDescription().getText()));
+            //System.out.println(experienceList.getLast());
+            System.out.println(cvTemplate.getExperiences());
+        }
+        /*Experience experience = experiences.getLast();
         experience.setCompanyName(experiencePage.getCompanyName().getText());
         experience.setJobTitle(experiencePage.getJobTitle().getText());
         experience.setCompanyPlace(experiencePage.getCompanyPlace().getText());
         experience.setPositionFeatures(experiencePage.getKeySkills().stream().map(TextInputControl::getText).toList());
         experiences.getLast().setStartDate(start.getValue().toString());
-        experiences.getLast().setEndDate((end.getValue()!=null) ? end.getValue().toString() : LocalDate.now().plusMonths(1).toString());
-        System.out.println(experiences);
-        cvTemplate.setExperiences(experiences);
+        experiences.getLast().setEndDate();
+        System.out.println(experiences);*/
+        //cvTemplate.setExperiences(experienceList);
     }
 }
