@@ -27,7 +27,8 @@ public class CVGeneratorApp extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(CVGeneratorApp.class.getResource("welcome2.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("FDM CV-Generator");
-        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("images/FDM_Logo_Black_RGB.png"))));
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream(
+                "images/FDM_Logo_Green_RGB.png"))));
         stage.setScene(scene);
 
         scene.getStylesheets().add("https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap");

@@ -11,18 +11,21 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 
 import java.util.function.Predicate;
 import static com.fdmgroup.cvgeneratorgradle.controller.AppUtils.findAllTextFields;
 
 public class ProfileController implements InitializableFXML, HasToggleableSaveButtons, HasAddableTextFields {
 
-    private CVTemplate cvTemplate;
-    private String profile;
+    private final Stage stage;
+    private final CVTemplate cvTemplate;
+    private final String profile;
     private ObservableList<TextInputControl> textAreas;
-    private TreeView<String> treeView;
+    private final TreeView<String> treeView;
 
-    public ProfileController(CVTemplate cvTemplate, TreeView<String> treeView) {
+    public ProfileController(CVTemplate cvTemplate, TreeView<String> treeView, Stage stage) {
+        this.stage = stage;
         this.cvTemplate = cvTemplate;
         profile = cvTemplate.getProfile();
         this.treeView = treeView;
@@ -49,7 +52,7 @@ public class ProfileController implements InitializableFXML, HasToggleableSaveBu
         saveBtn.setOnAction(actionEvent -> {
             cvTemplate.setProfile(page.getProfile().getText());
             treeView.getSelectionModel().select(2);
-            new PersonalInformationController(cvTemplate, treeView).initialize(main,"");
+            new PersonalInformationController(cvTemplate, treeView, stage).initialize(main,"");
         });
 
         page.getPrev().setVisible(false);

@@ -15,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -23,6 +24,7 @@ import java.util.Objects;
 
 public class PersonalInformationController implements InitializableFXML, HasToggleableSaveButtons, HasAddableTextFields {
 
+    private final Stage stage;
     private PersonalInfoPage page;
     private User user;
     private Stream stream;
@@ -34,12 +36,13 @@ public class PersonalInformationController implements InitializableFXML, HasTogg
     private final HashSet<String> TECHNICAL = new HashSet<>(List.of("Java", "HTML/CSS/JavaScript", "JUnit", "Eclipse", "Maven", "Git", "MySQL", "UML"));
     private final HashSet<String> BUSINESS = new HashSet<>(List.of("MySQL", "BPMN", "UML"));
 
-    public PersonalInformationController(CVTemplate cvTemplate, TreeView<String> treeView) {
+    public PersonalInformationController(CVTemplate cvTemplate, TreeView<String> treeView, Stage stage) {
         this.cvTemplate = cvTemplate;
         user = cvTemplate.getUser();
         stream = cvTemplate.getStream();
         location = cvTemplate.getLocation();
         this.treeView = treeView;
+        this.stage = stage;
     }
 
     @Override
@@ -96,13 +99,13 @@ public class PersonalInformationController implements InitializableFXML, HasTogg
         buttons[1].setOnAction(actionEvent -> {
             assignInfoInput();
             treeView.getSelectionModel().select(3);
-            new ExperienceController(cvTemplate, treeView).initialize(main, "");
+            new ExperienceController(cvTemplate, treeView, stage).initialize(main, "");
         });
 
         buttons[0].setOnAction(actionEvent -> {
             assignInfoInput();
             treeView.getSelectionModel().select(1);
-            new ProfileController(cvTemplate, treeView).initialize(main, "");
+            new ProfileController(cvTemplate, treeView, stage).initialize(main, "");
         });
 
 

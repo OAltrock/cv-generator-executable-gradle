@@ -14,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,17 +41,18 @@ public class EducationController implements InitializableFXML, HasToggleableSave
     /**
      * emulating variable loaded from template
      */
-    private final String forFutureReference = "3";
+    private final Stage stage;
     Predicate<String> predicate = input -> !input.matches("^.*[a-zA-Z]+.*$");
     TreeView<String> treeView;
 
     /**
      * @param cvTemplate {@link CVTemplate}
      */
-    public EducationController(CVTemplate cvTemplate, TreeView<String> treeView) {
+    public EducationController(CVTemplate cvTemplate, TreeView<String> treeView, Stage stage) {
         this.cvTemplate = cvTemplate;
         educations = cvTemplate.getEducations();
         this.treeView = treeView;
+        this.stage = stage;
     }
 
 
@@ -96,12 +98,12 @@ public class EducationController implements InitializableFXML, HasToggleableSave
         buttons[0].setOnAction(actionEvent -> {
             assignEducationInput(start, end);
             treeView.getSelectionModel().select(3);
-            new ExperienceController(cvTemplate, treeView).initialize(main, "");
+            new ExperienceController(cvTemplate, treeView, stage).initialize(main, "");
         });
         buttons[1].setOnAction(actionEvent -> {
             assignEducationInput(start, end);
             treeView.getSelectionModel().select(5);
-            new SkillsController(cvTemplate, treeView).initialize(main, "summary");
+            new SkillsController(cvTemplate, treeView, stage).initialize(main, "summary");
         });
 
     }

@@ -18,6 +18,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import static com.fdmgroup.cvgeneratorgradle.controller.AppUtils.findAllTextFiel
 
 public class ExperienceController implements InitializableFXML, HasToggleableSaveButtons, HasAddableTextFields, HasDateValidation {
 
+    private final Stage stage;
     private final CVTemplate cvTemplate;
     private List<Experience> experiences;
     private ExperiencePage experiencePage;
@@ -37,7 +39,8 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
     TreeView<String> treeView;
     private final ObservableList<ExperiencePage> experiencePages;
 
-    public ExperienceController(CVTemplate cvTemplate, TreeView<String> treeView) {
+    public ExperienceController(CVTemplate cvTemplate, TreeView<String> treeView, Stage stage) {
+        this.stage = stage;
         this.cvTemplate = cvTemplate;
         experiences = cvTemplate.getExperiences();
         this.treeView = treeView;
@@ -121,13 +124,13 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
         buttons[1].setOnAction(actionEvent -> {
             assignExperienceInput(experiencePages);
             treeView.getSelectionModel().select(4);
-            new EducationController(cvTemplate, treeView).initialize(main, "");
+            new EducationController(cvTemplate, treeView, stage).initialize(main, "");
         });
 
         buttons[0].setOnAction(actionEvent -> {
             assignExperienceInput(experiencePages);
             treeView.getSelectionModel().select(2);
-            new PersonalInformationController(cvTemplate, treeView).initialize(main, "");
+            new PersonalInformationController(cvTemplate, treeView, stage).initialize(main, "");
         });
 
         buttons[2].setOnAction(actionEvent -> {

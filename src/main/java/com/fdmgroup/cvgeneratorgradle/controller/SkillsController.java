@@ -7,7 +7,7 @@ import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.models.Language;
 import com.fdmgroup.cvgeneratorgradle.models.enums.LanguageLevel;
 import com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson;
-import com.fdmgroup.cvgeneratorgradle.views.FDMPage;
+
 import com.fdmgroup.cvgeneratorgradle.views.SkillsPage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,10 +16,8 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.function.Predicate;
@@ -29,15 +27,17 @@ import static com.fdmgroup.cvgeneratorgradle.controller.AppUtils.findAllTextFiel
 public class SkillsController implements InitializableFXML, HasToggleableSaveButtons,
         HasAddableTextFields {
 
-	private CVTemplate cvTemplate;
+	private final CVTemplate cvTemplate;
 	private SkillsPage page;
 	private ObservableList<TextInputControl> textFields;
-	private TreeView<String> treeView;
+	private final TreeView<String> treeView;
+	private final Stage stage;
 	Predicate<String> predicate = input -> !input.matches("^.*[a-zA-Z]+.*$");
 
-	public SkillsController(CVTemplate cvTemplate, TreeView<String> treeView) {
+	public SkillsController(CVTemplate cvTemplate, TreeView<String> treeView, Stage stage) {
 		this.cvTemplate = cvTemplate;
 		this.treeView = treeView;
+		this.stage=stage;
 	}
 
 	@Override
@@ -60,12 +60,12 @@ public class SkillsController implements InitializableFXML, HasToggleableSaveBut
 		buttons[0].setOnAction(actionEvent -> {
 			assignInput();
 			treeView.getSelectionModel().select(4);
-			new EducationController(cvTemplate,treeView).initialize(main,"");
+			new EducationController(cvTemplate,treeView, stage).initialize(main,"");
 		});
 		buttons[1].setOnAction(actionEvent -> {
 			assignInput();
 			treeView.getSelectionModel().select(6);
-			new SummaryController(cvTemplate, treeView).initialize(main,"summary");
+			new SummaryController(cvTemplate, treeView, stage).initialize(main,"summary");
 		});
 	}
 
@@ -103,6 +103,6 @@ public class SkillsController implements InitializableFXML, HasToggleableSaveBut
 		cvTemplate.setInterests(interestsToAdd);
 
 		//Save cvTemplate as Json
-		SaveObjectToJson.saveObjectAsJson(cvTemplate);
+		//SaveObjectToJson.saveObjectAsJson(cvTemplate);
 	}
 }

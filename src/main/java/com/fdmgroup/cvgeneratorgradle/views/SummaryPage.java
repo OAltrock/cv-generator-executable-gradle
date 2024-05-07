@@ -9,14 +9,19 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import lombok.Getter;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 @Getter
 public class SummaryPage extends FDMPage {
+    private Stage stage;
     private CVTemplate cvTemplate;
 
     private FDMCenterVBoxWrapper centerBox;
@@ -28,7 +33,7 @@ public class SummaryPage extends FDMPage {
     private final ListView<String> personalInformation = new ListView<>();
 
     private final Label experienceLabel = new Label("Experiences");
-    private final ListView<String> experience = new ListView<>();
+    private final List<ListView<String>> experiences;
 
     private final Label educationLabel = new Label("Education");
     private final ListView<String> education = new ListView<>();
@@ -47,8 +52,10 @@ public class SummaryPage extends FDMPage {
     private final MenuButton generateCV = new MenuButton("Generate Cv", null,
             new MenuItem("Generate PDF"), new MenuItem("Generate docx"));
 
-    public SummaryPage(CVTemplate cvTemplate) {
+    public SummaryPage(CVTemplate cvTemplate, Stage stage) {
         this.cvTemplate = cvTemplate;
+        experiences = new ArrayList<>();
+        this.stage = stage;
         initialize();
     }
 
@@ -58,27 +65,33 @@ public class SummaryPage extends FDMPage {
 
         personalInformation.setMinHeight(130);
 
-        experience.setMinHeight(130);
+
         if (cvTemplate.getExperiences() == null) {
             cvTemplate.setExperiences(new ArrayList<>());
             cvTemplate.getExperiences().add(new Experience("", "", "",
                     new ArrayList<>(), "", "", ""));
         }
         //if there are more than one, nodes could be created for each one (same for education)
-        Experience lastExperience = cvTemplate.getExperiences().getLast();
-        String ongoing = (!lastExperience.getEndDate().isEmpty()) ? (LocalDate.parse(lastExperience.getEndDate()).isAfter(LocalDate.now())) ? "ongoing" : lastExperience.getEndDate() : "";
-        ObservableList<String> experienceList = FXCollections.observableArrayList(
-                "Job title: " + lastExperience.getJobTitle(),
-                "Company: " + lastExperience.getCompanyName(),
-                "at: " + lastExperience.getCompanyPlace(),
-                "from: " + lastExperience.getStartDate(),
-                "to: " + ongoing);
-        if (lastExperience.getPositionFeatures() != null) {
-            lastExperience.getPositionFeatures().forEach(positionFeature -> {
-                experienceList.add("Position feature: " + positionFeature);
-            });
+
+        for (Experience experience1 : cvTemplate.getExperiences()) {
+            String ongoing = (!experience1.getEndDate().isEmpty()) ?
+                    (LocalDate.parse(experience1.getEndDate()).isAfter(LocalDate.now()))
+                            ? "ongoing" : experience1.getEndDate() : "";
+            ObservableList<String> experienceList = FXCollections.observableArrayList(
+                    "Job title: " + experience1.getJobTitle(),
+                    "Company: " + experience1.getCompanyName(),
+                    "at: " + experience1.getCompanyPlace(),
+                    "from: " + experience1.getStartDate(),
+                    "to: " + ongoing);
+            if (experience1.getPositionFeatures() != null) {
+                experience1.getPositionFeatures().forEach(positionFeature -> {
+                    experienceList.add("Position feature: " + positionFeature);
+                });
+            }
+            ListView<String> experienceListView = new ListView<>(experienceList);
+            experienceListView.setMinHeight(130);
+            experiences.add(experienceListView);
         }
-        experience.setItems(experienceList);
 
         education.setMinHeight(130);
         if (cvTemplate.getEducations() == null) {
@@ -139,7 +152,9 @@ public class SummaryPage extends FDMPage {
         summaryGrid.add(languages, 1, 3);
 
         centerBox = new FDMCenterVBoxWrapper(profileLabel, profile, personalInformationLabel, personalInformation,
-                experienceLabel, experience, educationLabel, education, summaryGrid, saveCV, generateCV);
+                experienceLabel);
+        experiences.forEach(experienceLV -> centerBox.getChildren().add(experienceLV));
+        centerBox.getChildren().addAll(educationLabel, education, summaryGrid, saveCV, generateCV);
         centerBox.setDesign();
         saveCV.setDesign("primary");
 

@@ -74,22 +74,22 @@ public class MainController implements Initializable {
 
             switch (newV.getValue()) {
                 case "Personal Information" -> {
-                    new PersonalInformationController(cvTemplate, treeView).initialize(mainWindow, "personalInfo");
+                    new PersonalInformationController(cvTemplate, treeView, (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow, "personalInfo");
                 }
                 case "Experience" -> {
-                    new ExperienceController(cvTemplate,treeView).initialize(mainWindow, "experience2");
+                    new ExperienceController(cvTemplate,treeView, (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow, "experience2");
                 }
                 case "Summary" -> {
-                    new SummaryController(cvTemplate,treeView).initialize(mainWindow, "test");
+                    new SummaryController(cvTemplate,treeView, (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow, "test");
                 }
                 case "Education" -> {
-                    new EducationController(cvTemplate,treeView).initialize(mainWindow, "education2");
+                    new EducationController(cvTemplate,treeView, (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow, "education2");
                 }
                 case "Skills" -> {
-                    new SkillsController(cvTemplate, treeView).initialize(mainWindow, "skills");
+                    new SkillsController(cvTemplate, treeView, (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow, "skills");
                 }
                 case "Profile" -> {
-                    new ProfileController(cvTemplate,treeView).initialize(mainWindow, "profile");
+                    new ProfileController(cvTemplate,treeView, (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow, "profile");
                 }
                 default -> {
                 }
