@@ -55,21 +55,11 @@ public class CVGeneratorApp extends Application {
 
     }
 
-    public static int getCounter1() {
-        return counter1;
-    }
-
     public static void setCounter1(int counter1) {
         CVGeneratorApp.counter1 = counter1;
     }
 
-    public static int getExperienceSkillCounter() {
-        return experienceSkillCounter;
-    }
 
-    public static void setExperienceSkillCounter(int experienceSkillCounter) {
-        CVGeneratorApp.experienceSkillCounter = experienceSkillCounter;
-    }
 
     public static void main(String[] args) {
         launch();

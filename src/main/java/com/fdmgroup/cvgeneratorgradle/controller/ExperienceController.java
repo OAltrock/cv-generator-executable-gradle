@@ -70,7 +70,16 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
         final FDMHBox[] buttonWrapper = {new FDMHBox(buttons[0], buttons[2], buttons[1])};
         buttonWrapper[0].setDesign();
 
+
         experiencePages.forEach(experiencePage1 -> {
+            experiencePage1.getPageTitle().setText("Experience " + (experiencePages.indexOf(experiencePage1)+1));
+            experiencePages.addListener(new InvalidationListener() {
+                @Override
+                public void invalidated(Observable observable) {
+                    BooleanBinding moreThanOne = Bindings.createBooleanBinding(() -> experiencePages.size() <= 1);
+                    experiencePage1.getRemovePage().disableProperty().bind(moreThanOne);
+                }
+            });
             wrapper.getChildren().add(experiencePage1.getCenterBox());
 
             CheckBox checkBox = experiencePage1.getOngoing();
@@ -106,14 +115,15 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
             createValidationForTextFields(predicate, textFields, "Must contain at least one Letter");
             addValidationToDates(start, end, checkDate, checkBox);
             experiencePage1.getRemovePage().setDisable(true);
-            experiencePages.addListener(new InvalidationListener() {
-                @Override
-                public void invalidated(Observable observable) {
-                    BooleanBinding moreThanOne = Bindings.createBooleanBinding(() -> experiencePages.size() <= 1);
-                    experiencePage1.getRemovePage().disableProperty().bind(moreThanOne);
-                }
-            });
+
         });
+
+        ExperiencePage temp = new ExperiencePage(cvTemplate,textFields,
+                new Experience("","","",
+                        new ArrayList<>(),"","",""),
+                true);
+        experiencePages.add(temp);
+        experiencePages.remove(temp);
         wrapper.getChildren().addLast(buttonWrapper[0]);
         main.setCenter(experiencePages.getLast().createCenterPage(wrapper));
 
@@ -138,7 +148,16 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
                     new ArrayList<>(), "", "", "");
             ExperiencePage page = new ExperiencePage(cvTemplate, textFields,
                     newExperience, false);
+
+            experiencePages.addListener(new InvalidationListener() {
+                @Override
+                public void invalidated(Observable observable) {
+                    BooleanBinding moreThanOne = Bindings.createBooleanBinding(() -> experiencePages.size() <= 1);
+                    page.getRemovePage().disableProperty().bind(moreThanOne);
+                }
+            });
             experiencePages.add(page);
+            page.getPageTitle().setText("Experience "+ (experiencePages.indexOf(page)+1));
             wrapper.getChildren().add(page.getCenterBox());
             wrapper.getChildren().remove(buttonWrapper[0]);
             wrapper.getChildren().add(buttonWrapper[0]);
@@ -166,19 +185,14 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
                 lastPage.getOngoing().setSelected(!lastPage.getOngoing().isSelected());
                 lastPage.getOngoing().setSelected(!lastPage.getOngoing().isSelected());
             });
+
             addValidationToSaveButtons(textFields, predicate, page.getStartDate(), page.getEndDate(),
                     checkDate, page.getOngoing(), buttons);
             textFields.addAll(findAllTextFields(page.getCenterBox()));
             textFields.addAll(findAllTextFields(page.getKeySkillsGridPane()));
             createValidationForTextFields(predicate, textFields, "Must contain at least one Letter");
             addValidationToDates(page.getStartDate(), page.getEndDate(), checkDate, page.getOngoing());
-            experiencePages.addListener(new InvalidationListener() {
-                @Override
-                public void invalidated(Observable observable) {
-                    BooleanBinding moreThanOne = Bindings.createBooleanBinding(() -> experiencePages.size() <= 1);
-                    page.getRemovePage().disableProperty().bind(moreThanOne);
-                }
-            });
+
         });
 
     }

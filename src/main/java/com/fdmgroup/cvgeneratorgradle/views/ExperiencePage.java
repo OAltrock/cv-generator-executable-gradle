@@ -79,8 +79,8 @@ public class ExperiencePage extends FDMPage implements HasAddableTextFields {
     }
 
     private void initialize() {
-        String number = (cvTemplate.getExperiences() != null) ? String.valueOf(cvTemplate.getExperiences().size()) : "1";
-        pageTitle = new Label("Experience" + number);
+        /*String number = (cvTemplate.getExperiences() != null) ? String.valueOf(cvTemplate.getExperiences().size()) : "1";*/
+        pageTitle = new Label(); /*"Experience" + number);*/
         jobTitle = (experience.getJobTitle() != null) ? new javafx.scene.control.TextField(experience.getJobTitle()) : new TextField("");
         jobTitle.setPromptText("Title of job");
         companyName = (experience.getJobTitle() != null) ? new javafx.scene.control.TextField(experience.getCompanyName()) : new TextField("");

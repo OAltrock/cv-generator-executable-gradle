@@ -46,7 +46,7 @@ public interface HasAddableTextFields {
             if (parent.getChildren().size() / 3 + 1 <= limit) {
                 javafx.scene.control.TextField textFieldToAdd = new javafx.scene.control.TextField();
                 int rowCount = parent.getRowCount() + 1;
-                setCounter1(CVGeneratorApp.getCounter1() + 1);
+                //setCounter1(CVGeneratorApp.getCounter1() + 1);
                 textFieldToAdd.setStyle("-fx-pref-width: 300;");
                 textFieldToAdd.setPromptText(promptMessage);
                 textFieldToAdd.setId(String.valueOf(parent.getRowCount() + 1));
