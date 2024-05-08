@@ -58,8 +58,7 @@ public class SkillsPage extends FDMPage implements HasAddableTextFields {
         competencesTemp.forEach(competence -> {
             competencesToAdd.add(new TextField(competence));
         });
-        //textFields.addAll(competencesToAdd);
-        System.out.println(competencesToAdd);
+
         competenceGridPane = new GridPane(3, competencesToAdd.size());
         FDMButton addBtn = new FDMButton("Add competence");
         createAddableAreaFromModel(competencesToAdd, competenceGridPane, addBtn, textFields, location.getMaxCompetence(), "Remove competence", "Competence");

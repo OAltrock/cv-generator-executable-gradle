@@ -1,5 +1,7 @@
 .gradle
 build/
+jdk-zulu21/
+.metadata/
 ## build executables
 *.msi
 *.exe

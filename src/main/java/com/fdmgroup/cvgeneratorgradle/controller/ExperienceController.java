@@ -3,7 +3,7 @@ package com.fdmgroup.cvgeneratorgradle.controller;
 
 import com.fdmgroup.cvgeneratorgradle.interfaces.HasAddableTextFields;
 import com.fdmgroup.cvgeneratorgradle.interfaces.HasDateValidation;
-import com.fdmgroup.cvgeneratorgradle.interfaces.InitializableFXML;
+
 import com.fdmgroup.cvgeneratorgradle.interfaces.HasToggleableSaveButtons;
 import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.models.Experience;
@@ -12,7 +12,7 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.value.ChangeListener;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -28,12 +28,11 @@ import java.util.function.Predicate;
 
 import static com.fdmgroup.cvgeneratorgradle.controller.AppUtils.findAllTextFields;
 
-public class ExperienceController implements InitializableFXML, HasToggleableSaveButtons, HasAddableTextFields, HasDateValidation {
+public class ExperienceController implements HasToggleableSaveButtons, HasAddableTextFields, HasDateValidation {
 
     private final Stage stage;
     private final CVTemplate cvTemplate;
     private List<Experience> experiences;
-    private ExperiencePage experiencePage;
     private ObservableList<TextInputControl> textFields;
     Predicate<String> predicate = input -> !input.matches("^.*[a-zA-Z]+.*$");
     TreeView<String> treeView;
@@ -47,13 +46,10 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
         experiencePages = FXCollections.observableArrayList();
     }
 
-    @Override
-    public void initialize(BorderPane main, String resource) {
+    public void initialize(BorderPane main) {
 
         textFields = FXCollections.observableArrayList();
         FDMCenterVBoxWrapper wrapper = new FDMCenterVBoxWrapper();
-        //experiencePage = new ExperiencePage(cvTemplate, textFields);
-
 
         if (experiences != null && !experiences.isEmpty()) {
             experiences.forEach(experience -> {
@@ -127,20 +123,16 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
         wrapper.getChildren().addLast(buttonWrapper[0]);
         main.setCenter(experiencePages.getLast().createCenterPage(wrapper));
 
-
-        //GridPane gridPane = experiencePage.getKeySkillsGridPane();
-
-
         buttons[1].setOnAction(actionEvent -> {
             assignExperienceInput(experiencePages);
             treeView.getSelectionModel().select(4);
-            new EducationController(cvTemplate, treeView, stage).initialize(main, "");
+            new EducationController(cvTemplate, treeView, stage).initialize(main);
         });
 
         buttons[0].setOnAction(actionEvent -> {
             assignExperienceInput(experiencePages);
             treeView.getSelectionModel().select(2);
-            new PersonalInformationController(cvTemplate, treeView, stage).initialize(main, "");
+            new PersonalInformationController(cvTemplate, treeView, stage).initialize(main);
         });
 
         buttons[2].setOnAction(actionEvent -> {
@@ -178,10 +170,8 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
                 textFields.removeAll(findAllTextFields(page.getCenterBox()));
                 textFields.removeAll(findAllTextFields(page.getKeySkillsGridPane()));
                 wrapper.getChildren().remove(parent);
-                System.out.println(experiencePages);
                 ExperiencePage lastPage = (experiencePages.indexOf(page)==0) ? experiencePages.get(experiencePages.indexOf(page)+1) : experiencePages.get(experiencePages.indexOf(page)-1);
                 experiencePages.remove(page);
-                System.out.println(lastPage);
                 lastPage.getOngoing().setSelected(!lastPage.getOngoing().isSelected());
                 lastPage.getOngoing().setSelected(!lastPage.getOngoing().isSelected());
             });
@@ -199,14 +189,12 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
 
     private void assignExperienceInput(List<ExperiencePage> experiencePages) {
         if (experiences == null) experiences = new ArrayList<>();
-        //experiences.add(new Experience());
         List<Experience> experienceList = new ArrayList<>();
         for (ExperiencePage page : experiencePages) {
             List<String> keySkills = new ArrayList<>();
             for (TextInputControl keySkill : page.getKeySkills()) {
                 keySkills.add(keySkill.getText());
             }
-            //(end.getValue() != null) ? end.getValue().toString() : LocalDate.now().plusMonths(1).toString()
             experienceList.add(new Experience(page.getJobTitle().getText(), page.getStartDate().getValue().toString(),
                     (page.getEndDate().getValue() != null) ?
                             page.getEndDate().getValue().toString() :
@@ -215,14 +203,5 @@ public class ExperienceController implements InitializableFXML, HasToggleableSav
                     page.getCompanyPlace().getText(), page.getDescription().getText()));
         }
         cvTemplate.setExperiences(experienceList);
-        /*Experience experience = experiences.getLast();
-        experience.setCompanyName(experiencePage.getCompanyName().getText());
-        experience.setJobTitle(experiencePage.getJobTitle().getText());
-        experience.setCompanyPlace(experiencePage.getCompanyPlace().getText());
-        experience.setPositionFeatures(experiencePage.getKeySkills().stream().map(TextInputControl::getText).toList());
-        experiences.getLast().setStartDate(start.getValue().toString());
-        experiences.getLast().setEndDate();
-        System.out.println(experiences);*/
-        //cvTemplate.setExperiences(experienceList);
     }
 }
