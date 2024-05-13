@@ -6,7 +6,9 @@ import com.fdmgroup.cvgeneratorgradle.interfaces.InitializableFXML;
 import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.models.Language;
 import com.fdmgroup.cvgeneratorgradle.models.enums.LanguageLevel;
+import com.fdmgroup.cvgeneratorgradle.utils.HelperClass;
 import com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson;
+import com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToDocument;
 import com.fdmgroup.cvgeneratorgradle.views.FDMPage;
 import com.fdmgroup.cvgeneratorgradle.views.SkillsPage;
 import javafx.collections.FXCollections;
@@ -17,9 +19,11 @@ import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import static com.fdmgroup.cvgeneratorgradle.controller.AppUtils.findAllTextFields;
@@ -98,5 +102,15 @@ public class SkillsController implements InitializableFXML, HasToggleableSaveBut
 
 		//Save cvTemplate as Json
 		SaveObjectToJson.saveObjectAsJson(cvTemplate);
+		Map<String, String> hashMap = HelperClass.convertCVObjectToHashMap(cvTemplate);
+		System.out.println("Elements of the hashMap are:");
+		for (Map.Entry<String, String> entry : hashMap.entrySet()) {
+			System.out.println(entry.getKey() + " : " + entry.getValue());
+		}
+		try {
+			SaveObjectToDocument.saveObjectAsWord(cvTemplate);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

@@ -67,6 +67,9 @@ dependencies {
     runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:win"
     runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:linux"
     runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:mac"
+    
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
 }
 
 test {
@@ -131,4 +134,16 @@ jar {
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    ext {
+        set('vendor', JvmVendorSpec.AZUL)
+    }
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+        vendor = JvmVendorSpec.AZUL
+    }
+    withSourcesJar()
 }
