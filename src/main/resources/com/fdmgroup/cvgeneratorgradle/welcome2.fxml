@@ -15,7 +15,7 @@
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#showLeftBorder" text="New CV" />
                   <MenuItem mnemonicParsing="false" text="Recent" />
-                  <MenuItem mnemonicParsing="false" text="Load CV" />
+                  <MenuItem mnemonicParsing="false" onAction="#loadCV" text="Load CV" />
                   <MenuItem mnemonicParsing="false" text="Save Cv" />
               <MenuItem mnemonicParsing="false" onAction="#closeApp" text="Exit" />
             </items>

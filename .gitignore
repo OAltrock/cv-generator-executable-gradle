@@ -12,6 +12,7 @@ jdk-zulu21/
 !**/src/test/**/build/
 
 ### IntelliJ IDEA ###
+.idea/
 .idea/modules.xml
 .idea/gradle.xml
 .idea/misc.xml

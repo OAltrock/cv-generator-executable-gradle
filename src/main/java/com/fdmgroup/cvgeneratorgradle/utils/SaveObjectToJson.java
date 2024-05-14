@@ -13,7 +13,6 @@ public class SaveObjectToJson {
         String json = gson.toJson(object);
 
         // create file path with user and his local documents folder e.g. C:\Users\Username\Documents
-        //todo: let user choose the storage folder
         //String documentsFolderPath = System.getProperty("user.home") + File.separator + "Documents";
         //String filePath = documentsFolderPath + File.separator + "CvAutoSave.json";
         System.out.println(fileName);

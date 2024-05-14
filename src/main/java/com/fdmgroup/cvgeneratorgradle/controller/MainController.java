@@ -10,12 +10,17 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import static com.fdmgroup.cvgeneratorgradle.utils.LoadObjectFromJson.loadObjectFromJson;
 
 public class MainController implements Initializable {
 
@@ -41,7 +46,6 @@ public class MainController implements Initializable {
 
 
     public void showLeftBorder(ActionEvent actionEvent) {
-        //setting center scene (will be deprecated once we use classes (CVTemplate)
         setLabel("Fill out the specific sections of your CV");
 
         TreeItem<String> cv = new TreeItem<>("CV");
@@ -55,12 +59,10 @@ public class MainController implements Initializable {
         List<TreeItem<String>> detailsItems = List.of(profile, personalInformation, experience, education, skills);
         List<TreeItem<String>> rootItems = List.of(details, summary);
 
-        //setting up tree nodes (should be populated by a cv class in the future)
         details.getChildren().addAll(detailsItems);
         cv.getChildren().addAll(rootItems);
 
         //setting up tree view
-
         treeView = createTreeView(cv);
         treeView.setPrefWidth(300);
         treeView.setShowRoot(false);
@@ -93,6 +95,21 @@ public class MainController implements Initializable {
                 }
             }
         });
+    }
+
+    public void loadCV(ActionEvent event) throws FileNotFoundException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Load CV");
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("JSON File", "*.json"));
+        File selectedFile = fileChooser.showOpenDialog(mainWindow.getScene().getWindow());
+        //System.out.println(selectedFile.getPath());
+        if (selectedFile!=null) {
+            cvTemplate = loadObjectFromJson(selectedFile.getPath());
+            showLeftBorder(event);
+            new SummaryController(cvTemplate,treeView, (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow);
+        }
     }
 
     /**
