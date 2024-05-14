@@ -56,6 +56,7 @@ public class MainController implements Initializable {
         TreeItem<String> skills = new TreeItem<>("Skills");
         TreeItem<String> education = new TreeItem<>("Education");
         TreeItem<String> profile = new TreeItem<>("Profile");
+        TreeItem<String> testItem = new TreeItem<>("Test Item");
         List<TreeItem<String>> detailsItems = List.of(profile, personalInformation, experience, education, skills);
         List<TreeItem<String>> rootItems = List.of(details, summary);
 
@@ -91,6 +92,8 @@ public class MainController implements Initializable {
                 case "Profile" -> {
                     new ProfileController(cvTemplate,treeView, (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow);
                 }
+
+
                 default -> {
                 }
             }

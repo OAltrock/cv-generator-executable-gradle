@@ -80,6 +80,9 @@ dependencies {
     runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:win"
     runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:linux"
     runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:mac"
+    
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
 }
 
 test {
@@ -134,7 +137,6 @@ runtime {
         into("$buildDir/jpackage/$basePath/app")
     }
 } */
-
 
 mainClassName = 'com.fdmgroup.cvgeneratorgradle.Main'
 jar {

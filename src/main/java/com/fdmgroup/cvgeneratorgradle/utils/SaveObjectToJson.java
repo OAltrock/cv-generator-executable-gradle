@@ -26,4 +26,5 @@ public class SaveObjectToJson {
 
         System.out.println(object.getClass().getSimpleName() + " saved as JSON");
     }
+
 }

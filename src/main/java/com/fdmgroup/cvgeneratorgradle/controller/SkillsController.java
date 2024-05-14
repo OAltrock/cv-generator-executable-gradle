@@ -7,6 +7,10 @@ import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.models.Language;
 import com.fdmgroup.cvgeneratorgradle.models.enums.LanguageLevel;
 
+import com.fdmgroup.cvgeneratorgradle.utils.HelperClass;
+import com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson;
+import com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToDocument;
+import com.fdmgroup.cvgeneratorgradle.views.FDMPage;
 
 import com.fdmgroup.cvgeneratorgradle.views.SkillsPage;
 import javafx.collections.FXCollections;
@@ -18,8 +22,12 @@ import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import static com.fdmgroup.cvgeneratorgradle.controller.AppUtils.findAllTextFields;
@@ -95,5 +103,6 @@ public class SkillsController implements HasToggleableSaveButtons,
 			interestsToAdd.add(interest.getText());
 		});
 		cvTemplate.setInterests(interestsToAdd);
+
 	}
 }
