@@ -40,4 +40,16 @@ public class Experience {
 		this.description = description;
 	}
 
+	@Override
+	public String toString() {
+		return "Experience{" +
+				"jobTitle='" + jobTitle + '\'' +
+				", startDate='" + startDate + '\'' +
+				", endDate='" + endDate + '\'' +
+				", positionFeatures=" + positionFeatures +
+				", companyName='" + companyName + '\'' +
+				", companyPlace='" + companyPlace + '\'' +
+				", description='" + description + '\'' +
+				'}';
+	}
 }

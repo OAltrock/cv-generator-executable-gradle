@@ -2,7 +2,6 @@ package com.fdmgroup.cvgeneratorgradle.controller;
 
 import com.fdmgroup.cvgeneratorgradle.CVGeneratorApp;
 import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
-import com.fdmgroup.cvgeneratorgradle.models.Education;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,7 +14,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -75,22 +73,22 @@ public class MainController implements Initializable {
 
             switch (newV.getValue()) {
                 case "Personal Information" -> {
-                    new PersonalInformationController(cvTemplate, treeView).initialize(mainWindow, "personalInfo");
+                    new PersonalInformationController(cvTemplate, treeView, (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow);
                 }
                 case "Experience" -> {
-                    new ExperienceController(cvTemplate,treeView).initialize(mainWindow, "experience2");
+                    new ExperienceController(cvTemplate,treeView, (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow);
                 }
                 case "Summary" -> {
-                    new SummaryController(cvTemplate,treeView).initialize(mainWindow, "test");
+                    new SummaryController(cvTemplate,treeView, (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow);
                 }
                 case "Education" -> {
-                    new EducationController(cvTemplate,treeView).initialize(mainWindow, "education2");
+                    new EducationController(cvTemplate,treeView, (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow);
                 }
                 case "Skills" -> {
-                    new SkillsController(cvTemplate, treeView).initialize(mainWindow, "skills");
+                    new SkillsController(cvTemplate, treeView, (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow);
                 }
                 case "Profile" -> {
-                    new ProfileController(cvTemplate,treeView).initialize(mainWindow, "profile");
+                    new ProfileController(cvTemplate,treeView, (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow);
                 }
 
 
@@ -105,7 +103,7 @@ public class MainController implements Initializable {
      * @param message custom message for the center-label
      */
     private void setLabel(String message) {
-        setCenter("centerDefault.fxml");
+        setCenter();
         VBox centerDefault = (VBox) mainWindow.getCenter();
         Label messageLabel = (Label) centerDefault.lookup("#centerDefaultLabel");
         Border b = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(20), BorderWidths.DEFAULT));
@@ -116,11 +114,10 @@ public class MainController implements Initializable {
     }
 
     /**
-     * sets center of the main BorderPane ({@link BorderPane}
-     * @param resource String of the FXML file name (eg: centerDefault.fxml) {@link FXMLLoader}
+     * sets center of the main BorderPane to the about-page ({@link BorderPane}
      */
-    private void setCenter(String resource) {
-        FXMLLoader loader = new FXMLLoader(CVGeneratorApp.class.getResource(resource));
+    private void setCenter() {
+        FXMLLoader loader = new FXMLLoader(CVGeneratorApp.class.getResource("centerDefault.fxml"));
         try {
             mainWindow.setCenter(loader.load());
         } catch (IOException e) {

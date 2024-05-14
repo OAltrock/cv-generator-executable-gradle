@@ -35,7 +35,7 @@ public class FDMButton extends Button {
 		                    "-fx-text-align: center;" +
 		                    "-fx-font-size: 16px;" +
 		                    "-fx-cursor: hand;" +
-		                    "-fx-background-radius: 2vh;" + 
+		                    "-fx-background-radius: 2px;" +
 		                    "-fx-background-color: #C5FF00;" +
                             "-fx-text-fill: black;" +
                             "-fx-font-weight: bold;" +
@@ -45,7 +45,7 @@ public class FDMButton extends Button {
 		                    "-fx-text-align: center;" +
 		                    "-fx-font-size: 16px;" +
 		                    "-fx-cursor: hand;" +
-		                    "-fx-background-radius: 2vh;" + 
+		                    "-fx-background-radius: 2px;" +
 		                    "-fx-background-color: #E9EDF6;" +
                             "-fx-text-fill: black;" +
                             "-fx-border-color: transparent;");
@@ -54,7 +54,7 @@ public class FDMButton extends Button {
 		                    "-fx-text-align: center;" +
 		                    "-fx-font-size: 16px;" +
 		                    "-fx-cursor: hand;" +
-		                    "-fx-background-radius: 2vh;" + 
+		                    "-fx-background-radius: 2px;" +
 		                    "-fx-background-color: transparent;" +
                             "-fx-text-fill: white;" +
                             "-fx-border-color: #C5FF00;" +

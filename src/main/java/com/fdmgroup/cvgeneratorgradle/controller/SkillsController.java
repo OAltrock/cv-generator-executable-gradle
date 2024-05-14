@@ -2,25 +2,29 @@ package com.fdmgroup.cvgeneratorgradle.controller;
 
 import com.fdmgroup.cvgeneratorgradle.interfaces.HasAddableTextFields;
 import com.fdmgroup.cvgeneratorgradle.interfaces.HasToggleableSaveButtons;
-import com.fdmgroup.cvgeneratorgradle.interfaces.InitializableFXML;
+
 import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.models.Language;
 import com.fdmgroup.cvgeneratorgradle.models.enums.LanguageLevel;
+
 import com.fdmgroup.cvgeneratorgradle.utils.HelperClass;
 import com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson;
 import com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToDocument;
 import com.fdmgroup.cvgeneratorgradle.views.FDMPage;
+
 import com.fdmgroup.cvgeneratorgradle.views.SkillsPage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -28,25 +32,23 @@ import java.util.function.Predicate;
 
 import static com.fdmgroup.cvgeneratorgradle.controller.AppUtils.findAllTextFields;
 
-public class SkillsController implements InitializableFXML, HasToggleableSaveButtons,
+public class SkillsController implements HasToggleableSaveButtons,
         HasAddableTextFields {
 
-	private CVTemplate cvTemplate;
+	private final CVTemplate cvTemplate;
 	private SkillsPage page;
-	private ObservableList<TextInputControl> textFields;
-	private TreeView<String> treeView;
+    private final TreeView<String> treeView;
+	private final Stage stage;
 	Predicate<String> predicate = input -> !input.matches("^.*[a-zA-Z]+.*$");
 
-	public SkillsController(CVTemplate cvTemplate, TreeView<String> treeView) {
+	public SkillsController(CVTemplate cvTemplate, TreeView<String> treeView, Stage stage) {
 		this.cvTemplate = cvTemplate;
 		this.treeView = treeView;
+		this.stage=stage;
 	}
 
-	@Override
-    public void initialize(BorderPane main, String resource) {
-        /*InitializableFXML.super.initialize(main, resource);
-        VBox center = (VBox) main.getCenter();*/
-		textFields = FXCollections.observableArrayList();
+    public void initialize(BorderPane main) {
+        ObservableList<TextInputControl> textFields = FXCollections.observableArrayList();
 		page = new SkillsPage(cvTemplate, textFields);
 		Button[] buttons = new Button[] {page.getPrevBtn(), page.getNextBtn()};
 
@@ -54,20 +56,19 @@ public class SkillsController implements InitializableFXML, HasToggleableSaveBut
 		addValidationToSaveButtons(textFields,predicate.negate(), buttons);
 		textFields.addAll(findAllTextFields(page.getCompetenceGridPane()));
 		textFields.addAll(findAllTextFields(page.getCertificateGridPane()));
-		textFields.addAll(findAllTextFields(page.getLanguageGridPane()));
 		textFields.addAll(findAllTextFields(page.getHobbiesGridPane()));
 
-		createValidationForTextFields(string -> !string.matches("^.*[a-zA-Z]+.*$"),textFields,"Must contain at least one letter");
+		createValidationForTextFields(string -> !string.matches("^.*[a-zA-Z]+.*$"), textFields,"Must contain at least one letter");
 
 		buttons[0].setOnAction(actionEvent -> {
 			assignInput();
 			treeView.getSelectionModel().select(4);
-			new EducationController(cvTemplate,treeView).initialize(main,"");
+			new EducationController(cvTemplate,treeView, stage).initialize(main);
 		});
 		buttons[1].setOnAction(actionEvent -> {
 			assignInput();
 			treeView.getSelectionModel().select(6);
-			new SummaryController(cvTemplate, treeView).initialize(main,"summary");
+			new SummaryController(cvTemplate, treeView, stage).initialize(main);
 		});
 	}
 
@@ -89,7 +90,10 @@ public class SkillsController implements InitializableFXML, HasToggleableSaveBut
 		List<TextInputControl> languageInput = findAllTextFields(page.getLanguageGridPane());
 		HashSet<Language> languagesToAdd = new HashSet<>();
 		languageInput.forEach(language -> {
-			languagesToAdd.add(new Language(language.getText(), LanguageLevel.C2));
+			if (language.getText()!=null && !language.getText().isEmpty()) {
+				MenuButton languageLlvBtn = (MenuButton) page.getLanguageGridPane().getChildren().get(page.getLanguageGridPane().getChildren().indexOf(language) + 1);
+				languagesToAdd.add(new Language(language.getText(), (languageLlvBtn.getText()!=null)? LanguageLevel.valueOf(languageLlvBtn.getText()):LanguageLevel.C2));
+			}
 		});
 		cvTemplate.setLanguages(languagesToAdd);
 
@@ -100,17 +104,5 @@ public class SkillsController implements InitializableFXML, HasToggleableSaveBut
 		});
 		cvTemplate.setInterests(interestsToAdd);
 
-		//Save cvTemplate as Json
-		SaveObjectToJson.saveObjectAsJson(cvTemplate);
-		Map<String, String> hashMap = HelperClass.convertCVObjectToHashMap(cvTemplate);
-		System.out.println("Elements of the hashMap are:");
-		for (Map.Entry<String, String> entry : hashMap.entrySet()) {
-			System.out.println(entry.getKey() + " : " + entry.getValue());
-		}
-		try {
-			SaveObjectToDocument.saveObjectAsWord(cvTemplate);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
 	}
 }

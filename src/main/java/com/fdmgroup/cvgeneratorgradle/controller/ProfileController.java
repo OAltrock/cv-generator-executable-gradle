@@ -2,7 +2,6 @@ package com.fdmgroup.cvgeneratorgradle.controller;
 
 import com.fdmgroup.cvgeneratorgradle.interfaces.HasAddableTextFields;
 import com.fdmgroup.cvgeneratorgradle.interfaces.HasToggleableSaveButtons;
-import com.fdmgroup.cvgeneratorgradle.interfaces.InitializableFXML;
 import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.views.FDMButton;
 import com.fdmgroup.cvgeneratorgradle.views.FDMCenterVBoxWrapper;
@@ -11,26 +10,27 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 
 import java.util.function.Predicate;
 import static com.fdmgroup.cvgeneratorgradle.controller.AppUtils.findAllTextFields;
 
-public class ProfileController implements InitializableFXML, HasToggleableSaveButtons, HasAddableTextFields {
+public class ProfileController implements HasToggleableSaveButtons, HasAddableTextFields {
 
-    private CVTemplate cvTemplate;
-    private String profile;
-    private ObservableList<TextInputControl> textAreas;
-    private TreeView<String> treeView;
+    private final Stage stage;
+    private final CVTemplate cvTemplate;
+    private final String profile;
+    private final TreeView<String> treeView;
 
-    public ProfileController(CVTemplate cvTemplate, TreeView<String> treeView) {
+    public ProfileController(CVTemplate cvTemplate, TreeView<String> treeView, Stage stage) {
+        this.stage = stage;
         this.cvTemplate = cvTemplate;
         profile = cvTemplate.getProfile();
         this.treeView = treeView;
     }
 
-    @Override
-    public void initialize(BorderPane main, String resource) {
-        textAreas = FXCollections.observableArrayList();
+    public void initialize(BorderPane main) {
+        ObservableList<TextInputControl> textAreas = FXCollections.observableArrayList();
         ProfilePage page = new ProfilePage(profile, textAreas);
 
         main.setCenter(page.createCenterPage(page.getCenterBox()));
@@ -49,7 +49,7 @@ public class ProfileController implements InitializableFXML, HasToggleableSaveBu
         saveBtn.setOnAction(actionEvent -> {
             cvTemplate.setProfile(page.getProfile().getText());
             treeView.getSelectionModel().select(2);
-            new PersonalInformationController(cvTemplate, treeView).initialize(main,"");
+            new PersonalInformationController(cvTemplate, treeView, stage).initialize(main);
         });
 
         page.getPrev().setVisible(false);

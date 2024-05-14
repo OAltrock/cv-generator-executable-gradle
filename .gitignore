@@ -1,6 +1,8 @@
 gradle.properties
 .gradle
 build/
+jdk-zulu21/
+.metadata/
 ## build executables
 *.msi
 *.exe
@@ -12,6 +14,8 @@ build/
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
+.idea/gradle.xml
+.idea/misc.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/

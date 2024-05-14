@@ -41,10 +41,10 @@ public class SaveObjectToDocument {
         System.out.println(outputPath);
 
         //String wordTemplatePath = "resources/templates/fdm_cv_template_v1.docx";
-        String wordTemplatePath =
-                "C:/Users/Thomas/git/CV_Generator/cv-generator-executable-gradle/src/main/resources/com/fdmgroup/cvgeneratorgradle/templates/fdm_cv_template_test.docx";
         //String wordTemplatePath =
-        //        "com/fdmgroup/cvgeneratorgradle/templates/fdm_cv_template_test.docx";
+        //        "C:/Users/Thomas/git/CV_Generator/cv-generator-executable-gradle/src/main/resources/com/fdmgroup/cvgeneratorgradle/templates/fdm_cv_template_test.docx";
+        String wordTemplatePath =
+                "./src/main/resources/com/fdmgroup/cvgeneratorgradle/templates/fdm_cv_template_test.docx";
 
         // Try-with-resources block to handle streams
         //try (InputStream templateInputStream = SaveObjectToDocument.class.getClassLoader().getResourceAsStream(wordTemplatePath);
@@ -120,15 +120,15 @@ public class SaveObjectToDocument {
                         String key = entry.getKey();
                         if (run.getText(0).contains(key)) {
                             String replacementValue = entry.getValue();
-                            if (run.getText(0).contains("{user.firstName}")) {
-                                System.out.println("+++++ {user.firstName} found in run!!!!");
-                                System.out.println("+++++ Replacement key is: " + key);
-                                System.out.println("+++++ Replacement value is: " + replacementValue);
-                            }
+                            //if (run.getText(0).contains("{user.firstName}")) {
+                            //    System.out.println("+++++ {user.firstName} found in run!!!!");
+                            //    System.out.println("+++++ Replacement key is: " + key);
+                            //    System.out.println("+++++ Replacement value is: " + replacementValue);
+                            //}
                             run.setText(run.getText(0).replace(key, replacementValue), 0);
-                            if (key.equals("{user.firstName}")) {
-                                System.out.println("+++++ new run text is: " + run.getText(0));
-                            }
+                            //if (key.equals("{user.firstName}")) {
+                            //    System.out.println("+++++ new run text is: " + run.getText(0));
+                            //}
                         }
                     }
                 }

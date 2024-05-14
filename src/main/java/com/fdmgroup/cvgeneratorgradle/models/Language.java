@@ -21,5 +21,12 @@ public class Language {
 		this.languageType = languageType;
 		this.languageLevel = languageLevel;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Language{" +
+				"languageType='" + languageType + '\'' +
+				", languageLevel=" + languageLevel +
+				'}';
+	}
 }
