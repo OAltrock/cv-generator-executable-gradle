@@ -1,41 +1,59 @@
 package com.fdmgroup.cvgeneratorgradle.utils;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
+
 
 import com.fdmgroup.cvgeneratorgradle.models.*;
 import com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToDocument;
 
 
 
-//this is for debugging only
+//this is for debugging/testing only
 public class CVTemplateExampleValues {
 
     public static void main(String[] args) {
-        // Call the method to get example values
-        //Map<String, String> exampleValues = convertCVObjectToHashMap();
+
         CVTemplate cVExampleTemplate = createCVTemplateWithExampleValues();
+        String userHome = System.getProperty("user.home");
+        Path documentsPath = Paths.get(userHome, "Documents", "CVgenerator");
 
-        // Print the example values
-    //    for (Map.Entry<String, String> entry : exampleValues.entrySet()) {
-    //        System.out.println(entry.getKey() + ": " + entry.getValue());
-    //    }
+        // Create the "CVgenerator" directory if it doesn't exist
+        if (!Files.exists(documentsPath)) {
+            try {
+                Files.createDirectories(documentsPath);
+                System.out.println("CVgenerator directory created: " + documentsPath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
+        String outpathWord = documentsPath.resolve("CvAutoSave.docx").toString();
+        String outpathPDF = documentsPath.resolve("CvAutoSave.PDF").toString();
+
+        System.out.println("Word file path: " + outpathWord);
+        System.out.println("PDF file path: " + outpathPDF);
 
         try {
-            SaveObjectToDocument.saveObjectAsWord(cVExampleTemplate);
+            SaveObjectToDocument.saveObjectAsWord(cVExampleTemplate, outpathWord);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            SaveObjectToDocument.saveObjectAsPDF(cVExampleTemplate, outpathPDF);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
 
+
     }
-
-
 
     public static CVTemplate createCVTemplateWithExampleValues() {
         // Create a new User object

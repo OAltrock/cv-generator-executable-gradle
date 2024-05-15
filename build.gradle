@@ -72,15 +72,28 @@ dependencies {
     // https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
     implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.4.0-b180830.0359'
 
+    // POI XWPF Converter for converting Word documents to PDF
+    //implementation 'fr.opensagres.poi.xwpf.converter:poi-xwpf-converter-core:2.0.2'
+    implementation 'fr.opensagres.xdocreport:fr.opensagres.poi.xwpf.converter.pdf.openpdf:2.0.6'
+    implementation 'org.apache.poi:poi:4.1.1'
+    implementation 'org.apache.poi:poi-ooxml:4.1.1'
+
+    // iText library required by POI XWPF Converter for PDF conversion
+    //implementation 'com.lowagie:itext:2.1.7'
+
     /* // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.17.0' */
 
+    // JUnit for testing
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+
+    // JavaFX runtime dependencies
     runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:win"
     runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:linux"
     runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:mac"
-    
+
+    // Lombok for reducing boilerplate code
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
 }

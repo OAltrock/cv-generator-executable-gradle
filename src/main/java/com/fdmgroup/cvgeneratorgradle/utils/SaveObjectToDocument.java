@@ -6,6 +6,9 @@ import com.fdmgroup.cvgeneratorgradle.utils.FolderStructurePrinter;
 import org.apache.commons.math3.exception.OutOfRangeException;
 import org.apache.poi.xwpf.usermodel.*;
 
+import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
+import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
+
 import java.io.*;
 import java.util.List;
 import java.util.Map;
@@ -17,14 +20,31 @@ import java.io.IOException;
 
 public class SaveObjectToDocument {
 
+    //this method is called from the summary page and controls the document creation (word or pdf):
+    public static void createDocument(CVTemplate cvTemplate, String format, String outputPath) throws IOException {
+        if ("Word".equalsIgnoreCase(format)) {
+            saveObjectAsWord(cvTemplate, outputPath);
+        } else if ("PDF".equalsIgnoreCase(format)) {
+            saveObjectAsPDF(cvTemplate, outputPath);
+        } else {
+            throw new IllegalArgumentException("Unsupported document format: " + format);
+        }
+    }
 
+//save word to auto chosen file in home directory:
     public static void saveObjectAsWord(CVTemplate cvTemplate) throws IOException {
+        String documentsFolderPath = System.getProperty("user.home") + File.separator + "Documents"+ File.separator + "CVgenerator";
+        String outputPath = documentsFolderPath + File.separator + "CvAutoSave.docx";
+        saveObjectAsWord(cvTemplate, outputPath);
+    }
+
+    public static void saveObjectAsWord(CVTemplate cvTemplate, String outputPath) throws IOException {
 
         Map<String, String> cVHashMap = HelperClass.convertCVObjectToHashMap(cvTemplate);
 
         //later: pass the output path when calling the function
         String documentsFolderPath = System.getProperty("user.home") + File.separator + "Documents"+ File.separator + "CVgenerator";
-        String outputPath = documentsFolderPath + File.separator + "CvAutoSave.docx";
+        //String outputPath = documentsFolderPath + File.separator + "CvAutoSave.docx";
         String outputPathTestFile = documentsFolderPath + File.separator + "paragraphsFound.txt";
         String outputPathTestFile2 = documentsFolderPath + File.separator + "replacementsRecord.txt";
 
@@ -135,6 +155,26 @@ public class SaveObjectToDocument {
             }
         }
     }
+
+    public static void saveObjectAsPDF(CVTemplate cvTemplate, String outputPath) throws IOException {
+        String wordTempPath = System.getProperty("java.io.tmpdir") + "tempCvDocument.docx";
+        saveObjectAsWord(cvTemplate, wordTempPath);
+
+        try (FileInputStream wordInputStream = new FileInputStream(new File(wordTempPath));
+             XWPFDocument document = new XWPFDocument(wordInputStream);
+             OutputStream pdfOutputStream = new FileOutputStream(outputPath)) {
+
+            PdfOptions options = PdfOptions.create();
+            PdfConverter.getInstance().convert(document, pdfOutputStream, options);
+
+            System.out.println("PDF file saved");
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage());
+        } finally {
+            new File(wordTempPath).delete();
+        }
+    }
+
 
     private static void removeParagraphsWithPlaceholders(XWPFDocument document) {
         List<XWPFParagraph> paragraphsToRemove = new ArrayList<>();
