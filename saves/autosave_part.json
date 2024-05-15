@@ -1,0 +1,100 @@
+{
+  "id": 0,
+  "user": {
+    "id": 0,
+    "firstName": "asd",
+    "lastName": "asd",
+    "email": "asd",
+    "role": ""
+  },
+  "profile": "asddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+  "location": {
+    "locationName": "Germany",
+    "minExperience": 1,
+    "maxExperience": 5,
+    "minEducation": 1,
+    "maxEducation": 1,
+    "minPositionFeature": 1,
+    "maxPositionFeature": 3,
+    "minKeyModule": 1,
+    "maxKeyModule": 3,
+    "minCompetence": 1,
+    "maxCompetence": 5,
+    "minCertificate": 1,
+    "maxCertificate": 5,
+    "minLanguage": 1,
+    "maxLanguage": 5,
+    "minInterest": 0,
+    "maxInterest": 5,
+    "isPictureMandatory": false
+  },
+  "stream": {
+    "streamName": "Technical",
+    "presetTraining": [],
+    "presetCompetences": []
+  },
+  "experiences": [
+    {
+      "id": 0,
+      "jobTitle": "asd2",
+      "startDate": "2024-04-29",
+      "endDate": "2024-06-15",
+      "positionFeatures": [
+        "asd2"
+      ],
+      "companyName": "asd2",
+      "companyPlace": "asd2",
+      "description": ""
+    },
+    {
+      "id": 0,
+      "jobTitle": "asd3",
+      "startDate": "2023-05-10",
+      "endDate": "2024-06-15",
+      "positionFeatures": [
+        "asd"
+      ],
+      "companyName": "asd3",
+      "companyPlace": "asd3",
+      "description": ""
+    }
+  ],
+  "educations": [
+    {
+      "id": 0,
+      "degree": "asd",
+      "studyTitle": "asd",
+      "universityName": "as",
+      "universityPlace": "das",
+      "startDate": "2024-04-29",
+      "endDate": "2024-06-15",
+      "thesisTitle": "dasd",
+      "keyModules": [
+        "asd"
+      ]
+    }
+  ],
+  "competences": [
+    "Java",
+    "Maven",
+    "HTML/CSS/JavaScript",
+    "Git",
+    "JUnit",
+    "UML",
+    "Eclipse",
+    "MySQL"
+  ],
+  "certificates": [
+    "asd"
+  ],
+  "languages": [
+    {
+      "id": 0,
+      "languageType": "asd",
+      "languageLevel": "C2"
+    }
+  ],
+  "interests": [
+    "asd"
+  ]
+}

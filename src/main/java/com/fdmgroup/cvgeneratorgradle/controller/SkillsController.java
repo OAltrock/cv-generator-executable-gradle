@@ -22,6 +22,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -31,6 +32,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 import static com.fdmgroup.cvgeneratorgradle.controller.AppUtils.findAllTextFields;
+import static com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson.saveObjectAsJson;
 
 public class SkillsController implements HasToggleableSaveButtons,
         HasAddableTextFields {
@@ -50,7 +52,7 @@ public class SkillsController implements HasToggleableSaveButtons,
     public void initialize(BorderPane main) {
         ObservableList<TextInputControl> textFields = FXCollections.observableArrayList();
 		page = new SkillsPage(cvTemplate, textFields);
-		Button[] buttons = new Button[] {page.getPrevBtn(), page.getNextBtn()};
+		Button[] buttons = new Button[] {page.getNextBtn()};
 
 		main.setCenter(page.createCenterPage(page.getCenterBox()));
 		addValidationToSaveButtons(textFields,predicate.negate(), buttons);
@@ -60,12 +62,12 @@ public class SkillsController implements HasToggleableSaveButtons,
 
 		createValidationForTextFields(string -> !string.matches("^.*[a-zA-Z]+.*$"), textFields,"Must contain at least one letter");
 
-		buttons[0].setOnAction(actionEvent -> {
+		page.getPrevBtn().setOnAction(actionEvent -> {
 			assignInput();
 			treeView.getSelectionModel().select(4);
 			new EducationController(cvTemplate,treeView, stage).initialize(main);
 		});
-		buttons[1].setOnAction(actionEvent -> {
+		buttons[0].setOnAction(actionEvent -> {
 			assignInput();
 			treeView.getSelectionModel().select(6);
 			new SummaryController(cvTemplate, treeView, stage).initialize(main);
@@ -104,5 +106,6 @@ public class SkillsController implements HasToggleableSaveButtons,
 		});
 		cvTemplate.setInterests(interestsToAdd);
 
+		saveObjectAsJson(cvTemplate);
 	}
 }

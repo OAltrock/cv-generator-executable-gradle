@@ -22,6 +22,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
+import static com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson.saveObjectAsJson;
+
 public class PersonalInformationController implements HasToggleableSaveButtons, HasAddableTextFields {
 
     private final Stage stage;
@@ -51,7 +53,7 @@ public class PersonalInformationController implements HasToggleableSaveButtons, 
         if (location == null) location = new Location("", 1, 1, 1, 3, 1, 3, 1, 3, 0, 1, 0, 1, 1, 3, 0, 3, false);
         page = new PersonalInfoPage(user, location, stream, textFields);
         main.setCenter(page.createCenterPage(page.getCenterBox()));
-        Button[] buttons = new Button[]{page.getPrevBtn(), page.getNextBtn()};
+        Button[] buttons = new Button[]{page.getNextBtn()};
 
         addValidationToSaveButtons(textFields, List.of(page.getStreamChooser(), page.getLocationChooser()), string -> !string.matches("^.*[a-zA-Z]+.*$"), buttons);
 
@@ -89,13 +91,13 @@ public class PersonalInformationController implements HasToggleableSaveButtons, 
             }
         });
 
-        buttons[1].setOnAction(actionEvent -> {
+        buttons[0].setOnAction(actionEvent -> {
             assignInfoInput();
             treeView.getSelectionModel().select(3);
             new ExperienceController(cvTemplate, treeView, stage).initialize(main);
         });
 
-        buttons[0].setOnAction(actionEvent -> {
+        page.getPrevBtn().setOnAction(actionEvent -> {
             assignInfoInput();
             treeView.getSelectionModel().select(1);
             new ProfileController(cvTemplate, treeView, stage).initialize(main);
@@ -118,5 +120,6 @@ public class PersonalInformationController implements HasToggleableSaveButtons, 
         //ToDo: add addable competences
         cvTemplate.setCompetences(temp);
         cvTemplate.setLocation(location);
+        saveObjectAsJson(cvTemplate);
     }
 }
