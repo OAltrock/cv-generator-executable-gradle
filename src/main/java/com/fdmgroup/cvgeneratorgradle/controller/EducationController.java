@@ -24,6 +24,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 import static com.fdmgroup.cvgeneratorgradle.controller.AppUtils.findAllTextFields;
+import static com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson.saveObjectAsJson;
 
 public class EducationController implements HasToggleableSaveButtons, HasAddableTextFields, HasDateValidation {
 
@@ -68,7 +69,7 @@ public class EducationController implements HasToggleableSaveButtons, HasAddable
         ObservableList<TextInputControl> textFields = FXCollections.observableArrayList();
         educationPage = new EducationPage(cvTemplate, textFields);
 
-        Button[] buttons = new Button[]{educationPage.getPrevBtn(), educationPage.getNextBtn()};
+        Button[] buttons = new Button[]{educationPage.getNextBtn()};
         main.setCenter(educationPage.createCenterPage(educationPage.getCenterBox()));
         centerBox = educationPage.getCenterBox();
         start = educationPage.getStartDate();
@@ -97,12 +98,12 @@ public class EducationController implements HasToggleableSaveButtons, HasAddable
         addValidationToDates(start, end, checkDate, checkBox);
         //ToDo: change way data is saved for instance with an additional button
         //ToDo: maybe disable validation for previous button
-        buttons[0].setOnAction(actionEvent -> {
+        educationPage.getPrevBtn().setOnAction(actionEvent -> {
             assignEducationInput(start, end);
             treeView.getSelectionModel().select(3);
             new ExperienceController(cvTemplate, treeView, stage).initialize(main);
         });
-        buttons[1].setOnAction(actionEvent -> {
+        buttons[0].setOnAction(actionEvent -> {
             assignEducationInput(start, end);
             treeView.getSelectionModel().select(5);
             new SkillsController(cvTemplate, treeView, stage).initialize(main);
@@ -133,12 +134,13 @@ public class EducationController implements HasToggleableSaveButtons, HasAddable
 
         educations.getLast().setStartDate(start.getValue().toString());
         //if end is null (ie is not being picked due to ongoing is selected, a date in the future
-        //is chosen. when reading out cvTemplate future dates automatically will disable the
-        //date picker and select ongoing (int that case the summary page lists the end date
+        //is chosen. when reading out cvTemplate, the end date picker will be automatically disabled if the date
+        //is in the future and ongoing will be selected (in that case the summary page lists the end date
         //as "ongoing"
         educations.getLast().setEndDate((end.getValue() != null) ? end.getValue().toString() : LocalDate.now().plusMonths(1).toString());
 
         cvTemplate.setEducations(educations);
+        saveObjectAsJson(cvTemplate);
     }
 
 }

@@ -27,6 +27,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 import static com.fdmgroup.cvgeneratorgradle.controller.AppUtils.findAllTextFields;
+import static com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson.saveObjectAsJson;
 
 public class ExperienceController implements HasToggleableSaveButtons, HasAddableTextFields, HasDateValidation {
 
@@ -62,8 +63,10 @@ public class ExperienceController implements HasToggleableSaveButtons, HasAddabl
             cvTemplate.setExperiences(new ArrayList<>());
         }
 
-        Button[] buttons = new Button[]{new FDMButton("Previous"), new FDMButton("Next"), new FDMButton("Add Experience")};
-        final FDMHBox[] buttonWrapper = {new FDMHBox(buttons[0], buttons[2], buttons[1])};
+        Button[] buttons = new Button[]{new FDMButton("Next")};
+        FDMButton prevBtn = new FDMButton("Previous");
+        FDMButton addExpBtn = new FDMButton("Add Experience");
+        final FDMHBox[] buttonWrapper = {new FDMHBox(prevBtn, addExpBtn, buttons[0])};
         buttonWrapper[0].setDesign();
 
 
@@ -105,6 +108,7 @@ public class ExperienceController implements HasToggleableSaveButtons, HasAddabl
                 lastPage.getOngoing().setSelected(!lastPage.getOngoing().isSelected());
                 wrapper.getChildren().remove(parent);
             });
+
             addValidationToSaveButtons(textFields, predicate, start, end, checkDate, checkBox, buttons);
             textFields.addAll(findAllTextFields(centerBox));
             textFields.addAll(findAllTextFields(experiencePage1.getKeySkillsGridPane()));
@@ -123,19 +127,19 @@ public class ExperienceController implements HasToggleableSaveButtons, HasAddabl
         wrapper.getChildren().addLast(buttonWrapper[0]);
         main.setCenter(experiencePages.getLast().createCenterPage(wrapper));
 
-        buttons[1].setOnAction(actionEvent -> {
+        buttons[0].setOnAction(actionEvent -> {
             assignExperienceInput(experiencePages);
             treeView.getSelectionModel().select(4);
             new EducationController(cvTemplate, treeView, stage).initialize(main);
         });
 
-        buttons[0].setOnAction(actionEvent -> {
+        prevBtn.setOnAction(actionEvent -> {
             assignExperienceInput(experiencePages);
             treeView.getSelectionModel().select(2);
             new PersonalInformationController(cvTemplate, treeView, stage).initialize(main);
         });
 
-        buttons[2].setOnAction(actionEvent -> {
+        addExpBtn.setOnAction(actionEvent -> {
             Experience newExperience = new Experience("", "", "",
                     new ArrayList<>(), "", "", "");
             ExperiencePage page = new ExperiencePage(cvTemplate, textFields,
@@ -182,9 +186,7 @@ public class ExperienceController implements HasToggleableSaveButtons, HasAddabl
             textFields.addAll(findAllTextFields(page.getKeySkillsGridPane()));
             createValidationForTextFields(predicate, textFields, "Must contain at least one Letter");
             addValidationToDates(page.getStartDate(), page.getEndDate(), checkDate, page.getOngoing());
-
         });
-
     }
 
     private void assignExperienceInput(List<ExperiencePage> experiencePages) {
@@ -203,5 +205,6 @@ public class ExperienceController implements HasToggleableSaveButtons, HasAddabl
                     page.getCompanyPlace().getText(), page.getDescription().getText()));
         }
         cvTemplate.setExperiences(experienceList);
+        saveObjectAsJson(cvTemplate);
     }
 }

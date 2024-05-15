@@ -8,10 +8,14 @@ import java.io.FileReader;
 
 public class LoadObjectFromJson {
 
+    /**
+     * Creates a {@link CVTemplate} from given file path
+     * @param filePath of file that ought to be converted to CVTemplate class
+     * @return a CVTemplate class instance
+     * @throws FileNotFoundException
+     */
     public static CVTemplate loadObjectFromJson (String filePath) throws FileNotFoundException {
         Gson gson = new Gson();
-        //String filePath = System.getProperty("user.home")+"/documents/completeSave.json";
-        //System.out.println(filePath);
         return gson.fromJson(new FileReader(filePath), CVTemplate.class);
     }
 }

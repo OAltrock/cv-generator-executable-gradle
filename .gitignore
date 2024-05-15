@@ -3,6 +3,7 @@ gradle.properties
 build/
 jdk-zulu21/
 .metadata/
+./saves
 ## build executables
 *.msi
 *.exe

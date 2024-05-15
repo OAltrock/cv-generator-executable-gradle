@@ -44,10 +44,14 @@ public class MainController implements Initializable {
 
     }
 
+    public void createNewCV(ActionEvent actionEvent) {
+        cvTemplate = new CVTemplate();
+        setLabel("Fill out the specific sections of your CV");
+        showLeftBorder(actionEvent);
+    }
+
 
     public void showLeftBorder(ActionEvent actionEvent) {
-        setLabel("Fill out the specific sections of your CV");
-
         TreeItem<String> cv = new TreeItem<>("CV");
         TreeItem<String> summary = new TreeItem<>("Summary");
         TreeItem<String> details = new TreeItem<>("Details");
@@ -56,7 +60,6 @@ public class MainController implements Initializable {
         TreeItem<String> skills = new TreeItem<>("Skills");
         TreeItem<String> education = new TreeItem<>("Education");
         TreeItem<String> profile = new TreeItem<>("Profile");
-        TreeItem<String> testItem = new TreeItem<>("Test Item");
         List<TreeItem<String>> detailsItems = List.of(profile, personalInformation, experience, education, skills);
         List<TreeItem<String>> rootItems = List.of(details, summary);
 
@@ -100,6 +103,7 @@ public class MainController implements Initializable {
         });
     }
 
+
     public void loadCV(ActionEvent event) throws FileNotFoundException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Load CV");
@@ -107,7 +111,6 @@ public class MainController implements Initializable {
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("JSON File", "*.json"));
         File selectedFile = fileChooser.showOpenDialog(mainWindow.getScene().getWindow());
-        //System.out.println(selectedFile.getPath());
         if (selectedFile!=null) {
             cvTemplate = loadObjectFromJson(selectedFile.getPath());
             showLeftBorder(event);

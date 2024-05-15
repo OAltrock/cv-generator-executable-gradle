@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 
 import java.util.function.Predicate;
 import static com.fdmgroup.cvgeneratorgradle.controller.AppUtils.findAllTextFields;
+import static com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson.saveObjectAsJson;
 
 public class ProfileController implements HasToggleableSaveButtons, HasAddableTextFields {
 
@@ -48,6 +49,7 @@ public class ProfileController implements HasToggleableSaveButtons, HasAddableTe
 
         saveBtn.setOnAction(actionEvent -> {
             cvTemplate.setProfile(page.getProfile().getText());
+            saveObjectAsJson(cvTemplate);
             treeView.getSelectionModel().select(2);
             new PersonalInformationController(cvTemplate, treeView, stage).initialize(main);
         });
