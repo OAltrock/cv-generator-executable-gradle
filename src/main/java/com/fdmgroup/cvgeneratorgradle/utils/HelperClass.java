@@ -15,7 +15,14 @@ import java.util.List;
 import java.util.Map;
 public class HelperClass {
 
-//Would be nice to have, but not working properly yet (not used). We use the "CV Object" version instead
+    /**
+     * Converts any object to a HashMap by iterating over its fields and adding the field names and values
+     * to the HashMap. Would be nice to have, but not working properly yet (not used). We use the "CV Object" version instead
+     *
+     *
+     * @param obj The object to be converted to a HashMap
+     * @return A HashMap containing the object's field names as keys and their corresponding values
+     */
     public static Map<String, String> convertAnyObjectToHashMap(Object obj) {
         Map<String, String> hashMap = new HashMap<>();
         Class<?> clazz = obj.getClass();
@@ -35,6 +42,14 @@ public class HelperClass {
         return hashMap;
     }
 
+    /**
+     * Converts a CVTemplate object to a HashMap by extracting selected fields from the object
+     * and mapping them in the HashMap. The Hashmap keys are defined placeholders unsed in the docx template,
+     * the values are variable values taken from the object.
+     *
+     * @param obj The CVTemplate object to be converted
+     * @return A HashMap containing placeholders as keys and their corresponding values from the CVTemplate object
+     */
     public static Map<String, String> convertCVObjectToHashMap(CVTemplate obj) {
         Map<String, String> hashMap = new HashMap<>();
 
@@ -111,27 +126,19 @@ public class HelperClass {
         return hashMap;
     }
 
-//this method searches a paragraph for a string and is returning the index of the first run, that contains this string.
-    public static int findRunContainingText(XWPFParagraph paragraph, String searchString) {
-        List<XWPFRun> runs = paragraph.getRuns();
-        for (int i = 0; i < runs.size(); i++) {
-            XWPFRun run = runs.get(i);
-            if (run.getText(0) != null && run.getText(0).contains(searchString)) {
-                System.out.println("Text of run with " + searchString  + "is:");
-                System.out.println(run.getText(0));
-                return i; // Return the index of the run containing the search string
-            }
-        }
-        // If the search string is not found in any run, return -1
-        return -1;
-    }
-
+    /**
+     * Analyzes the runs (text segments) within a paragraph and creates a list of integers representing
+     * the status of each run. The status indicates whether the run contains an opening bracket, a closing bracket,
+     * both brackets, or no brackets.
+     *
+     * @param paragraph The XWPFParagraph object to be analyzed
+     * @return A list of integers representing the status of each run within the paragraph
+     */
     public static List<Integer> analyzeRuns(XWPFParagraph paragraph) {
         List<XWPFRun> runs = paragraph.getRuns();
         List<Integer> statusList = new ArrayList<>();
 
         for (XWPFRun run : runs) {
-
             //create a list of bracket order for analysis:
             List<Integer> bracketList = new ArrayList<>();//add 1 for "{" and 2 for "}"
             String text = run.getText(0);
@@ -170,6 +177,18 @@ public class HelperClass {
         return statusList;
     }
 
+
+    /**
+     * Rearranges the runs within a paragraph based on the provided status list. Runs containing opening brackets
+     * are merged with subsequent runs until a closing bracket is encountered (so that placeholders texts distributed between
+     * multiple runs are moved in only one run). The method returns a list indicating
+     * whether each run contains one or more placeholders or not.
+     *
+     * @param paragraph  The XWPFParagraph object whose runs need to be rearranged
+     * @param statusList The list of integers representing the status of each run within the paragraph
+     * @return A list of booleans indicating whether each run contains one or more placeholders2 or not
+     * @throws IllegalStateException If an invalid bracket sequence is encountered (e.g., closing bracket without an opening bracket)
+     */
     public static List<Boolean> rearrangeRuns(XWPFParagraph paragraph, List<Integer> statusList) {
         List<XWPFRun> runs = paragraph.getRuns();
         List<Boolean> placeholderExistsList = new ArrayList<>();
@@ -217,6 +236,13 @@ public class HelperClass {
         }
         return placeholderExistsList;
     }
+
+    /**
+     * Debugs the paragraphs within an XWPFDocument by printing out the paragraphs that contain placeholders
+     * and the text of each run within those paragraphs.
+     *
+     * @param document The XWPFDocument object containing the paragraphs to be debugged
+     */
     public static void debugParagraphs(XWPFDocument document) {
         System.out.println("======= Debugging Paragraphs =======");
         int paragraphCount = 0;

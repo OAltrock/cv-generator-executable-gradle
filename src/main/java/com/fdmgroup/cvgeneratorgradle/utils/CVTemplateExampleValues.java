@@ -41,12 +41,12 @@ public class CVTemplateExampleValues {
         System.out.println("PDF file path: " + outpathPDF);
 
         try {
-            SaveObjectToDocument.saveObjectAsWord(cVExampleTemplate, outpathWord);
+            SaveObjectToDocument.createDocument(cVExampleTemplate, "Word", outpathWord);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         try {
-            SaveObjectToDocument.saveObjectAsPDF(cVExampleTemplate, outpathPDF);
+            SaveObjectToDocument.createDocument(cVExampleTemplate, "pdf", outpathPDF);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

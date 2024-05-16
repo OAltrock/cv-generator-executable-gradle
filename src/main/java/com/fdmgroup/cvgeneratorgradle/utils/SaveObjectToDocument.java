@@ -20,9 +20,28 @@ import java.io.IOException;
 
 public class SaveObjectToDocument {
 
-    //this method is called from the summary page and controls the document creation (word or pdf):
+    /**
+     * Creates a Word or PDF document from the provided CVTemplate object and saves it to the specified output path.
+     * Additionally, it creates an auto-save file in JSON format for the CVTemplate object.
+     *
+     * <p>This method is typically called from the summary page and controls the document creation process.
+     * It first creates an auto-save file in JSON format containing the CVTemplate object data. Then, based
+     * on the specified format (either "Word" or "PDF"), it calls the appropriate method to generate the
+     * corresponding document and saves it to the provided output path.</p>
+     *
+     * @param cvTemplate The CVTemplate object containing the data to be populated in the document.
+     * @param format     The desired document format, either "Word" or "PDF" (case-insensitive).
+     * @param outputPath The path where the generated document should be saved.
+     * @throws IOException If an I/O error occurs while creating the auto-save file or generating the document.
+     * @throws IllegalArgumentException If an unsupported document format is provided.
+     */
     public static void createDocument(CVTemplate cvTemplate, String format, String outputPath) throws IOException {
-        if ("Word".equalsIgnoreCase(format)) {
+
+        //creating an auto save in json format:
+        String saveFilePath = ".\\saves\\autosave_fullCV.json";
+        SaveObjectToJson.saveObjectAsJson(cvTemplate, saveFilePath);
+
+        if ("docx".equalsIgnoreCase(format) || "word".equalsIgnoreCase(format)) {
             saveObjectAsWord(cvTemplate, outputPath);
         } else if ("PDF".equalsIgnoreCase(format)) {
             saveObjectAsPDF(cvTemplate, outputPath);
@@ -38,11 +57,18 @@ public class SaveObjectToDocument {
         saveObjectAsWord(cvTemplate, outputPath);
     }
 
+    /**
+     * Generates a Word document from a given CVTemplate object and saves it to the specified output path.
+     *
+     * @param cvTemplate The CVTemplate object containing the data to be populated in the Word document.
+     * @param outputPath The path where the generated Word document should be saved.
+     * @throws IOException If an I/O error occurs while reading the template or writing the output file.
+     * @author Thomas Elble thomas.elble@fdmgroup.com
+     * @version 1.0 (2024-05-15)
+     */
     public static void saveObjectAsWord(CVTemplate cvTemplate, String outputPath) throws IOException {
 
         Map<String, String> cVHashMap = HelperClass.convertCVObjectToHashMap(cvTemplate);
-
-        //later: pass the output path when calling the function
         String documentsFolderPath = System.getProperty("user.home") + File.separator + "Documents"+ File.separator + "CVgenerator";
         //String outputPath = documentsFolderPath + File.separator + "CvAutoSave.docx";
         String outputPathTestFile = documentsFolderPath + File.separator + "paragraphsFound.txt";
@@ -57,49 +83,39 @@ public class SaveObjectToDocument {
             }
         }
 
-        System.out.println("saving word file under:");
-        System.out.println(outputPath);
+        //System.out.println("saving word file under:");
+        //System.out.println(outputPath);
 
-        //String wordTemplatePath = "resources/templates/fdm_cv_template_v1.docx";
-        //String wordTemplatePath =
-        //        "C:/Users/Thomas/git/CV_Generator/cv-generator-executable-gradle/src/main/resources/com/fdmgroup/cvgeneratorgradle/templates/fdm_cv_template_test.docx";
+        //String wordTemplatePath = "./src/main/resources/templates/fdm_cv_template_v1.docx";
         String wordTemplatePath =
                 "./src/main/resources/com/fdmgroup/cvgeneratorgradle/templates/fdm_cv_template_test.docx";
 
-        // Try-with-resources block to handle streams
-        //try (InputStream templateInputStream = SaveObjectToDocument.class.getClassLoader().getResourceAsStream(wordTemplatePath);
-        //try (InputStream templateInputStream = getClass().getClassLoader()
-        //        .getResourceAsStream(wordTemplatePath);
         try (FileInputStream templateInputStream = new FileInputStream(new File(wordTemplatePath));
              XWPFDocument document = new XWPFDocument(templateInputStream);
              OutputStream outputStream = new FileOutputStream(outputPath)) {
 
-            // Record paragraphs to the test file
-            //recordParagraphs(document, outputPathTestFile);
-
-            System.out.println("==========content of the document is:==================");
+            //System.out.println("==========content of the document is:==================");
             for (XWPFParagraph paragraph : document.getParagraphs()) {
-                System.out.println("=== " + paragraph.getText());
+            //    System.out.println("=== " + paragraph.getText());
                 replaceTextInParagraph(paragraph, cVHashMap);
             }
-            System.out.println("============End of content=====================");
-
+            //System.out.println("============End of content=====================");
 
             // Replace placeholders in table cells (in case the document contains tables)
-            System.out.println("==========content of the tables is:==================");
+            //System.out.println("==========content of the tables is:==================");
             for (XWPFTable table : document.getTables()) {
                 for (XWPFTableRow row : table.getRows()) {
                     for (XWPFTableCell cell : row.getTableCells()) {
                         for (XWPFParagraph paragraph : cell.getParagraphs()) {
-                            System.out.println("== " + paragraph.getText());
+            //                System.out.println("== " + paragraph.getText());
                             replaceTextInParagraph(paragraph, cVHashMap);
                         }
                     }
                 }
             }
-            System.out.println("============End of table content=====================");
+            //System.out.println("============End of table content=====================");
 
-            HelperClass.debugParagraphs(document);
+            //HelperClass.debugParagraphs(document);
             removeParagraphsWithPlaceholders(document);//remove remaining placeholders
 
             // Write the modified document to the output stream
@@ -110,16 +126,33 @@ public class SaveObjectToDocument {
         }
     }
 
-    // Helper method to replace placeholders in a paragraph with actual content
+    /**
+     * Helper method to replace placeholders in a paragraph with user data.
+     *
+     * <p>This method iterates over the runs (text segments) within a paragraph and replaces any
+     * placeholders (text enclosed in curly braces '{...}') with the corresponding replacement values
+     * from the provided map.</p>
+     *
+     * <p>The method performs the following steps:
+     * <ol>
+     *     <li>Analyzes the runs in the paragraph to determine if they contain placeholders or not.</li>
+     *     <li>Rearranges the runs based on the analysis, grouping runs with and without placeholders.</li>
+     *     <li>Iterates over the rearranged runs, and for each run containing placeholders, replaces the placeholders with the corresponding replacement values from the provided map.</li>
+     * </ol>
+     * </p>
+     *
+     * @param paragraph     The XWPFParagraph object representing the paragraph to process.
+     * @param replacements  A map containing the placeholders as keys and their replacement values as values.
+     * @throws IllegalStateException If there is a mismatch between the number of runs and the size of the runContainsPlaceholder list.
+     * @author Thomas Elble thomas.elble@fdmgroup.com
+     * @version 1.0 (2024-05-15)
+     */
     private static void replaceTextInParagraph(XWPFParagraph paragraph, Map<String, String> replacements) {
 
         // Create a new run with the updated text
         String text = paragraph.getText();
         if (text.contains("{") && text.contains("}")) {
             boolean textChanged = false;
-            //in case we have more than one value to change in the paragraph text, we take a substring with only the first value
-            //String subText = text.substring(0, text.indexOf("}")+1);
-            //String residualText = text.substring(text.indexOf("}") + 1);
 
             // Analyze the runs and determine the status list
             List<Integer> statusList = HelperClass.analyzeRuns(paragraph);
@@ -140,15 +173,7 @@ public class SaveObjectToDocument {
                         String key = entry.getKey();
                         if (run.getText(0).contains(key)) {
                             String replacementValue = entry.getValue();
-                            //if (run.getText(0).contains("{user.firstName}")) {
-                            //    System.out.println("+++++ {user.firstName} found in run!!!!");
-                            //    System.out.println("+++++ Replacement key is: " + key);
-                            //    System.out.println("+++++ Replacement value is: " + replacementValue);
-                            //}
                             run.setText(run.getText(0).replace(key, replacementValue), 0);
-                            //if (key.equals("{user.firstName}")) {
-                            //    System.out.println("+++++ new run text is: " + run.getText(0));
-                            //}
                         }
                     }
                 }
@@ -156,6 +181,26 @@ public class SaveObjectToDocument {
         }
     }
 
+    /**
+     * Generates a PDF document from a given CVTemplate object and saves it to the specified output path.
+     *
+     * <p>This method first generates a temporary Word document using the {@link #saveObjectAsWord(CVTemplate, String)}
+     * method, and then converts the Word document to a PDF file using the Apache POI XWPF Converter library.</p>
+     *
+     * <p>The steps involved in the conversion process are:
+     * <ol>
+     *     <li>Create a temporary Word document from the provided CVTemplate object.</li>
+     *     <li>Open the temporary Word document using an XWPFDocument instance.</li>
+     *     <li>Convert the XWPFDocument to a PDF file using the PdfConverter utility class.</li>
+     *     <li>Write the PDF file to the specified output path.</li>
+     *     <li>Delete the temporary Word document file.</li>
+     * </ol>
+     * </p>
+     *
+     * @param cvTemplate The CVTemplate object containing the data to be populated in the PDF document.
+     * @param outputPath The path where the generated PDF document should be saved.
+     * @throws IOException If an I/O error occurs while reading/writing files or during the conversion process.
+     */
     public static void saveObjectAsPDF(CVTemplate cvTemplate, String outputPath) throws IOException {
         String wordTempPath = System.getProperty("java.io.tmpdir") + "tempCvDocument.docx";
         saveObjectAsWord(cvTemplate, wordTempPath);
@@ -175,7 +220,19 @@ public class SaveObjectToDocument {
         }
     }
 
-
+    /**
+     * Removes paragraphs and table cells that contain placeholders from the given XWPFDocument.
+     *
+     * <p>This method iterates over all paragraphs in the document body and table cells, and identifies
+     * those that contain placeholders (text enclosed in curly braces '{...}'). It then removes these
+     * paragraphs from the document body and clears the text content of the table cell paragraphs.</p>
+     *
+     * <p>Note that removing paragraphs from table cells directly is not possible due to a limitation
+     * in the Apache POI library. Therefore, this method clears the text content of table cell paragraphs
+     * containing placeholders instead of removing them.</p>
+     *
+     * @param document The XWPFDocument from which to remove paragraphs with placeholders.
+     */
     private static void removeParagraphsWithPlaceholders(XWPFDocument document) {
         List<XWPFParagraph> paragraphsToRemove = new ArrayList<>();
         for (XWPFParagraph paragraph : document.getParagraphs()) {
@@ -206,7 +263,7 @@ public class SaveObjectToDocument {
             document.removeBodyElement(document.getPosOfParagraph(paragraph));
         }
 
-        //removing table paragraps does not work, but deleting the text does work.
+        //removing table paragraphs does not work, but deleting the text does work.
         for (XWPFParagraph paragraph : paragraphsToRemoveFromTable) {
             System.out.println("~~~ Table Paragraphs that are removed: " + paragraph.getText() );
             for (XWPFRun run : paragraph.getRuns()) {
@@ -232,24 +289,5 @@ public class SaveObjectToDocument {
             document.removeBodyElement(document.getPosOfParagraph(paragraph));
         }
     }*/
-    private void replaceTextInParagraph_old(XWPFParagraph paragraph, Map<String, String> replacements) {
-        String text = paragraph.getText();
-        System.out.println("== " + text + " ==");
-        for (Map.Entry<String, String> entry : replacements.entrySet()) {
-            String key = entry.getKey();
-            if (text.contains(key)) {
-                text = text.replace(key, entry.getValue());
-            }
-        }
-        //paragraph.setText(text);
-    }
 
-    private static void recordParagraphs(XWPFDocument document, String outputPathTestFile) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputPathTestFile))) {
-            for (XWPFParagraph paragraph : document.getParagraphs()) {
-                writer.write(paragraph.getText());
-                writer.newLine();
-            }
-        }
-    }
 }
