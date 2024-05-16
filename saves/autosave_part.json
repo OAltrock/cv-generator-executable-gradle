@@ -2,12 +2,11 @@
   "id": 0,
   "user": {
     "id": 0,
-    "firstName": "asd",
-    "lastName": "asd",
-    "email": "asd",
-    "role": ""
+    "firstName": "hgfhgfhggggggggggggggggggggf",
+    "lastName": "hgfhgfffffffff",
+    "email": "hgfhgf"
   },
-  "profile": "asddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+  "profile": "ugfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgf",
   "location": {
     "locationName": "Germany",
     "minExperience": 1,
@@ -29,72 +28,56 @@
     "isPictureMandatory": false
   },
   "stream": {
-    "streamName": "Technical",
+    "streamName": "Business",
     "presetTraining": [],
     "presetCompetences": []
   },
   "experiences": [
     {
       "id": 0,
-      "jobTitle": "asd2",
-      "startDate": "2024-04-29",
-      "endDate": "2024-06-15",
+      "jobTitle": "hgfhgfhgf",
+      "startDate": "2024-05-06",
+      "endDate": "2024-04-30",
       "positionFeatures": [
-        "asd2"
+        "fgfgf"
       ],
-      "companyName": "asd2",
-      "companyPlace": "asd2",
-      "description": ""
-    },
-    {
-      "id": 0,
-      "jobTitle": "asd3",
-      "startDate": "2023-05-10",
-      "endDate": "2024-06-15",
-      "positionFeatures": [
-        "asd"
-      ],
-      "companyName": "asd3",
-      "companyPlace": "asd3",
+      "companyName": "hgfhgf",
+      "companyPlace": "hgfhgf",
       "description": ""
     }
   ],
   "educations": [
     {
       "id": 0,
-      "degree": "asd",
-      "studyTitle": "asd",
-      "universityName": "as",
-      "universityPlace": "das",
-      "startDate": "2024-04-29",
-      "endDate": "2024-06-15",
-      "thesisTitle": "dasd",
+      "degree": "fgfg",
+      "studyTitle": "fgf",
+      "universityName": "gf",
+      "universityPlace": "fg",
+      "startDate": "2024-05-06",
+      "endDate": "2024-05-07",
+      "thesisTitle": "gf",
       "keyModules": [
-        "asd"
+        "f",
+        "iiii",
+        "iiiii",
+        "iiiii"
       ]
     }
   ],
   "competences": [
-    "Java",
-    "Maven",
-    "HTML/CSS/JavaScript",
-    "Git",
-    "JUnit",
-    "UML",
-    "Eclipse",
-    "MySQL"
+    "kjh"
   ],
   "certificates": [
-    "asd"
+    "kjh"
   ],
   "languages": [
     {
       "id": 0,
-      "languageType": "asd",
+      "languageType": "f",
       "languageLevel": "C2"
     }
   ],
   "interests": [
-    "asd"
+    "f"
   ]
 }
