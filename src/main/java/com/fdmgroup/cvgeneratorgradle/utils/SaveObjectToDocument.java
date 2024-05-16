@@ -20,9 +20,28 @@ import java.io.IOException;
 
 public class SaveObjectToDocument {
 
-    //this method is called from the summary page and controls the document creation (word or pdf):
+    /**
+     * Creates a Word or PDF document from the provided CVTemplate object and saves it to the specified output path.
+     * Additionally, it creates an auto-save file in JSON format for the CVTemplate object.
+     *
+     * <p>This method is typically called from the summary page and controls the document creation process.
+     * It first creates an auto-save file in JSON format containing the CVTemplate object data. Then, based
+     * on the specified format (either "Word" or "PDF"), it calls the appropriate method to generate the
+     * corresponding document and saves it to the provided output path.</p>
+     *
+     * @param cvTemplate The CVTemplate object containing the data to be populated in the document.
+     * @param format     The desired document format, either "Word" or "PDF" (case-insensitive).
+     * @param outputPath The path where the generated document should be saved.
+     * @throws IOException If an I/O error occurs while creating the auto-save file or generating the document.
+     * @throws IllegalArgumentException If an unsupported document format is provided.
+     */
     public static void createDocument(CVTemplate cvTemplate, String format, String outputPath) throws IOException {
-        if ("Word".equalsIgnoreCase(format)) {
+
+        //creating an auto save in json format:
+        String saveFilePath = ".\\saves\\autosave_fullCV.json";
+        SaveObjectToJson.saveObjectAsJson(cvTemplate, saveFilePath);
+
+        if ("docx".equalsIgnoreCase(format) || "word".equalsIgnoreCase(format)) {
             saveObjectAsWord(cvTemplate, outputPath);
         } else if ("PDF".equalsIgnoreCase(format)) {
             saveObjectAsPDF(cvTemplate, outputPath);

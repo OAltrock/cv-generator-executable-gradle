@@ -4,6 +4,7 @@ import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.models.Education;
 import com.fdmgroup.cvgeneratorgradle.models.Experience;
 import com.fdmgroup.cvgeneratorgradle.models.User;
+import com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToDocument;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -49,8 +50,15 @@ public class SummaryPage extends FDMPage {
     private GridPane summaryGrid;
 
     private final FDMButton saveCV = new FDMButton("Save CV");
+
+    MenuItem generatePDFDocument = new MenuItem("Generate PDF");
+    MenuItem generateWordDocument = new MenuItem("Generate docx");
     private final MenuButton generateCV = new MenuButton("Generate Cv", null,
-            new MenuItem("Generate PDF"), new MenuItem("Generate docx"));
+            generatePDFDocument, generateWordDocument);
+    //generatePDFDocument.setOnAction(event -> SaveObjectToDocument.createDocument(cvTemplate, "PDF", ));
+    //generateWordDocument.setOnAction(event -> generateWord());
+
+
 
     public SummaryPage(CVTemplate cvTemplate, Stage stage) {
         this.cvTemplate = cvTemplate;

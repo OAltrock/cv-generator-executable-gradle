@@ -54,9 +54,9 @@ public class HelperClass {
         Map<String, String> hashMap = new HashMap<>();
 
         // Extract user fields
-        hashMap.put("{user.firstName}", obj.2getUser().getFirstName());
-        hashMap.put("{user.lastName}", obj.31getUser().getLastName());
-        hashMap.put("{user.email}", obj.2getUser().getEmail());
+        hashMap.put("{user.firstName}", obj.getUser().getFirstName());
+        hashMap.put("{user.lastName}", obj.getUser().getLastName());
+        hashMap.put("{user.email}", obj.getUser().getEmail());
         hashMap.put("{user.role}", obj.getUser().getRole());
 
         // Extract location fields

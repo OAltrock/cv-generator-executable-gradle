@@ -70,7 +70,7 @@
       <recent name="C:\Users\Thomas\git\CV_Generator\cv-generator-executable-gradle\src\main\resources\com\fdmgroup\cvgeneratorgradle\templates" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.CVGeneratorApp">
+  <component name="RunManager" selected="Application.CVTemplateExampleValues">
     <configuration name="CVGeneratorApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.fdmgroup.cvgeneratorgradle.CVGeneratorApp" />
       <module name="CV-Generator-Gradle.main" />
