@@ -97,7 +97,6 @@ public class EducationController implements HasToggleableSaveButtons, HasAddable
         createValidationForTextFields(predicate, textFields, "Must contain at least one letter");
         addValidationToDates(start, end, checkDate, checkBox);
         //ToDo: change way data is saved for instance with an additional button
-        //ToDo: maybe disable validation for previous button
         educationPage.getPrevBtn().setOnAction(actionEvent -> {
             assignEducationInput(start, end);
             treeView.getSelectionModel().select(3);
@@ -132,7 +131,8 @@ public class EducationController implements HasToggleableSaveButtons, HasAddable
         education.setThesisTitle(educationPage.getThesisTitle().getText());
         education.setKeyModules(educationPage.getKeyModules().stream().map(TextInputControl::getText).toList());
 
-        educations.getLast().setStartDate(start.getValue().toString());
+        educations.getLast().setStartDate((start.getValue()!=null) ? start.getValue().toString(): "");
+
         //if end is null (ie is not being picked due to ongoing is selected, a date in the future
         //is chosen. when reading out cvTemplate, the end date picker will be automatically disabled if the date
         //is in the future and ongoing will be selected (in that case the summary page lists the end date

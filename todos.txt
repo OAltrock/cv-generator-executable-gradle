@@ -1,0 +1,7 @@
+bugs
+=============================
+- 0 to ... addable fields: last can be removed                                O
+- index out of bounds remove addable (experience&education pages)             O
+- if invalid end date and "ongoing" is selected, "ongoing" isn't saved        X
+- removing the middle addable doesn't remove the remove button                O
+

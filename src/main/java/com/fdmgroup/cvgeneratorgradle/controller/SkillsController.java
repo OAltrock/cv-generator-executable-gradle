@@ -7,11 +7,6 @@ import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.models.Language;
 import com.fdmgroup.cvgeneratorgradle.models.enums.LanguageLevel;
 
-import com.fdmgroup.cvgeneratorgradle.utils.HelperClass;
-import com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson;
-import com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToDocument;
-import com.fdmgroup.cvgeneratorgradle.views.FDMPage;
-
 import com.fdmgroup.cvgeneratorgradle.views.SkillsPage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,19 +17,15 @@ import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+
 import java.util.function.Predicate;
 
 import static com.fdmgroup.cvgeneratorgradle.controller.AppUtils.findAllTextFields;
 import static com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson.saveObjectAsJson;
 
-public class SkillsController implements HasToggleableSaveButtons,
+public class SkillsController extends FDMController implements HasToggleableSaveButtons,
         HasAddableTextFields {
 
 	private final CVTemplate cvTemplate;
@@ -55,11 +46,24 @@ public class SkillsController implements HasToggleableSaveButtons,
 		Button[] buttons = new Button[] {page.getNextBtn()};
 
 		main.setCenter(page.createCenterPage(page.getCenterBox()));
+		//ToDo: validation for at least one language (this is analogue for all not-addable-fields once the addable fields have been changed to not-addable)
+		//ToDo: if there is input for a language there must be a language level
+		//ToDo: as of now, there is an exception if there is language input but no language level
 		addValidationToSaveButtons(textFields,predicate.negate(), buttons);
 		textFields.addAll(findAllTextFields(page.getCompetenceGridPane()));
 		textFields.addAll(findAllTextFields(page.getCertificateGridPane()));
 		textFields.addAll(findAllTextFields(page.getHobbiesGridPane()));
+		ObservableList<TextInputControl> languageInput = FXCollections.observableArrayList();
 
+
+		validateMaybeEmptyTextFields(page.getLanguageLevelButtons(), page.getLanguageGridPane());
+
+		/*findAllTextFields(page.getLanguageGridPane()).stream().filter(
+						textInputControl -> textInputControl.getText()!=null *//*&& !textInputControl.getText().isEmpty()*//*)
+				.forEach(languageInput::add);*/
+		languageInput.addAll(findAllTextFields(page.getLanguageGridPane()));
+		//ToDo: validation not completely responsive yet
+		validatePreviousBtn(page.getPrevBtn(), page.getLanguageLevelButtons(),languageInput,page.getLanguageGridPane());
 		createValidationForTextFields(string -> !string.matches("^.*[a-zA-Z]+.*$"), textFields,"Must contain at least one letter");
 
 		page.getPrevBtn().setOnAction(actionEvent -> {
@@ -94,7 +98,7 @@ public class SkillsController implements HasToggleableSaveButtons,
 		languageInput.forEach(language -> {
 			if (language.getText()!=null && !language.getText().isEmpty()) {
 				MenuButton languageLlvBtn = (MenuButton) page.getLanguageGridPane().getChildren().get(page.getLanguageGridPane().getChildren().indexOf(language) + 1);
-				languagesToAdd.add(new Language(language.getText(), (languageLlvBtn.getText()!=null)? LanguageLevel.valueOf(languageLlvBtn.getText()):LanguageLevel.C2));
+				languagesToAdd.add(new Language(language.getText(), (!languageLlvBtn.getText().contains("Choose")) ? LanguageLevel.valueOf(languageLlvBtn.getText()):LanguageLevel.C2));
 			}
 		});
 		cvTemplate.setLanguages(languagesToAdd);

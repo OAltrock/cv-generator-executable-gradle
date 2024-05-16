@@ -66,6 +66,10 @@ public class ExperienceController implements HasToggleableSaveButtons, HasAddabl
         Button[] buttons = new Button[]{new FDMButton("Next")};
         FDMButton prevBtn = new FDMButton("Previous");
         FDMButton addExpBtn = new FDMButton("Add Experience");
+
+        ((FDMButton) buttons[0]).setDesign("primary");
+        prevBtn.setDesign("primary");
+        addExpBtn.setDesign("primary");
         final FDMHBox[] buttonWrapper = {new FDMHBox(prevBtn, addExpBtn, buttons[0])};
         buttonWrapper[0].setDesign();
 
@@ -197,7 +201,7 @@ public class ExperienceController implements HasToggleableSaveButtons, HasAddabl
             for (TextInputControl keySkill : page.getKeySkills()) {
                 keySkills.add(keySkill.getText());
             }
-            experienceList.add(new Experience(page.getJobTitle().getText(), page.getStartDate().getValue().toString(),
+            experienceList.add(new Experience(page.getJobTitle().getText(), (page.getStartDate().getValue()!=null) ? page.getStartDate().getValue().toString() : "",
                     (page.getEndDate().getValue() != null) ?
                             page.getEndDate().getValue().toString() :
                             LocalDate.now().plusMonths(1).toString(),

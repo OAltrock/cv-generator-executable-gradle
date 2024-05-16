@@ -29,7 +29,7 @@ public class SaveObjectToJson {
             }
         }
         else {
-            directory = "./saves/";
+            directory = "./saves/auto saves/";
             fileNameWODir = "autosave_part.json";
         }
 

@@ -112,6 +112,8 @@ public class EducationPage extends FDMPage implements HasAddableTextFields/*, Ha
         nextBtn = new FDMButton("Next");
         buttonWrapper = new FDMHBox(prevBtn, nextBtn);
         buttonWrapper.setDesign();
+        prevBtn.setDesign("primary");
+        nextBtn.setDesign("primary");
 
         centerBox = new FDMCenterVBoxWrapper(pageTitle, degree,
                 studyTitle,
