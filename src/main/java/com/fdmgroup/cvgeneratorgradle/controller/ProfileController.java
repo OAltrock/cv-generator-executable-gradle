@@ -6,6 +6,8 @@ import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.views.FDMButton;
 import com.fdmgroup.cvgeneratorgradle.views.FDMCenterVBoxWrapper;
 import com.fdmgroup.cvgeneratorgradle.views.ProfilePage;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -13,6 +15,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.util.function.Predicate;
+
 import static com.fdmgroup.cvgeneratorgradle.controller.AppUtils.findAllTextFields;
 import static com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson.saveObjectAsJson;
 
@@ -38,9 +41,19 @@ public class ProfileController implements HasToggleableSaveButtons, HasAddableTe
         FDMCenterVBoxWrapper centerBox = page.getCenterBox();
         FDMButton saveBtn = page.getNext();
 
-        Predicate<String> atLeast50Chars = (string -> string.length()>=50 && string.matches("^.*\\w+.*$"));
+        Predicate<String> atLeast50Chars = (string -> string.length() >= 50 && string.matches("^.*\\w+.*$"));
 
-        addValidationToSaveButtons(textAreas,atLeast50Chars, saveBtn);
+        addValidationToSaveButtons(textAreas, atLeast50Chars, saveBtn);
+        textAreas.addListener(new InvalidationListener() {
+            @Override
+            public void invalidated(Observable observable) {
+                textAreas.forEach(textInputControl -> textInputControl.setOnMouseClicked(actionEvent -> {
+                            cvTemplate.setProfile(page.getProfile().getText());
+                            saveObjectAsJson(cvTemplate);
+                        }
+                ));
+            }
+        });
 
 
         textAreas.addAll(findAllTextFields(centerBox));

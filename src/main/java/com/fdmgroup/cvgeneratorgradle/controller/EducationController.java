@@ -9,6 +9,8 @@ import com.fdmgroup.cvgeneratorgradle.models.Education;
 
 
 import com.fdmgroup.cvgeneratorgradle.views.EducationPage;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -88,6 +90,13 @@ public class EducationController implements HasToggleableSaveButtons, HasAddable
                 return startDate.isBefore(endDate) || startDate.isEqual(endDate);
             }
         };
+        textFields.addListener(new InvalidationListener() {
+            @Override
+            public void invalidated(Observable observable) {
+                textFields.forEach(textInputControl -> textInputControl.setOnMouseClicked(actionEvent ->
+                        assignEducationInput(start,end)));
+            }
+        });
 
         addValidationToSaveButtons(textFields, predicate, start, end, checkDate, checkBox, buttons);
 
@@ -107,7 +116,6 @@ public class EducationController implements HasToggleableSaveButtons, HasAddable
             treeView.getSelectionModel().select(5);
             new SkillsController(cvTemplate, treeView, stage).initialize(main);
         });
-
     }
 
     /**

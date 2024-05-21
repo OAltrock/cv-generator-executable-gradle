@@ -9,6 +9,8 @@ import com.fdmgroup.cvgeneratorgradle.models.Stream;
 import com.fdmgroup.cvgeneratorgradle.models.User;
 
 import com.fdmgroup.cvgeneratorgradle.views.PersonalInfoPage;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
@@ -54,6 +56,13 @@ public class PersonalInformationController implements HasToggleableSaveButtons, 
         page = new PersonalInfoPage(user, location, stream, textFields);
         main.setCenter(page.createCenterPage(page.getCenterBox()));
         Button[] buttons = new Button[]{page.getNextBtn()};
+        textFields.addListener(new InvalidationListener() {
+            @Override
+            public void invalidated(Observable observable) {
+                textFields.forEach(textInputControl -> textInputControl.setOnMouseClicked(actionEvent ->
+                        assignInfoInput()));
+            }
+        });
 
         addValidationToSaveButtons(textFields, List.of(page.getStreamChooser(), page.getLocationChooser()), string -> !string.matches("^.*[a-zA-Z]+.*$"), buttons);
 

@@ -1,5 +1,7 @@
 package com.fdmgroup.cvgeneratorgradle.controller;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -13,6 +15,7 @@ import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class FDMController {
@@ -60,7 +63,7 @@ public abstract class FDMController {
                 btn.textProperty());
     }
 
-    void validatePreviousBtn(Button prevBtn, List<MenuButton> languageLevelBtns, List<TextInputControl> languageInput, GridPane parent) {
+    void validatePreviousBtn(List<MenuButton> languageLevelBtns, List<TextInputControl> languageInput, GridPane parent, Button... prevBtn) {
         languageLevelBtns.forEach(btn -> {
             TextInputControl correspondingLanguage = (TextInputControl) parent.getChildren().get(parent.getChildren().indexOf(btn)-1);
 
@@ -73,7 +76,7 @@ public abstract class FDMController {
                             .reduce(Bindings::or)
                             .get();
                     //ObservableBooleanValue languageLevelBinding = getObservableLanguageAndLanguageLvl(correspondingLanguage,btn).not();
-                    prevBtn.disableProperty().bind(allLevelsSelected);
+                    Arrays.stream(prevBtn).forEach(btn -> btn.disableProperty().bind(allLevelsSelected));
                 }
             });
 
@@ -81,7 +84,7 @@ public abstract class FDMController {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                     BooleanBinding allLevelsSelected = getBooleanBinding(languageInput, btn);
-                    prevBtn.disableProperty().bind(allLevelsSelected);
+                    Arrays.stream(prevBtn).forEach(btn -> btn.disableProperty().bind(allLevelsSelected));
                 }
             });
         });
@@ -110,7 +113,7 @@ public abstract class FDMController {
     }
 
     private static BooleanBinding getBooleanBinding(List<TextInputControl> languageInput, MenuButton btn) {
-        BooleanBinding allLevelsSelected = languageInput.stream()
+        return languageInput.stream()
                 .map(TextInputControl::textProperty)
                 .map(stringProperty ->
                         Bindings.createBooleanBinding(()->
@@ -118,6 +121,7 @@ public abstract class FDMController {
                                         && btn.getText().contains("Choose")),stringProperty, btn.textProperty()))
                 .reduce(Bindings::or)
                 .get();
-        return allLevelsSelected;
     }
+
+
 }
