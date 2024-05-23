@@ -4,18 +4,14 @@ import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
-
-import static com.fdmgroup.cvgeneratorgradle.utils.LoadObjectFromJson.loadObjectFromJson;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class SaveObjectToJson {
     //static final String AUTO_SAVE_PATH = "./saves/autosave_part.json";
@@ -72,6 +68,24 @@ public class SaveObjectToJson {
                 } else {
                     recentFiles.remove(recentFiles.lastEntry());
                     recentFiles.putIfAbsent(String.valueOf(Files.getLastModifiedTime(Path.of(newFileWithDir.getAbsolutePath()))), newFileWithDir.getAbsolutePath());
+                }
+            }
+            else {
+                AtomicReference<String> toRemove = new AtomicReference<>("");
+                recentFiles.forEach((key, value) -> {
+                    if (value.equals(newFileWithDir.getAbsolutePath())) {
+                         toRemove.set(key);
+
+                    }
+                });
+
+                try {
+                    recentFiles.remove(toRemove.get());
+                    System.out.println(toRemove.get());
+                    recentFiles.put(String.valueOf(Files.getLastModifiedTime(Path.of(newFileWithDir.getAbsolutePath()))), newFileWithDir.getAbsolutePath());
+                    //System.out.println(recentFiles);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
             }
             //recentFiles.forEach((k,v)-> System.out.println(v));
