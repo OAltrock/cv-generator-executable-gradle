@@ -4,6 +4,9 @@ import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.utils.FolderStructurePrinter;
 
 import com.sun.javafx.binding.BindingHelperObserver;
+
+import javafx.scene.control.Menu;
+
 import org.apache.commons.math3.exception.OutOfRangeException;
 import org.apache.poi.xwpf.usermodel.*;
 
@@ -36,11 +39,11 @@ public class SaveObjectToDocument {
      * @throws IOException If an I/O error occurs while creating the auto-save file or generating the document.
      * @throws IllegalArgumentException If an unsupported document format is provided.
      */
-    public static void createDocument(CVTemplate cvTemplate, String format, String outputPath) throws IOException {
+    public static void createDocument(CVTemplate cvTemplate, String format, String outputPath, Menu recent) throws IOException {
 
         //creating an auto save in json format:
         String saveFilePath = ".\\saves\\autosave_fullCV.json";
-        SaveObjectToJson.saveObjectAsJson(cvTemplate, saveFilePath);
+        SaveObjectToJson.saveObjectAsJson(cvTemplate, saveFilePath, recent,cvTemplate);
 
         if ("docx".equalsIgnoreCase(format) || "word".equalsIgnoreCase(format)) {
             saveObjectAsWord(cvTemplate, outputPath, false);

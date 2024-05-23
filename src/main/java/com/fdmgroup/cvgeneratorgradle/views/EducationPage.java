@@ -80,8 +80,13 @@ public class EducationPage extends FDMPage implements HasAddableTextFields/*, Ha
         thesisTitle = (education.getDegree() != null) ? new TextField(education.getThesisTitle()) : new TextField("");
         thesisTitle.setId("thesisTitle");
         thesisTitle.setPromptText("Title of thesis");
-        startDate = (education.getStartDate() != null && !education.getStartDate().isEmpty()) ? new DatePicker(LocalDate.parse(education.getStartDate())) : new DatePicker();
-        endDate = (education.getStartDate() != null && !education.getStartDate().isEmpty()) ? new DatePicker(LocalDate.parse(education.getEndDate())) : new DatePicker();
+        startDate = (education.getStartDate() != null && !education.getStartDate().isEmpty())
+                ? new DatePicker(LocalDate.parse(education.getStartDate())) : new DatePicker();
+        endDate = (education.getStartDate() != null && !education.getStartDate().isEmpty()) ?
+                (LocalDate.parse(education.getEndDate()).isAfter(LocalDate.parse(education.getStartDate()))) ?
+                        new DatePicker(LocalDate.parse(education.getEndDate()))
+                        : new DatePicker(LocalDate.now().plusMonths(1))
+                : new DatePicker();
         ongoing = new CheckBox("ongoing");
         if (endDate.getValue() != null) {
             ongoing.setSelected(endDate.getValue().isAfter(LocalDate.now()));
@@ -112,6 +117,8 @@ public class EducationPage extends FDMPage implements HasAddableTextFields/*, Ha
         nextBtn = new FDMButton("Next");
         buttonWrapper = new FDMHBox(prevBtn, nextBtn);
         buttonWrapper.setDesign();
+        prevBtn.setDesign("primary");
+        nextBtn.setDesign("primary");
 
         centerBox = new FDMCenterVBoxWrapper(pageTitle, degree,
                 studyTitle,

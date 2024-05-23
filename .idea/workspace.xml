@@ -5,17 +5,40 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="278fc135-e0b6-415d-9da4-900dc54c8d08" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/FDMController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/utils/GeneratorConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/todos.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/autosave_fullCV.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/autosave_part.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/CVGeneratorApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/CVGeneratorApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/EducationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/EducationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/ExperienceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/ExperienceController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/MainController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/PersonalInformationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/PersonalInformationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/ProfileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/ProfileController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/SkillsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/SkillsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/SummaryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/SummaryController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/interfaces/HasAddableTextFields.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/interfaces/HasAddableTextFields.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/interfaces/HasToggleableSaveButtons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/interfaces/HasToggleableSaveButtons.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/utils/CVTemplateExampleValues.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/utils/CVTemplateExampleValues.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/utils/HelperClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/utils/HelperClass.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/utils/FolderStructurePrinter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/utils/FolderStructurePrinter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/utils/LoadObjectFromJson.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/utils/LoadObjectFromJson.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/utils/SaveObjectToDocument.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/utils/SaveObjectToDocument.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/fdmgroup/cvgeneratorgradle/templates/fdm_cv_template_test.docx" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/fdmgroup/cvgeneratorgradle/templates/fdm_cv_template_test.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/utils/SaveObjectToJson.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/utils/SaveObjectToJson.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/views/EducationPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/views/EducationPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/views/ExperiencePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/views/ExperiencePage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/views/PersonalInfoPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/views/PersonalInfoPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/views/ProfilePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/views/ProfilePage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/views/SkillsPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/views/SkillsPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/fdmgroup/cvgeneratorgradle/welcome2.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/fdmgroup/cvgeneratorgradle/welcome2.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,18 +83,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Thomas/IdeaProjects/ConvertPdf-master&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "Merging main",
+    "last_opened_file_path": "C:/Users/Thomas/IdeaProjects/ConvertPdf-master",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Thomas\git\CV_Generator\cv-generator-executable-gradle\src\main\resources\com\fdmgroup\cvgeneratorgradle\templates" />

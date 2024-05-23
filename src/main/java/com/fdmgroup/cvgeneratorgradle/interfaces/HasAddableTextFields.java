@@ -43,15 +43,16 @@ public interface HasAddableTextFields {
 
         addBtn.setOnAction(event -> {
             MenuButton languageLevelButton = null;
-            if (parent.getChildren().size() / 3 + 1 <= limit) {
+            if (parent.getChildren().size() / 2 + 1 <= limit) {
                 javafx.scene.control.TextField textFieldToAdd = new javafx.scene.control.TextField();
                 int rowCount = parent.getRowCount() + 1;
-                //setCounter1(CVGeneratorApp.getCounter1() + 1);
                 textFieldToAdd.setStyle("-fx-pref-width: 300;");
                 textFieldToAdd.setPromptText(promptMessage);
                 textFieldToAdd.setId(String.valueOf(parent.getRowCount() + 1));
-                javafx.scene.control.Button removeButton = new javafx.scene.control.Button(removeBtnMessage);
+                FDMButton removeButton = new FDMButton(removeBtnMessage);
+                removeButton.setDesign("primary");
                 removeButton.setId(Integer.toString(rowCount));
+
 
                 parent.add(textFieldToAdd, 0, rowCount);
                 if (isLanguageGridPane) {
@@ -60,21 +61,20 @@ public interface HasAddableTextFields {
                     languageLevelButton.getItems().addAll(languageLevels);
                     parent.add(languageLevelButton, 1, rowCount);
                     addListenerToLanguageLevelButton(languageLevelButton);
-
                 }
                 parent.add(removeButton, (isLanguageGridPane) ? 2 : 1, rowCount);
 
                 //ToDo: maybe there is a better way (includes the whole system of adding and removing removeBtns)
-                if (parent.getChildren().size() > 4 && parent.getChildren().size() < 7) {
-                    FDMButton lastRemoveBtn = new FDMButton(removeBtnMessage);
-                    parent.add(lastRemoveBtn, (isLanguageGridPane) ? 2 :1, rowCount - 2);
-                    TextField lastTextField = (TextField) parent.getChildren().stream().filter(child -> (GridPane.getColumnIndex(child) == 0 &&
-                                    Objects.equals(GridPane.getRowIndex(child), GridPane.getRowIndex(lastRemoveBtn))))
-                            .toList().getLast();
-                    addListenerTooRemoveBtn(lastTextField, languageLevelButton, lastRemoveBtn, parent, addBtn, textFields, addableTextFields);
-                }
                 parent.getChildren().remove(addBtn);
                 parent.add(addBtn, (isLanguageGridPane) ? 3 : 2, rowCount);
+                if (parent.getChildren().size() >= 3 && parent.getChildren().size() < 6) {
+                    FDMButton removeBottomBtn = new FDMButton(removeBtnMessage);
+                    removeBottomBtn.setDesign("primary");
+                    removeBottomBtn.setId(String.valueOf(rowCount - 2));
+                    parent.add(removeBottomBtn, 1, rowCount - 2);
+                    addListenerTooRemoveBtn((TextInputControl) parent.getChildren().getFirst(),null,removeBottomBtn,parent,addBtn,textFields,addableTextFields);
+                }
+
 
                 addListenerTooRemoveBtn(textFieldToAdd, languageLevelButton, removeButton, parent, addBtn, textFields, addableTextFields);
                 textFields.add(textFieldToAdd);
@@ -100,17 +100,15 @@ public interface HasAddableTextFields {
         removeButton.setOnAction(event -> {
             textFields.remove(textFieldToRemove);
             addableTextFields.remove(textFieldToRemove);
-            System.out.println(gridPane.getChildren());
 
             Node languageLvlBtn = gridPane.getChildren().get(gridPane.getChildren().indexOf(textFieldToRemove)+1);
-            System.out.println(languageLvlBtn);
             if (languageLvlBtn instanceof MenuButton)
                 gridPane.getChildren().removeAll(addModuleBtn, languageLvlBtn, removeButton, textFieldToRemove);
             else gridPane.getChildren().removeAll(addModuleBtn, removeButton, textFieldToRemove);
             gridPane.add(addModuleBtn, (languageLevelButton !=null) ? 3 : 2, gridPane.getRowCount() - 1);
 
-            if (gridPane.getChildren().size() <= 4 && gridPane.getChildren().size() > 1) {
-                Button rmvBtn = (Button) gridPane.getChildren().get(2);
+            if (gridPane.getChildren().size() <= 3 && gridPane.getChildren().size() > 1) {
+                Button rmvBtn = (Button) gridPane.getChildren().get(1);
                 if (rmvBtn != null) gridPane.getChildren().remove(rmvBtn);
             }
 
@@ -209,7 +207,6 @@ public interface HasAddableTextFields {
                     MenuButton languageLevelButton = null;
                     gridPane.add(textField, 0, 0);
                     if (isLanguageGrid) {
-                        System.out.println(cvTemplate.getLanguages());
                         languageLevelButton = new MenuButton("Choose language level");
                         if (cvTemplate.getLanguages()!=null && !cvTemplate.getLanguages().isEmpty()) {
                             for (Language language : cvTemplate.getLanguages()) {

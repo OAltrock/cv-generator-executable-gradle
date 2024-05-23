@@ -27,7 +27,7 @@ public class SkillsPage extends FDMPage implements HasAddableTextFields {
     Label hobbiesLabel;
 
     GridPane competenceGridPane;
-    MenuButton languageLevelButton;
+    List<MenuButton> languageLevelButtons;
     GridPane certificateGridPane;
     GridPane languageGridPane;
     GridPane hobbiesGridPane;
@@ -40,6 +40,7 @@ public class SkillsPage extends FDMPage implements HasAddableTextFields {
     public SkillsPage(CVTemplate cvTemplate, ObservableList<TextInputControl> textFields) {
         this.cvTemplate = cvTemplate;
         this.textFields = textFields;
+        languageLevelButtons = new ArrayList<>();
 
         initialize();
     }
@@ -72,6 +73,7 @@ public class SkillsPage extends FDMPage implements HasAddableTextFields {
         //textFields.addAll(certsToAdd);
         certificateGridPane = new GridPane(3, certsToAdd.size());
         FDMButton addCertBtn = new FDMButton("Add certificate");
+        addCertBtn.setDesign("primary");
         createAddableAreaFromModel(certsToAdd, certificateGridPane, addCertBtn, textFields, location.getMaxCertificate(), "Remove certificate", "Certificate");
 
         languagesLabel = new Label("Add " + location.getMinLanguage() + " to " + location.getMaxLanguage() + " Languages");
@@ -142,10 +144,13 @@ public class SkillsPage extends FDMPage implements HasAddableTextFields {
         //textFields.addAll(hobbiesToAdd);
         hobbiesGridPane = new GridPane(3, hobbiesToAdd.size());
         FDMButton addHobbyBtn = new FDMButton("Add interest or hobby");
+        addHobbyBtn.setDesign("primary");
         createAddableAreaFromModel(hobbiesToAdd, hobbiesGridPane, addHobbyBtn, textFields, location.getMaxInterest(), "Remove interest", "Interest or hobby");
 
         prevBtn = new FDMButton("Previous");
+        prevBtn.setDesign("primary");
         nextBtn = new FDMButton("Next");
+        nextBtn.setDesign("primary");
         buttonWrapper = new FDMHBox(prevBtn, nextBtn);
         buttonWrapper.setDesign();
 
@@ -156,9 +161,12 @@ public class SkillsPage extends FDMPage implements HasAddableTextFields {
     }
 
     private void setLanguageRow(Language current, List<MenuItem> languageLevels, int i) {
-        languageLevelButton = (current.getLanguageType() == null) ? new MenuButton("Choose language level") : new MenuButton(current.getLanguageLevel().toString());
+        MenuButton languageLevelButton = (current.getLanguageType() == null) ? new MenuButton("Choose language level") : new MenuButton(current.getLanguageLevel().toString());
         languageLevelButton.getItems().addAll(languageLevels);
         addListenerToLanguageLevelButton(languageLevelButton);
+        languageLevelButtons.add(languageLevelButton);
+
+
         TextInputControl textField = new TextField(current.getLanguageType());
         textField.setPromptText("Language");
         languageGridPane.add(textField, 0, i);

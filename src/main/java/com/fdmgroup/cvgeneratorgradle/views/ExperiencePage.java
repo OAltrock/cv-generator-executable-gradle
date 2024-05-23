@@ -21,8 +21,8 @@ import java.util.List;
 public class ExperiencePage extends FDMPage implements HasAddableTextFields {
     private final CVTemplate cvTemplate;
     //private List<Experience> experiences;
-    private Experience experience;
-    private boolean singleExperience;
+    private final Experience experience;
+    private final boolean singleExperience;
     private javafx.scene.control.ScrollPane center;
     private FDMCenterVBoxWrapper centerBox;
     private javafx.scene.control.Label pageTitle;
@@ -89,15 +89,18 @@ public class ExperiencePage extends FDMPage implements HasAddableTextFields {
         companyPlace.setPromptText("Place of company");
         description = (experience.getJobTitle() != null) ? new TextArea(experience.getDescription()) : new TextField("");
         description.setPromptText("Description");
+        ongoing = new CheckBox("ongoing");
 
         startDate = (experience.getStartDate() != null && !experience.getStartDate().isEmpty()) ? new DatePicker(LocalDate.parse(experience.getStartDate()))
                 : new DatePicker();
-        endDate = (experience.getStartDate() != null && !experience.getStartDate().isEmpty()) ? new DatePicker(LocalDate.parse(experience.getEndDate()))
+        endDate = (experience.getStartDate() != null && !experience.getStartDate().isEmpty()) ?
+                (LocalDate.parse(experience.getEndDate()).isAfter(LocalDate.parse(experience.getStartDate()))) ? new DatePicker(LocalDate.parse(experience.getEndDate()))
+                        : new DatePicker(LocalDate.now().plusMonths(1))
                 : new DatePicker();
-        ongoing = new CheckBox("ongoing");
+
         if (endDate.getValue() != null) {
             ongoing.setSelected(endDate.getValue().isAfter(LocalDate.now()));
-            endDate.setDisable(endDate.getValue().isAfter(LocalDate.now()));
+            endDate.setDisable(endDate.getValue().isAfter(LocalDate.now()) || endDate.getValue().isBefore(startDate.getValue()));
         }
         dateWrapper = new FDMDateWrapper(startDate, endDate, ongoing);
         dateWrapper.setDesign();
@@ -123,6 +126,7 @@ public class ExperiencePage extends FDMPage implements HasAddableTextFields {
 
         centerBox = new FDMCenterVBoxWrapper();
         removePage = new FDMButton("Remove experience");
+        removePage.setDesign("primary");
         centerBox.getChildren().addAll(pageTitle, jobTitle, companyName, companyPlace,
                 dateWrapper, keySkillsGridPane, removePage);
 

@@ -13,6 +13,7 @@ import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 
+import javafx.beans.value.ObservableBooleanValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -20,6 +21,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +49,7 @@ public class ExperienceController implements HasToggleableSaveButtons, HasAddabl
         experiencePages = FXCollections.observableArrayList();
     }
 
-    public void initialize(BorderPane main) {
+    public void initialize(BorderPane main, Menu recent, MainController mainController) {
 
         textFields = FXCollections.observableArrayList();
         FDMCenterVBoxWrapper wrapper = new FDMCenterVBoxWrapper();
@@ -66,17 +68,30 @@ public class ExperienceController implements HasToggleableSaveButtons, HasAddabl
         Button[] buttons = new Button[]{new FDMButton("Next")};
         FDMButton prevBtn = new FDMButton("Previous");
         FDMButton addExpBtn = new FDMButton("Add Experience");
+        ObservableBooleanValue canAdd = Bindings.createBooleanBinding(()->experiencePages.size()>=cvTemplate.getLocation().getMaxExperience(),experiencePages);
+        addExpBtn.disableProperty().bind(canAdd);
+
+        ((FDMButton) buttons[0]).setDesign("primary");
+        prevBtn.setDesign("primary");
+        addExpBtn.setDesign("primary");
         final FDMHBox[] buttonWrapper = {new FDMHBox(prevBtn, addExpBtn, buttons[0])};
         buttonWrapper[0].setDesign();
 
 
         experiencePages.forEach(experiencePage1 -> {
-            experiencePage1.getPageTitle().setText("Experience " + (experiencePages.indexOf(experiencePage1)+1));
+            experiencePage1.getPageTitle().setText("Experience " + (experiencePages.indexOf(experiencePage1) + 1));
             experiencePages.addListener(new InvalidationListener() {
                 @Override
                 public void invalidated(Observable observable) {
                     BooleanBinding moreThanOne = Bindings.createBooleanBinding(() -> experiencePages.size() <= 1);
                     experiencePage1.getRemovePage().disableProperty().bind(moreThanOne);
+                }
+            });
+            textFields.addListener(new InvalidationListener() {
+                @Override
+                public void invalidated(Observable observable) {
+                    textFields.forEach(textInputControl -> textInputControl.setOnMouseClicked(actionEvent ->
+                            assignExperienceInput(experiencePages, recent, mainController)));
                 }
             });
             wrapper.getChildren().add(experiencePage1.getCenterBox());
@@ -102,7 +117,7 @@ public class ExperienceController implements HasToggleableSaveButtons, HasAddabl
                 textFields.removeAll(findAllTextFields(experiencePage1.getCenterBox()));
                 textFields.removeAll(findAllTextFields(experiencePage1.getKeySkillsGridPane()));
                 wrapper.getChildren().remove(parent);
-                ExperiencePage lastPage = (experiencePages.indexOf(experiencePage1)==0) ? experiencePages.get(experiencePages.indexOf(experiencePage1)+1) : experiencePages.get(experiencePages.indexOf(experiencePage1)-1);
+                ExperiencePage lastPage = (experiencePages.indexOf(experiencePage1) == 0) ? experiencePages.get(experiencePages.indexOf(experiencePage1) + 1) : experiencePages.get(experiencePages.indexOf(experiencePage1) - 1);
                 experiencePages.remove(experiencePage1);
                 lastPage.getOngoing().setSelected(!lastPage.getOngoing().isSelected());
                 lastPage.getOngoing().setSelected(!lastPage.getOngoing().isSelected());
@@ -118,9 +133,9 @@ public class ExperienceController implements HasToggleableSaveButtons, HasAddabl
 
         });
 
-        ExperiencePage temp = new ExperiencePage(cvTemplate,textFields,
-                new Experience("","","",
-                        new ArrayList<>(),"","",""),
+        ExperiencePage temp = new ExperiencePage(cvTemplate, textFields,
+                new Experience("", "", "",
+                        new ArrayList<>(), "", "", ""),
                 true);
         experiencePages.add(temp);
         experiencePages.remove(temp);
@@ -128,15 +143,15 @@ public class ExperienceController implements HasToggleableSaveButtons, HasAddabl
         main.setCenter(experiencePages.getLast().createCenterPage(wrapper));
 
         buttons[0].setOnAction(actionEvent -> {
-            assignExperienceInput(experiencePages);
+            assignExperienceInput(experiencePages, recent, mainController);
             treeView.getSelectionModel().select(4);
-            new EducationController(cvTemplate, treeView, stage).initialize(main);
+            new EducationController(cvTemplate, treeView, stage).initialize(main, recent, mainController);
         });
 
         prevBtn.setOnAction(actionEvent -> {
-            assignExperienceInput(experiencePages);
+            assignExperienceInput(experiencePages, recent, mainController);
             treeView.getSelectionModel().select(2);
-            new PersonalInformationController(cvTemplate, treeView, stage).initialize(main);
+            new PersonalInformationController(cvTemplate, treeView, stage).initialize(main, recent, mainController);
         });
 
         addExpBtn.setOnAction(actionEvent -> {
@@ -153,7 +168,7 @@ public class ExperienceController implements HasToggleableSaveButtons, HasAddabl
                 }
             });
             experiencePages.add(page);
-            page.getPageTitle().setText("Experience "+ (experiencePages.indexOf(page)+1));
+            page.getPageTitle().setText("Experience " + (experiencePages.indexOf(page) + 1));
             wrapper.getChildren().add(page.getCenterBox());
             wrapper.getChildren().remove(buttonWrapper[0]);
             wrapper.getChildren().add(buttonWrapper[0]);
@@ -174,7 +189,7 @@ public class ExperienceController implements HasToggleableSaveButtons, HasAddabl
                 textFields.removeAll(findAllTextFields(page.getCenterBox()));
                 textFields.removeAll(findAllTextFields(page.getKeySkillsGridPane()));
                 wrapper.getChildren().remove(parent);
-                ExperiencePage lastPage = (experiencePages.indexOf(page)==0) ? experiencePages.get(experiencePages.indexOf(page)+1) : experiencePages.get(experiencePages.indexOf(page)-1);
+                ExperiencePage lastPage = (experiencePages.indexOf(page) == 0) ? experiencePages.get(experiencePages.indexOf(page) + 1) : experiencePages.get(experiencePages.indexOf(page) - 1);
                 experiencePages.remove(page);
                 lastPage.getOngoing().setSelected(!lastPage.getOngoing().isSelected());
                 lastPage.getOngoing().setSelected(!lastPage.getOngoing().isSelected());
@@ -189,7 +204,7 @@ public class ExperienceController implements HasToggleableSaveButtons, HasAddabl
         });
     }
 
-    private void assignExperienceInput(List<ExperiencePage> experiencePages) {
+    private void assignExperienceInput(List<ExperiencePage> experiencePages, Menu recent, MainController mainController) {
         if (experiences == null) experiences = new ArrayList<>();
         List<Experience> experienceList = new ArrayList<>();
         for (ExperiencePage page : experiencePages) {
@@ -197,14 +212,19 @@ public class ExperienceController implements HasToggleableSaveButtons, HasAddabl
             for (TextInputControl keySkill : page.getKeySkills()) {
                 keySkills.add(keySkill.getText());
             }
-            experienceList.add(new Experience(page.getJobTitle().getText(), page.getStartDate().getValue().toString(),
-                    (page.getEndDate().getValue() != null) ?
+            experienceList.add(new Experience(page.getJobTitle().getText(), (page.getStartDate().getValue() != null) ? page.getStartDate().getValue().toString() : "",
+                    ((page.getEndDate().getValue() != null && (page.getStartDate().getValue() != null) && page.getEndDate().getValue().isAfter(page.getStartDate().getValue()))) ?
                             page.getEndDate().getValue().toString() :
                             LocalDate.now().plusMonths(1).toString(),
                     keySkills, page.getCompanyName().getText(),
                     page.getCompanyPlace().getText(), page.getDescription().getText()));
         }
         cvTemplate.setExperiences(experienceList);
-        saveObjectAsJson(cvTemplate);
+        saveObjectAsJson(cvTemplate, recent,cvTemplate);
+        try {
+            mainController.loadRecentCV(stage);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

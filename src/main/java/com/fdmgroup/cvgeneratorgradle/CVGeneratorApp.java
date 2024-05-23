@@ -1,5 +1,6 @@
 package com.fdmgroup.cvgeneratorgradle;
 
+import com.fdmgroup.cvgeneratorgradle.controller.MainController;
 import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import javafx.application.Application;
 import javafx.fxml.FXML;
@@ -14,11 +15,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import java.io.FileNotFoundException;
 import java.util.Objects;
+
+import static com.fdmgroup.cvgeneratorgradle.utils.GeneratorConfig.*;
+import static com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson.recentFileNames;
+import static com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson.recentFiles;
 
 @RequiredArgsConstructor
 public class CVGeneratorApp extends Application {
-    private CVTemplate cvTemplate;
+    //private CVTemplate cvTemplate;
     static int counter1=0;
     static int experienceSkillCounter=0;
 
@@ -34,13 +40,13 @@ public class CVGeneratorApp extends Application {
         scene.getStylesheets().add("https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap");
 
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("css/welcomePage.css")).toExternalForm());
+
         stage.show();
 
         stage.setOnCloseRequest(windowEvent -> {
             windowEvent.consume();
             closeApp(stage);
         });
-
     }
 
     public void closeApp(Stage stage) {
@@ -50,6 +56,7 @@ public class CVGeneratorApp extends Application {
         alert.setContentText("Do you really want to exit");
 
         if(alert.showAndWait().get()== ButtonType.OK) {
+            saveRecent(recentFiles, recentFileNames);
             stage.close();
         }
 

@@ -12,7 +12,7 @@ import java.util.List;
 
 import com.fdmgroup.cvgeneratorgradle.models.*;
 import com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToDocument;
-
+import javafx.scene.control.Menu;
 
 
 //this is for debugging/testing only
@@ -43,12 +43,12 @@ public class CVTemplateExampleValues {
 
         SaveObjectToJson.saveObjectAsJson(cVExampleTemplate, outpathjson);
         try {
-            SaveObjectToDocument.createDocument(cVExampleTemplate, "Word", outpathWord);
+            SaveObjectToDocument.createDocument(cVExampleTemplate, "Word", outpathWord, new Menu());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         try {
-            SaveObjectToDocument.createDocument(cVExampleTemplate, "pdf", outpathPDF);
+            SaveObjectToDocument.createDocument(cVExampleTemplate, "pdf", outpathPDF, new Menu());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

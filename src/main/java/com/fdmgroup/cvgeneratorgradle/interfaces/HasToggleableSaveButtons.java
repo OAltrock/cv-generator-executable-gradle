@@ -94,7 +94,8 @@ public interface HasToggleableSaveButtons {
                                                 public void changed(ObservableValue<? extends LocalDate> observableValue, LocalDate localDate, LocalDate t1) {
                                                     BooleanBinding allVboxFieldsValidated = list.stream()
                                                             .map(TextInputControl::textProperty)
-                                                            .map(stringProperty -> Bindings.createBooleanBinding(() -> checkText.test(stringProperty.get()), stringProperty))
+                                                            .map(stringProperty -> Bindings.createBooleanBinding(
+                                                                    () -> checkText.test(stringProperty.get()), stringProperty))
                                                             .reduce(Bindings::or)
                                                             .get();
                                                     BooleanBinding datesCorrect = Bindings.createBooleanBinding(() -> checkDate.test(start.getValue(), end.getValue()), end.valueProperty()).not();

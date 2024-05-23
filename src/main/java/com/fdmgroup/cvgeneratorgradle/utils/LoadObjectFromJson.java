@@ -1,5 +1,7 @@
 package com.fdmgroup.cvgeneratorgradle.utils;
 
+import com.fdmgroup.cvgeneratorgradle.CVGeneratorApp;
+import com.fdmgroup.cvgeneratorgradle.controller.MainController;
 import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.google.gson.Gson;
 
@@ -16,6 +18,6 @@ public class LoadObjectFromJson {
      */
     public static CVTemplate loadObjectFromJson (String filePath) throws FileNotFoundException {
         Gson gson = new Gson();
-        return gson.fromJson(new FileReader(filePath), CVTemplate.class);
+       return gson.fromJson(new FileReader(filePath), CVTemplate.class);
     }
 }

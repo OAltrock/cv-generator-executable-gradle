@@ -1,0 +1,14 @@
+bugs
+=============================
+- 0 to ... addable fields: last can be removed                                X
+- index out of bounds remove addable (experience&education pages)             X
+- if invalid end date and "ongoing" is selected, "ongoing" isn't saved        X
+- removing the middle addable doesn't remove the remove button                X
+- next can't have same validation logic in skills page (with languages)       O
+- count of experiences isn't correct when deleting not the last one           O
+  (getChildren().size() won't work - maybe static counter somewhere?!)
+
+functionalities
+=============================
+- add buttons should be disabled if nothing can be added                      X
+
