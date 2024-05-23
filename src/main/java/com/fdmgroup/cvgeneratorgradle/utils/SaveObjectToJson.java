@@ -35,6 +35,17 @@ public class SaveObjectToJson {
             }
         } else {
             directory = "./saves/auto saves/";
+        }
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String json = gson.toJson(object);
+        /*System.out.println("without dir: "+ fileNameWODir);
+        System.out.println("dir name: "+ directory);*/
+        File newFile = new File(directory);
+        if (!newFile.exists()) {
+            newFile.mkdirs();
+        }
+        if (isAutoSave) {
             FolderStructurePrinter folderStructurePrinter = new FolderStructurePrinter();
             TreeMap<String, String> autosaves = null;
             try {
@@ -48,17 +59,8 @@ public class SaveObjectToJson {
                 fileNameWODir = autosaves.lastEntry().getValue();
             }
             System.out.println(fileNameWODir);
-            //fileNameWODir = "autosave_part.json";
         }
-
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String json = gson.toJson(object);
-        /*System.out.println("without dir: "+ fileNameWODir);
-        System.out.println("dir name: "+ directory);*/
-        File newFile = new File(directory);
-        if (!newFile.exists()) {
-            newFile.mkdirs();
-        }
+        //fileNameWODir = "autosave_part.json";
         File newFileWithDir = new File(directory + fileNameWODir);
         try (FileWriter fw = new FileWriter(newFileWithDir);) {
             fw.write(json);
@@ -75,7 +77,6 @@ public class SaveObjectToJson {
                 recentFiles.forEach((key, value) -> {
                     if (value.equals(newFileWithDir.getAbsolutePath())) {
                          toRemove.set(key);
-
                     }
                 });
 
