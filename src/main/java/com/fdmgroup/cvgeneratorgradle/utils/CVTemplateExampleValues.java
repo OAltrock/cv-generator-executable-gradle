@@ -36,10 +36,12 @@ public class CVTemplateExampleValues {
 
         String outpathWord = documentsPath.resolve("CvAutoSave.docx").toString();
         String outpathPDF = documentsPath.resolve("CvAutoSave.PDF").toString();
+        String outpathjson = documentsPath.resolve("CvAutoSave.json").toString();
 
         System.out.println("Word file path: " + outpathWord);
         System.out.println("PDF file path: " + outpathPDF);
 
+        SaveObjectToJson.saveObjectAsJson(cVExampleTemplate, outpathjson);
         try {
             SaveObjectToDocument.createDocument(cVExampleTemplate, "Word", outpathWord);
         } catch (IOException e) {
@@ -77,6 +79,7 @@ public class CVTemplateExampleValues {
         experience.setJobTitle("Software Developer");
         experience.setStartDate("2018-01-01");
         experience.setEndDate("2022-12-31");
+        experience.setCompanyName("google");
         List<String> positionFeatures = new ArrayList<>();
         positionFeatures.add("Team Leader");
         positionFeatures.add("React Developer");
