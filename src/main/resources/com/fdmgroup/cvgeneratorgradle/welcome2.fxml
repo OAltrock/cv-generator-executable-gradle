@@ -16,7 +16,7 @@
                   <MenuItem mnemonicParsing="false" onAction="#createNewCV" text="New CV" />
                   <Menu fx:id="recent" mnemonicParsing="false" text="Recent" />
                   <MenuItem mnemonicParsing="false" onAction="#loadCV" text="Load CV" />
-                  <MenuItem mnemonicParsing="false" text="Save Cv" />
+                  <MenuItem mnemonicParsing="false" text="Save Cv" onAction="#saveCV"/>
               <MenuItem mnemonicParsing="false" onAction="#closeApp" text="Exit" />
             </items>
           </Menu>

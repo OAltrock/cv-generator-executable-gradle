@@ -54,6 +54,11 @@ public class SaveObjectToDocument {
         }
     }
 
+    // use without menu:
+    public static void createDocument(CVTemplate cvTemplate, String format, String outputPath) throws IOException {
+        createDocument(cvTemplate, format, outputPath, new Menu());
+    }
+
 //save word to auto chosen file in home directory:
     public static void saveObjectAsWord(CVTemplate cvTemplate) throws IOException {
         String documentsFolderPath = System.getProperty("user.home") + File.separator + "Documents"+ File.separator + "CVgenerator";
