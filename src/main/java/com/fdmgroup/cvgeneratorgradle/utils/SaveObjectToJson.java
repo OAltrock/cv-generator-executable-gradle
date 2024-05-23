@@ -1,22 +1,32 @@
 package com.fdmgroup.cvgeneratorgradle.utils;
 
+import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import java.io.*;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.*;
+
+import static com.fdmgroup.cvgeneratorgradle.utils.LoadObjectFromJson.loadObjectFromJson;
 
 public class SaveObjectToJson {
     //static final String AUTO_SAVE_PATH = "./saves/autosave_part.json";
+    public static TreeMap<String, String> recentFiles = new TreeMap<>();
+    public static Set<String> recentFileNames = new HashSet<>();
 
-    public static void saveObjectAsJson(Object object) {
-        doSave(object, "",true);
+    public static void saveObjectAsJson(Object object, Menu recent, CVTemplate cvTemplate) {
+        doSave(object, "", true, recent, cvTemplate);
     }
 
-    private static void doSave(Object object, String fileName, boolean isAutoSave) {
+    private static void doSave(Object object, String fileName, boolean isAutoSave, Menu recent, CVTemplate cvTemplate) {
         String fileNameWODir = fileName;
         String directory = "";
         if (!isAutoSave) {
@@ -27,10 +37,22 @@ public class SaveObjectToJson {
                     break;
                 }
             }
-        }
-        else {
+        } else {
             directory = "./saves/auto saves/";
-            fileNameWODir = "autosave_part.json";
+            FolderStructurePrinter folderStructurePrinter = new FolderStructurePrinter();
+            TreeMap<String, String> autosaves = null;
+            try {
+                autosaves = (TreeMap<String, String>) folderStructurePrinter.listFilesUsingFileWalkAndVisitor(directory);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            if (autosaves.size() < 5) {
+                fileNameWODir = "autosave" + (autosaves.size() + 1) + "_part.json";
+            } else {
+                fileNameWODir = autosaves.lastEntry().getValue();
+            }
+            System.out.println(fileNameWODir);
+            //fileNameWODir = "autosave_part.json";
         }
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -44,16 +66,25 @@ public class SaveObjectToJson {
         File newFileWithDir = new File(directory + fileNameWODir);
         try (FileWriter fw = new FileWriter(newFileWithDir);) {
             fw.write(json);
+            if (recentFileNames.add(newFileWithDir.getAbsolutePath())) {
+                if (recentFiles.size() < 10) {
+                    recentFiles.putIfAbsent(String.valueOf(Files.getLastModifiedTime(Path.of(newFileWithDir.getAbsolutePath()))), newFileWithDir.getAbsolutePath());
+                } else {
+                    recentFiles.remove(recentFiles.lastEntry());
+                    recentFiles.putIfAbsent(String.valueOf(Files.getLastModifiedTime(Path.of(newFileWithDir.getAbsolutePath()))), newFileWithDir.getAbsolutePath());
+                }
+            }
+            //recentFiles.forEach((k,v)-> System.out.println(v));
+
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
         }
         System.out.println(object.getClass().getSimpleName() + " saved as JSON");
     }
 
-    public static void saveObjectAsJson(Object object, String fileName) {
-        doSave(object,fileName,false);
+    public static void saveObjectAsJson(Object object, String fileName, Menu recent, CVTemplate cvTemplate) {
+        doSave(object, fileName, false, recent, cvTemplate);
         //create directory if it doesn't exist
-
 
 
         // create file path with user and his local documents folder e.g. C:\Users\Username\Documents
@@ -65,8 +96,14 @@ public class SaveObjectToJson {
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
         }*/
+    }
 
-
+    public static File selectFileFromFileChooser(String fileChooserTitle, String outputDescription, String fileExtension, Stage stage) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(fileChooserTitle);
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(outputDescription, fileExtension));
+        return fileChooser.showSaveDialog(stage);
     }
 
 }

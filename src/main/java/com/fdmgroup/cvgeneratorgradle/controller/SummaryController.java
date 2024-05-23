@@ -15,9 +15,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import static com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson.saveObjectAsJson;
+import static com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson.selectFileFromFileChooser;
 
 public class SummaryController {
     CVTemplate cvTemplate;
@@ -30,7 +32,7 @@ public class SummaryController {
         this.stage = stage;
     }
 
-    public void initialize(BorderPane main) {
+    public void initialize(BorderPane main, Menu recent, MainController mainController) {
         SummaryPage page = new SummaryPage(cvTemplate, stage);
         main.setCenter(page.createCenterPage(page.getCenterBox()));
         if (cvTemplate.getUser()==null) cvTemplate.setUser(new User("","",""));
@@ -45,16 +47,23 @@ public class SummaryController {
                     //fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
                     //fileChooser.getExtensionFilters().addAll(
                     //        new FileChooser.ExtensionFilter("JSON File","*.json"));
-                    File selectedFile = selectFileFromFileChooser(cvTemplate, "Save", "JSON File", "*.json");
+                    File selectedFile = selectFileFromFileChooser("Save", "JSON File", "*.json", stage);
                     //File selectedFile = fileChooser.showSaveDialog(stage);
-                    if (selectedFile != null) saveObjectAsJson(cvTemplate, selectedFile.getPath());
+                    if (selectedFile != null) {
+                        saveObjectAsJson(cvTemplate, selectedFile.getPath(), recent, cvTemplate);
+                        try {
+                            mainController.loadRecentCV(stage);
+                        } catch (FileNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
         });
 
         page.getGeneratePDFDocument().setOnAction(action -> {
-            File selectedFilePDF = selectFileFromFileChooser(cvTemplate, "Save", "PDF File", "*.pdf");
+            File selectedFilePDF = selectFileFromFileChooser("Save", "PDF File", "*.pdf", stage);
             if (selectedFilePDF!=null) {
                 try {
-                    SaveObjectToDocument.createDocument(cvTemplate, "PDF", selectedFilePDF.getPath());
+                    SaveObjectToDocument.createDocument(cvTemplate, "PDF", selectedFilePDF.getPath(), recent);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -62,10 +71,10 @@ public class SummaryController {
         });
 
         page.getGenerateWordDocument().setOnAction(action -> {
-            File selectedFileWord = selectFileFromFileChooser(cvTemplate, "Save", "Word File", "*.docx");
+            File selectedFileWord = selectFileFromFileChooser( "Save", "Word File", "*.docx", stage);
             if (selectedFileWord != null) {
                 try {
-                    SaveObjectToDocument.createDocument(cvTemplate, "docx", selectedFileWord.getPath());
+                    SaveObjectToDocument.createDocument(cvTemplate, "docx", selectedFileWord.getPath(), recent);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -74,11 +83,5 @@ public class SummaryController {
 
     }
 
-    private File selectFileFromFileChooser(CVTemplate cvTemplate, String fileChooserTitle, String outputDescription, String fileExtension) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(fileChooserTitle);
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(outputDescription, fileExtension));
-        return fileChooser.showSaveDialog(stage);
-    }
+
 }

@@ -21,6 +21,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +49,7 @@ public class ExperienceController implements HasToggleableSaveButtons, HasAddabl
         experiencePages = FXCollections.observableArrayList();
     }
 
-    public void initialize(BorderPane main) {
+    public void initialize(BorderPane main, Menu recent, MainController mainController) {
 
         textFields = FXCollections.observableArrayList();
         FDMCenterVBoxWrapper wrapper = new FDMCenterVBoxWrapper();
@@ -90,7 +91,7 @@ public class ExperienceController implements HasToggleableSaveButtons, HasAddabl
                 @Override
                 public void invalidated(Observable observable) {
                     textFields.forEach(textInputControl -> textInputControl.setOnMouseClicked(actionEvent ->
-                            assignExperienceInput(experiencePages)));
+                            assignExperienceInput(experiencePages, recent, mainController)));
                 }
             });
             wrapper.getChildren().add(experiencePage1.getCenterBox());
@@ -142,15 +143,15 @@ public class ExperienceController implements HasToggleableSaveButtons, HasAddabl
         main.setCenter(experiencePages.getLast().createCenterPage(wrapper));
 
         buttons[0].setOnAction(actionEvent -> {
-            assignExperienceInput(experiencePages);
+            assignExperienceInput(experiencePages, recent, mainController);
             treeView.getSelectionModel().select(4);
-            new EducationController(cvTemplate, treeView, stage).initialize(main);
+            new EducationController(cvTemplate, treeView, stage).initialize(main, recent, mainController);
         });
 
         prevBtn.setOnAction(actionEvent -> {
-            assignExperienceInput(experiencePages);
+            assignExperienceInput(experiencePages, recent, mainController);
             treeView.getSelectionModel().select(2);
-            new PersonalInformationController(cvTemplate, treeView, stage).initialize(main);
+            new PersonalInformationController(cvTemplate, treeView, stage).initialize(main, recent, mainController);
         });
 
         addExpBtn.setOnAction(actionEvent -> {
@@ -203,7 +204,7 @@ public class ExperienceController implements HasToggleableSaveButtons, HasAddabl
         });
     }
 
-    private void assignExperienceInput(List<ExperiencePage> experiencePages) {
+    private void assignExperienceInput(List<ExperiencePage> experiencePages, Menu recent, MainController mainController) {
         if (experiences == null) experiences = new ArrayList<>();
         List<Experience> experienceList = new ArrayList<>();
         for (ExperiencePage page : experiencePages) {
@@ -219,6 +220,11 @@ public class ExperienceController implements HasToggleableSaveButtons, HasAddabl
                     page.getCompanyPlace().getText(), page.getDescription().getText()));
         }
         cvTemplate.setExperiences(experienceList);
-        saveObjectAsJson(cvTemplate);
+        saveObjectAsJson(cvTemplate, recent,cvTemplate);
+        try {
+            mainController.loadRecentCV(stage);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

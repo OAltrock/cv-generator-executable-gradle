@@ -1,5 +1,6 @@
 package com.fdmgroup.cvgeneratorgradle.controller;
 
+import com.fdmgroup.cvgeneratorgradle.Main;
 import com.fdmgroup.cvgeneratorgradle.interfaces.HasAddableTextFields;
 import com.fdmgroup.cvgeneratorgradle.interfaces.HasToggleableSaveButtons;
 
@@ -12,13 +13,11 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.TextInputControl;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
 import java.util.HashSet;
 import java.util.List;
 
@@ -42,21 +41,19 @@ public class SkillsController extends FDMController implements HasToggleableSave
         this.stage = stage;
     }
 
-    public void initialize(BorderPane main) {
+    public void initialize(BorderPane main, Menu recent, MainController mainController) {
         ObservableList<TextInputControl> textFields = FXCollections.observableArrayList();
         page = new SkillsPage(cvTemplate, textFields);
         Button[] buttons = new Button[]{page.getNextBtn()};
 
         main.setCenter(page.createCenterPage(page.getCenterBox()));
         //ToDo: validation for at least one language (this is analogue for all not-addable-fields once the addable fields have been changed to not-addable)
-        //ToDo: if there is input for a language there must be a language level
-        //ToDo: as of now, there is an exception if there is language input but no language level
         addValidationToSaveButtons(textFields, predicate.negate(), buttons);
         textFields.addListener(new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
                 textFields.forEach(textInputControl -> textInputControl.setOnMouseClicked(actionEvent ->
-                        assignInput()));
+                        assignInput(recent, mainController)));
             }
         });
         textFields.addAll(findAllTextFields(page.getCompetenceGridPane()));
@@ -73,27 +70,27 @@ public class SkillsController extends FDMController implements HasToggleableSave
 
         //ToDo: validation not completely responsive yet
         Button[] buttonsForLanguageValidation = new Button[]{page.getPrevBtn(), page.getNextBtn()};
-        validatePreviousBtn(page.getLanguageLevelButtons(), languageInput, page.getLanguageGridPane(), buttonsForLanguageValidation);
+        //validatePreviousBtn(page.getLanguageLevelButtons(), languageInput, page.getLanguageGridPane(), buttonsForLanguageValidation);
         languageInput.addAll(findAllTextFields(page.getLanguageGridPane()));
         createValidationForTextFields(string -> !string.matches("^.*[a-zA-Z]+.*$"), textFields, "Must contain at least one letter");
 
         page.getPrevBtn().setOnAction(actionEvent -> {
-            assignInput();
+            assignInput(recent, mainController);
             treeView.getSelectionModel().select(4);
-            new EducationController(cvTemplate, treeView, stage).initialize(main);
+            new EducationController(cvTemplate, treeView, stage).initialize(main, recent, mainController);
         });
         buttons[0].setOnAction(actionEvent -> {
-            assignInput();
+            assignInput(recent, mainController);
             treeView.getSelectionModel().select(6);
-            new SummaryController(cvTemplate, treeView, stage).initialize(main);
+            new SummaryController(cvTemplate, treeView, stage).initialize(main, recent, mainController);
         });
 
         languageInput.forEach(textInputControl ->
                 textInputControl.setOnMouseClicked(actionEvent ->
-                        assignInput()));
+                        assignInput(recent, mainController)));
     }
 
-    private void assignInput() {
+    private void assignInput(Menu recent, MainController mainController) {
         List<TextInputControl> competencesInput = findAllTextFields(page.getCompetenceGridPane());
         HashSet<String> competencesToAdd = new HashSet<>();
         competencesInput.forEach(competence -> {
@@ -125,6 +122,11 @@ public class SkillsController extends FDMController implements HasToggleableSave
         });
         cvTemplate.setInterests(interestsToAdd);
 
-        saveObjectAsJson(cvTemplate);
+        saveObjectAsJson(cvTemplate, recent,cvTemplate);
+        try {
+            mainController.loadRecentCV(stage);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -5,6 +5,8 @@ import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableBooleanValue;
 import javafx.beans.value.ObservableValue;
@@ -22,7 +24,7 @@ public abstract class FDMController {
     void validateMaybeEmptyTextFields(List<MenuButton> languageLevelBtns, GridPane parent) {
         //String message = "Please choose a language level";
         languageLevelBtns.forEach(btn -> {
-            TextInputControl correspondingLanguage = (TextInputControl) parent.getChildren().get(parent.getChildren().indexOf(btn)-1);
+            TextInputControl correspondingLanguage = (TextInputControl) parent.getChildren().get(parent.getChildren().indexOf(btn) - 1);
             //System.out.println(btn.textProperty());
 
             correspondingLanguage.textProperty().addListener(new ChangeListener<String>() {
@@ -65,28 +67,54 @@ public abstract class FDMController {
 
     void validatePreviousBtn(List<MenuButton> languageLevelBtns, List<TextInputControl> languageInput, GridPane parent, Button... prevBtn) {
         languageLevelBtns.forEach(btn -> {
-            TextInputControl correspondingLanguage = (TextInputControl) parent.getChildren().get(parent.getChildren().indexOf(btn)-1);
+            TextInputControl correspondingLanguage = (TextInputControl) parent.getChildren().get(parent.getChildren().indexOf(btn) - 1);
 
             correspondingLanguage.textProperty().addListener(new ChangeListener<String>() {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                     BooleanBinding allLevelsSelected = languageInput.stream()
                             .map(TextInputControl::textProperty)
-                            .map(stringProperty -> Bindings.createBooleanBinding(()-> ((stringProperty.get()!=null && !stringProperty.get().isEmpty()) && btn.getText().contains("Choose")),stringProperty, btn.textProperty()))
-                            .reduce(Bindings::or)
+                            .map(stringProperty -> Bindings.createBooleanBinding(() -> ((stringProperty.get() != null &&
+                                    !stringProperty.get().isEmpty()) && btn.getText().contains("Choose")),
+                                    stringProperty, btn.textProperty()))
+                            .reduce(Bindings::and)
+                            .get();
+                    BooleanBinding allLanguageLevelBtnsSelected = languageLevelBtns.stream()
+                            .map(MenuButton::textProperty)
+                            .map(stringProperty -> Bindings.createBooleanBinding(() -> (stringProperty.getValue().contains("Choose") &&
+                                    (correspondingLanguage.getText() != null && !correspondingLanguage.getText().isEmpty())),
+                                    stringProperty, correspondingLanguage.textProperty()))
+                            .reduce(Bindings::and)
                             .get();
                     //ObservableBooleanValue languageLevelBinding = getObservableLanguageAndLanguageLvl(correspondingLanguage,btn).not();
-                    Arrays.stream(prevBtn).forEach(btn -> btn.disableProperty().bind(allLevelsSelected));
+                    Arrays.stream(prevBtn).forEach(btn -> btn.disableProperty()
+                            .bind(allLevelsSelected.or(allLanguageLevelBtnsSelected)));
                 }
             });
+            /*if (correspondingLanguage.getText()!=null && !correspondingLanguage.getText().isEmpty()) {*/
 
-            btn.textProperty().addListener(new ChangeListener<String>() {
-                @Override
-                public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                    BooleanBinding allLevelsSelected = getBooleanBinding(languageInput, btn);
-                    Arrays.stream(prevBtn).forEach(btn -> btn.disableProperty().bind(allLevelsSelected));
-                }
-            });
+                btn.textProperty().addListener(new ChangeListener<String>() {
+                    @Override
+                    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                        BooleanBinding allLevelsSelected = languageLevelBtns.stream()
+                                .map(MenuButton::textProperty)
+                                .map(stringProperty -> Bindings.createBooleanBinding(() -> (stringProperty.getValue().contains("Choose") &&
+                                                (correspondingLanguage.getText() != null && !correspondingLanguage.getText().isEmpty())),
+                                        stringProperty, correspondingLanguage.textProperty()))
+                                .reduce(Bindings::and)
+                                .get();
+                        BooleanBinding allLanguageLevelBtnsSelected = languageLevelBtns.stream()
+                                .map(MenuButton::textProperty)
+                                .map(stringProperty -> Bindings.createBooleanBinding(() -> (stringProperty.getValue().contains("Choose") &&
+                                        (correspondingLanguage.getText() != null && !correspondingLanguage.getText().isEmpty())),
+                                        stringProperty, correspondingLanguage.textProperty()))
+                                .reduce(Bindings::and)
+                                .get();
+                        Arrays.stream(prevBtn).forEach(btn -> btn.disableProperty()
+                                .bind(allLevelsSelected.or(allLanguageLevelBtnsSelected)));
+                    }
+                });
+            /*}*/
         });
 
         /*languageInput.forEach(languageInputField -> {
@@ -116,9 +144,9 @@ public abstract class FDMController {
         return languageInput.stream()
                 .map(TextInputControl::textProperty)
                 .map(stringProperty ->
-                        Bindings.createBooleanBinding(()->
-                                ((stringProperty.get()!=null && !stringProperty.get().isEmpty())
-                                        && btn.getText().contains("Choose")),stringProperty, btn.textProperty()))
+                        Bindings.createBooleanBinding(() ->
+                                ((stringProperty.get() != null && !stringProperty.get().isEmpty())
+                                        && btn.getText().contains("Choose")), stringProperty, btn.textProperty()))
                 .reduce(Bindings::or)
                 .get();
     }

@@ -14,11 +14,13 @@ import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -48,7 +50,7 @@ public class PersonalInformationController implements HasToggleableSaveButtons, 
         this.stage = stage;
     }
 
-    public void initialize(BorderPane main) {
+    public void initialize(BorderPane main, Menu recent, MainController mainController) {
         ObservableList<TextInputControl> textFields = FXCollections.observableArrayList();
         if (user == null) user = new User("", "", "", "");
         if (stream == null) stream = new Stream("", new ArrayList<>(), new HashSet<>());
@@ -60,7 +62,7 @@ public class PersonalInformationController implements HasToggleableSaveButtons, 
             @Override
             public void invalidated(Observable observable) {
                 textFields.forEach(textInputControl -> textInputControl.setOnMouseClicked(actionEvent ->
-                        assignInfoInput()));
+                        assignInfoInput(recent, mainController)));
             }
         });
 
@@ -101,21 +103,21 @@ public class PersonalInformationController implements HasToggleableSaveButtons, 
         });
 
         buttons[0].setOnAction(actionEvent -> {
-            assignInfoInput();
+            assignInfoInput(recent, mainController);
             treeView.getSelectionModel().select(3);
-            new ExperienceController(cvTemplate, treeView, stage).initialize(main);
+            new ExperienceController(cvTemplate, treeView, stage).initialize(main, recent, mainController);
         });
 
         page.getPrevBtn().setOnAction(actionEvent -> {
-            assignInfoInput();
+            assignInfoInput(recent, mainController);
             treeView.getSelectionModel().select(1);
-            new ProfileController(cvTemplate, treeView, stage).initialize(main);
+            new ProfileController(cvTemplate, treeView, stage).initialize(main, recent, mainController);
         });
 
 
     }
 
-    private void assignInfoInput() {
+    private void assignInfoInput(Menu recent, MainController mainController) {
 
         user.setFirstName(page.getFirstName().getText());
         user.setLastName(page.getLastName().getText());
@@ -129,6 +131,11 @@ public class PersonalInformationController implements HasToggleableSaveButtons, 
         //ToDo: add addable competences
         cvTemplate.setCompetences(temp);
         cvTemplate.setLocation(location);
-        saveObjectAsJson(cvTemplate);
+        saveObjectAsJson(cvTemplate, recent,cvTemplate);
+        try {
+            mainController.loadRecentCV(stage);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

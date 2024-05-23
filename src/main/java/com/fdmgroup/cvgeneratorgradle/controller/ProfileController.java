@@ -14,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
 import java.util.function.Predicate;
 
 import static com.fdmgroup.cvgeneratorgradle.controller.AppUtils.findAllTextFields;
@@ -33,7 +34,7 @@ public class ProfileController implements HasToggleableSaveButtons, HasAddableTe
         this.treeView = treeView;
     }
 
-    public void initialize(BorderPane main) {
+    public void initialize(BorderPane main, Menu recent, MainController mainController) {
         ObservableList<TextInputControl> textAreas = FXCollections.observableArrayList();
         ProfilePage page = new ProfilePage(profile, textAreas);
 
@@ -49,7 +50,12 @@ public class ProfileController implements HasToggleableSaveButtons, HasAddableTe
             public void invalidated(Observable observable) {
                 textAreas.forEach(textInputControl -> textInputControl.setOnMouseClicked(actionEvent -> {
                             cvTemplate.setProfile(page.getProfile().getText());
-                            saveObjectAsJson(cvTemplate);
+                            saveObjectAsJson(cvTemplate, recent,cvTemplate);
+                            try {
+                                mainController.loadRecentCV(stage);
+                            } catch (FileNotFoundException e) {
+                                throw new RuntimeException(e);
+                            }
                         }
                 ));
             }
@@ -60,11 +66,16 @@ public class ProfileController implements HasToggleableSaveButtons, HasAddableTe
 
         createValidationForTextFields(atLeast50Chars.negate(), textAreas, "Write at least 50 letters.");
 
-        saveBtn.setOnAction(actionEvent -> {
-            cvTemplate.setProfile(page.getProfile().getText());
-            saveObjectAsJson(cvTemplate);
+        saveBtn.setOnAction(actionEvent -> {            cvTemplate.setProfile(page.getProfile().getText());
+            saveObjectAsJson(cvTemplate, recent,cvTemplate);
+
             treeView.getSelectionModel().select(2);
-            new PersonalInformationController(cvTemplate, treeView, stage).initialize(main);
+            try {
+                mainController.loadRecentCV(stage);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            new PersonalInformationController(cvTemplate, treeView, stage).initialize(main, recent, mainController);
         });
 
         page.getPrev().setVisible(false);

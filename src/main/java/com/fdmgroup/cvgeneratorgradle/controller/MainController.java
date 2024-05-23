@@ -2,6 +2,7 @@ package com.fdmgroup.cvgeneratorgradle.controller;
 
 import com.fdmgroup.cvgeneratorgradle.CVGeneratorApp;
 import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,18 +13,25 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import lombok.Setter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
+import static com.fdmgroup.cvgeneratorgradle.utils.GeneratorConfig.*;
 import static com.fdmgroup.cvgeneratorgradle.utils.LoadObjectFromJson.loadObjectFromJson;
+import static com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson.*;
 
 public class MainController implements Initializable {
 
+    @Setter
     CVTemplate cvTemplate;
 
     TreeView<String> treeView;
@@ -31,14 +39,32 @@ public class MainController implements Initializable {
     @FXML
     private BorderPane mainWindow;
 
+    @FXML
+    private MenuBar menuBar;
+
+    @FXML
+    private Menu recent;
+
+    /*public MainController(CVTemplate cvTemplate) {
+        System.out.println(cvTemplate);
+        this.cvTemplate = cvTemplate;
+    }
+
+    public MainController() {
+    }*/
+
     public void closeApp(ActionEvent e) {
+
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Exit");
         alert.setHeaderText("Exiting");
         alert.setContentText("Do you really want to exit");
 
+
         if (alert.showAndWait().isPresent() && alert.showAndWait().get() == ButtonType.OK) {
             Stage stage = (Stage) mainWindow.getScene().getWindow();
+            System.out.println("got here");
+            saveRecent(recentFiles, recentFileNames);
             stage.close();
         }
 
@@ -78,22 +104,28 @@ public class MainController implements Initializable {
 
             switch (newV.getValue()) {
                 case "Personal Information" -> {
-                    new PersonalInformationController(cvTemplate, treeView, (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow);
+                    new PersonalInformationController(cvTemplate, treeView,
+                            (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow, recent, this);
                 }
                 case "Experience" -> {
-                    new ExperienceController(cvTemplate,treeView, (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow);
+                    new ExperienceController(cvTemplate,treeView,
+                            (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow, recent, this);
                 }
                 case "Summary" -> {
-                    new SummaryController(cvTemplate,treeView, (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow);
+                    new SummaryController(cvTemplate,treeView,
+                            (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow, recent, this);
                 }
                 case "Education" -> {
-                    new EducationController(cvTemplate,treeView, (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow);
+                    new EducationController(cvTemplate,treeView,
+                            (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow, recent, this);
                 }
                 case "Skills" -> {
-                    new SkillsController(cvTemplate, treeView, (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow);
+                    new SkillsController(cvTemplate, treeView,
+                            (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow, recent, this);
                 }
                 case "Profile" -> {
-                    new ProfileController(cvTemplate,treeView, (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow);
+                    new ProfileController(cvTemplate,treeView,
+                            (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow, recent, this);
                 }
 
 
@@ -114,8 +146,26 @@ public class MainController implements Initializable {
         if (selectedFile!=null) {
             cvTemplate = loadObjectFromJson(selectedFile.getPath());
             showLeftBorder(event);
-            new SummaryController(cvTemplate,treeView, (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow);
+            new SummaryController(cvTemplate,treeView, (Stage) mainWindow.getScene().getWindow()).initialize(mainWindow, recent, this);
         }
+    }
+
+    public void loadRecentCV(Stage stage) throws FileNotFoundException {
+        List<MenuItem> newRecent = new ArrayList<>(recentFiles.values().stream().map(k->{
+            MenuItem recentFile = new MenuItem(k);
+            recentFile.setOnAction(actionEvent -> {
+                try {
+                    cvTemplate = loadObjectFromJson(recentFile.getText());
+                    showLeftBorder(new ActionEvent());
+                    new SummaryController(cvTemplate, treeView, stage).initialize(mainWindow,recent, this);
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            recentFile.setStyle("-fx-color: white");
+            return recentFile;
+        }).toList());
+        recent.getItems().setAll(newRecent.reversed());
     }
 
     /**
@@ -139,6 +189,7 @@ public class MainController implements Initializable {
     private void setCenter() {
         FXMLLoader loader = new FXMLLoader(CVGeneratorApp.class.getResource("centerDefault.fxml"));
         try {
+            //loadRecentCV((Stage) mainWindow.getScene().getWindow());
             mainWindow.setCenter(loader.load());
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -161,12 +212,42 @@ public class MainController implements Initializable {
     }
 
     public void showInfo(ActionEvent actionEvent) {
-        setLabel("This is the alpha version of the FDM CV Generator.\nIt is partially based on an previous full stack project.");
+        setLabel("This is the alpha version of the FDM CV Generator.\nIt is partially based on a previous full stack project.");
     }
 
-    //Option to initialize a cvtemplate object without any bound actions (ie: load last edited cv automatically)
+    //Option to initialize a cvTemplate object without any bound actions (ie: load last edited cv automatically)
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        this.cvTemplate = new CVTemplate();
+        recent.setStyle("-fx-color: white");
+        recent.getItems().addAll(recentFiles.entrySet().stream().map(k-> {
+            MenuItem recentFile = new MenuItem(k.getValue());
+            recentFile.setStyle("-fx-color: white");
+            return recentFile;
+        }).toList());
+        recentFileNames = loadRecentFileNames();
+        recentFiles = loadRecentFiles();
+        menuBar.setOnMouseEntered(event -> {
+            loadRecent();
+        });
+    }
+
+    public void loadRecent() {
+        try {
+            loadRecentCV((Stage) mainWindow.getScene().getWindow());
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void saveCV() {
+        File selectedFile = selectFileFromFileChooser("Save", "JSON File", "*.json", (Stage) mainWindow.getScene().getWindow());
+        if (selectedFile != null) {
+            saveObjectAsJson(cvTemplate, selectedFile.getPath(), recent, cvTemplate);
+            try {
+                this.loadRecentCV((Stage) mainWindow.getScene().getWindow());
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

@@ -10,5 +10,5 @@ bugs
 
 functionalities
 =============================
-- add buttons should be disabled if nothing can be added                      O
+- add buttons should be disabled if nothing can be added                      X
 

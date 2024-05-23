@@ -1,33 +1,49 @@
 package com.fdmgroup.cvgeneratorgradle.utils;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Stream;
 
+@Getter
+@Setter
 public class FolderStructurePrinter {
+    private int fileCount = 0;
 
-    public static void main(String[] args) {
-        folderStructurePrinter();
-    }
-
-    public static void folderStructurePrinter() {
+    public static List<Path> folderStructurePrinter(String path) {
         // Get the current directory
-        Path currentDir = Paths.get("");
-        try {
+        List<Path> ret = new ArrayList<>();
+        try (Stream<Path> files = Files.walk(Paths.get(path))) {
             // List all files and directories in the current directory
-            Files.walk(currentDir)
+            files
                     .filter(Files::isRegularFile)
-                    .forEach(System.out::println);
+                    .forEach(ret::add);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return ret;
     }
 
-    public static void printCurrentDirectory() {
-        // Get the current working directory
-        Path currentPath = Paths.get("").toAbsolutePath();
-        System.out.println("Current working directory: " + currentPath);
-    }
+    public Map<String, String> listFilesUsingFileWalkAndVisitor(String dir) throws IOException {
+        Map<String,String> filesSorted = new TreeMap<>(Collections.reverseOrder());
+        Files.walkFileTree(Paths.get(dir), new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                if (!Files.isDirectory(file)) {
+                    filesSorted.put(attrs.lastModifiedTime().toString(),file.getFileName().toString());
 
+                    //System.out.println("attr: " + attrs.creationTime());
+                    fileCount++;
+                }
+                return FileVisitResult.CONTINUE;
+            }
+        });
+        return filesSorted;
+    }
 }

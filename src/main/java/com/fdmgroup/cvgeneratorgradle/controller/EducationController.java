@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +61,7 @@ public class EducationController implements HasToggleableSaveButtons, HasAddable
      * Also handles validation for the page
      * @param main main {@link BorderPane} that contains all views of the app
      */
-    public void initialize(BorderPane main) {
+    public void initialize(BorderPane main, Menu recent, MainController mainController) {
         CheckBox checkBox;
         VBox centerBox;
         DatePicker start;
@@ -94,7 +95,7 @@ public class EducationController implements HasToggleableSaveButtons, HasAddable
             @Override
             public void invalidated(Observable observable) {
                 textFields.forEach(textInputControl -> textInputControl.setOnMouseClicked(actionEvent ->
-                        assignEducationInput(start,end)));
+                        assignEducationInput(start,end, recent,mainController)));
             }
         });
 
@@ -107,14 +108,14 @@ public class EducationController implements HasToggleableSaveButtons, HasAddable
         addValidationToDates(start, end, checkDate, checkBox);
         //ToDo: change way data is saved for instance with an additional button
         educationPage.getPrevBtn().setOnAction(actionEvent -> {
-            assignEducationInput(start, end);
+            assignEducationInput(start, end, recent,mainController);
             treeView.getSelectionModel().select(3);
-            new ExperienceController(cvTemplate, treeView, stage).initialize(main);
+            new ExperienceController(cvTemplate, treeView, stage).initialize(main, recent,mainController);
         });
         buttons[0].setOnAction(actionEvent -> {
-            assignEducationInput(start, end);
+            assignEducationInput(start, end, recent,mainController);
             treeView.getSelectionModel().select(5);
-            new SkillsController(cvTemplate, treeView, stage).initialize(main);
+            new SkillsController(cvTemplate, treeView, stage).initialize(main, recent, mainController);
         });
     }
 
@@ -123,7 +124,7 @@ public class EducationController implements HasToggleableSaveButtons, HasAddable
      * @param start {@link DatePicker} for the start date of an education
      * @param end {@link DatePicker} for the end date of an education
      */
-    private void assignEducationInput(DatePicker start, DatePicker end) {
+    private void assignEducationInput(DatePicker start, DatePicker end, Menu recent, MainController mainController) {
 
         if (educations == null) educations = new ArrayList<>();
         if (educations.isEmpty()) educations.add(new Education());
@@ -148,7 +149,12 @@ public class EducationController implements HasToggleableSaveButtons, HasAddable
         educations.getLast().setEndDate((end.getValue() != null) ? end.getValue().toString() : LocalDate.now().plusMonths(1).toString());
 
         cvTemplate.setEducations(educations);
-        saveObjectAsJson(cvTemplate);
+        saveObjectAsJson(cvTemplate, recent,cvTemplate);
+        try {
+            mainController.loadRecentCV(stage);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
