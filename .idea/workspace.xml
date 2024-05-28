@@ -5,12 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="278fc135-e0b6-415d-9da4-900dc54c8d08" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/CVGeneratorApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/CVGeneratorApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/EducationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/EducationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/ExperienceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/ExperienceController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/FDMController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/FDMController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/MainController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/PersonalInformationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/PersonalInformationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/ProfileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/ProfileController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/SkillsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/SkillsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/SummaryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/controller/SummaryController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/interfaces/HasAddableTextFields.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/interfaces/HasAddableTextFields.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/utils/CVTemplateExampleValues.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/utils/CVTemplateExampleValues.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/utils/GeneratorConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/utils/GeneratorConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/utils/SaveObjectToDocument.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/utils/SaveObjectToDocument.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/utils/SaveObjectToJson.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/utils/SaveObjectToJson.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/views/EducationPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/views/EducationPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/views/ExperiencePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/views/ExperiencePage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/views/FDMPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/views/FDMPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/views/PersonalInfoPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/views/PersonalInfoPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/views/ProfilePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/views/ProfilePage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/views/SkillsPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/views/SkillsPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/views/SummaryPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fdmgroup/cvgeneratorgradle/views/SummaryPage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/fdmgroup/cvgeneratorgradle/welcome2.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/fdmgroup/cvgeneratorgradle/welcome2.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/todos.txt" beforeDir="false" afterPath="$PROJECT_DIR$/todos.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,6 +58,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="JUnit5 Test Class" />
       </list>
     </option>
   </component>
@@ -62,7 +80,10 @@
     "Application.Main.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "git-widget-placeholder": "cleanUp",
+    "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/Thomas/IdeaProjects/ConvertPdf-master",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
@@ -73,6 +94,12 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Thomas\git\CV_Generator\cv-generator-executable-gradle\src\main\resources\com\fdmgroup\cvgeneratorgradle\templates" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.fdmgroup.cvgeneratorgradle.controller" />
     </key>
   </component>
   <component name="RunManager" selected="Application.Main">
@@ -142,11 +169,11 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.Main" />
-      <item itemvalue="Application.WordDocumentCreatorTest" />
       <item itemvalue="Application.CVTemplateExampleValues" />
       <item itemvalue="Application.FolderStructurePrinter" />
+      <item itemvalue="Application.Main" />
       <item itemvalue="Application.ReadWordDocument" />
+      <item itemvalue="Application.WordDocumentCreatorTest" />
     </list>
     <recent_temporary>
       <list>

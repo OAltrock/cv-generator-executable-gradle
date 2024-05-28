@@ -3,7 +3,7 @@ package com.fdmgroup.cvgeneratorgradle.utils;
 import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.utils.FolderStructurePrinter;
 
-import com.sun.javafx.binding.BindingHelperObserver;
+//import com.sun.javafx.binding.BindingHelperObserver;
 
 import javafx.scene.control.Menu;
 
@@ -36,14 +36,14 @@ public class SaveObjectToDocument {
      * @param cvTemplate The CVTemplate object containing the data to be populated in the document.
      * @param format     The desired document format, either "Word" or "PDF" (case-insensitive).
      * @param outputPath The path where the generated document should be saved.
-     * @throws IOException If an I/O error occurs while creating the auto-save file or generating the document.
+     * @throws IOException              If an I/O error occurs while creating the auto-save file or generating the document.
      * @throws IllegalArgumentException If an unsupported document format is provided.
      */
     public static void createDocument(CVTemplate cvTemplate, String format, String outputPath, Menu recent) throws IOException {
 
         //creating an auto save in json format:
         String saveFilePath = ".\\saves\\autosave_fullCV.json";
-        SaveObjectToJson.saveObjectAsJson(cvTemplate, saveFilePath, recent,cvTemplate);
+        SaveObjectToJson.saveObjectAsJson(cvTemplate, saveFilePath, recent);
 
         if ("docx".equalsIgnoreCase(format) || "word".equalsIgnoreCase(format)) {
             saveObjectAsWord(cvTemplate, outputPath, false);
@@ -54,9 +54,9 @@ public class SaveObjectToDocument {
         }
     }
 
-//save word to auto chosen file in home directory:
+    //save word to auto chosen file in home directory:
     public static void saveObjectAsWord(CVTemplate cvTemplate) throws IOException {
-        String documentsFolderPath = System.getProperty("user.home") + File.separator + "Documents"+ File.separator + "CVgenerator";
+        String documentsFolderPath = System.getProperty("user.home") + File.separator + "Documents" + File.separator + "CVgenerator";
         String outputPath = documentsFolderPath + File.separator + "CvAutoSave.docx";
         saveObjectAsWord(cvTemplate, outputPath);
     }
@@ -69,8 +69,8 @@ public class SaveObjectToDocument {
     /**
      * Generates a Word document from a given CVTemplate object and saves it to the specified output path.
      *
-     * @param cvTemplate The CVTemplate object containing the data to be populated in the Word document.
-     * @param outputPath The path where the generated Word document should be saved.
+     * @param cvTemplate     The CVTemplate object containing the data to be populated in the Word document.
+     * @param outputPath     The path where the generated Word document should be saved.
      * @param createPdfLater boolean that holds the information, if this wile is used to create a pdf out of it in the next step.
      * @throws IOException If an I/O error occurs while reading the template or writing the output file.
      */
@@ -78,7 +78,7 @@ public class SaveObjectToDocument {
 
         Map<String, String> cVHashMap = HelperClass.convertCVObjectToHashMap(cvTemplate);
         System.out.println(cVHashMap);
-        String documentsFolderPath = System.getProperty("user.home") + File.separator + "Documents"+ File.separator + "CVgenerator";
+        String documentsFolderPath = System.getProperty("user.home") + File.separator + "Documents" + File.separator + "CVgenerator";
         //String outputPath = documentsFolderPath + File.separator + "CvAutoSave.docx";
         String outputPathTestFile = documentsFolderPath + File.separator + "paragraphsFound.txt";
         String outputPathTestFile2 = documentsFolderPath + File.separator + "replacementsRecord.txt";
@@ -132,7 +132,7 @@ public class SaveObjectToDocument {
             //HelperClassDocxCreation.displayTableContent(document);
 
 
-            HelperClassDocxCreation.removeTablesWithNoData(document,replacementString);
+            HelperClassDocxCreation.removeTablesWithNoData(document, replacementString);
             HelperClassDocxCreation.removeParagraphsWithSearchString(document, replacementString);
 
             if (createPdfLater) {//fix row heights, if this docx file is created to generate a pdf out of it.
@@ -161,8 +161,8 @@ public class SaveObjectToDocument {
      * </ol>
      * </p>
      *
-     * @param paragraph     The XWPFParagraph object representing the paragraph to process.
-     * @param replacements  A map containing the placeholders as keys and their replacement values as values.
+     * @param paragraph    The XWPFParagraph object representing the paragraph to process.
+     * @param replacements A map containing the placeholders as keys and their replacement values as values.
      * @throws IllegalStateException If there is a mismatch between the number of runs and the size of the runContainsPlaceholder list.
      */
     private static void replaceTextInParagraph(XWPFParagraph paragraph, Map<String, String> replacements) {
@@ -198,7 +198,7 @@ public class SaveObjectToDocument {
                     alreadyShown = true;
                 }
                 if (/*runContainsPlaceholder.get(i)*/ paragraph.getRuns().get(i).getText(0).contains("{")
-                && paragraph.getRuns().get(i).getText(0).contains("}")) {
+                        && paragraph.getRuns().get(i).getText(0).contains("}")) {
                     XWPFRun run = paragraph.getRuns().get(i);
                     //if (run.getText(0).contains("{")) {
                     //    System.out.println("### Run Text with Placeholder is: " + run.getText(0) + "Run number: " + i);

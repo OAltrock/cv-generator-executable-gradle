@@ -1,6 +1,5 @@
 package com.fdmgroup.cvgeneratorgradle.controller;
 
-import com.fdmgroup.cvgeneratorgradle.Main;
 import com.fdmgroup.cvgeneratorgradle.interfaces.HasAddableTextFields;
 import com.fdmgroup.cvgeneratorgradle.interfaces.HasToggleableSaveButtons;
 
@@ -29,31 +28,33 @@ import static com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson.saveObjectAs
 public class SkillsController extends FDMController implements HasToggleableSaveButtons,
         HasAddableTextFields {
 
-    private final CVTemplate cvTemplate;
     private SkillsPage page;
-    private final TreeView<String> treeView;
-    private final Stage stage;
     Predicate<String> predicate = input -> !input.matches("^.*[a-zA-Z]+.*$");
 
-    public SkillsController(CVTemplate cvTemplate, TreeView<String> treeView, Stage stage) {
+    public SkillsController(CVTemplate cvTemplate, TreeView<String> treeView, Stage stage, Menu recent) {
         this.cvTemplate = cvTemplate;
         this.treeView = treeView;
         this.stage = stage;
+        this.recent = recent;
     }
 
-    public void initialize(BorderPane main, Menu recent, MainController mainController) {
+    public void initialize(BorderPane main, MainController mainController) {
         ObservableList<TextInputControl> textFields = FXCollections.observableArrayList();
         page = new SkillsPage(cvTemplate, textFields);
-        Button[] buttons = new Button[]{page.getNextBtn()};
+
+        //model will be set on mouse leaving edit view (all input will be saved when user clicks any navigation)
+        page.getCenterBox().setOnMouseExited(event->{
+            assignToModel();
+        });
+        Button[] buttons = new Button[]{page.getNext()};
 
         main.setCenter(page.createCenterPage(page.getCenterBox()));
-        //ToDo: validation for at least one language (this is analogue for all not-addable-fields once the addable fields have been changed to not-addable)
         addValidationToSaveButtons(textFields, predicate.negate(), buttons);
         textFields.addListener(new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
                 textFields.forEach(textInputControl -> textInputControl.setOnMouseClicked(actionEvent ->
-                        assignInput(recent, mainController)));
+                        assignInput(mainController)));
             }
         });
         textFields.addAll(findAllTextFields(page.getCompetenceGridPane()));
@@ -64,33 +65,40 @@ public class SkillsController extends FDMController implements HasToggleableSave
 
         validateMaybeEmptyTextFields(page.getLanguageLevelButtons(), page.getLanguageGridPane());
 
-		/*findAllTextFields(page.getLanguageGridPane()).stream().filter(
-						textInputControl -> textInputControl.getText()!=null *//*&& !textInputControl.getText().isEmpty()*//*)
-				.forEach(languageInput::add);*/
-
-        //ToDo: validation not completely responsive yet
-        Button[] buttonsForLanguageValidation = new Button[]{page.getPrevBtn(), page.getNextBtn()};
-        //validatePreviousBtn(page.getLanguageLevelButtons(), languageInput, page.getLanguageGridPane(), buttonsForLanguageValidation);
+        Button[] buttonsForLanguageValidation = new Button[]{page.getPrev(), page.getNext()};
+        validatePreviousBtn(page.getLanguageLevelButtons(), languageInput, page.getLanguageGridPane(), buttonsForLanguageValidation);
         languageInput.addAll(findAllTextFields(page.getLanguageGridPane()));
         createValidationForTextFields(string -> !string.matches("^.*[a-zA-Z]+.*$"), textFields, "Must contain at least one letter");
 
-        page.getPrevBtn().setOnAction(actionEvent -> {
-            assignInput(recent, mainController);
+        page.getPrev().setOnAction(actionEvent -> {
+            assignInput(mainController);
             treeView.getSelectionModel().select(4);
-            new EducationController(cvTemplate, treeView, stage).initialize(main, recent, mainController);
+            new EducationController(cvTemplate, treeView, stage, recent).initialize(main, mainController);
         });
         buttons[0].setOnAction(actionEvent -> {
-            assignInput(recent, mainController);
+            assignInput(mainController);
             treeView.getSelectionModel().select(6);
-            new SummaryController(cvTemplate, treeView, stage).initialize(main, recent, mainController);
+            new SummaryController(cvTemplate, treeView, stage, recent).initialize(main, mainController);
         });
 
         languageInput.forEach(textInputControl ->
                 textInputControl.setOnMouseClicked(actionEvent ->
-                        assignInput(recent, mainController)));
+                        assignInput(mainController)));
     }
 
-    private void assignInput(Menu recent, MainController mainController) {
+    void assignInput(MainController mainController) {
+        assignToModel();
+
+        saveObjectAsJson(cvTemplate, recent);
+        try {
+            mainController.loadRecentCV(stage);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //model should be set but not necessarily saved to file, therefore assign input is separated from saving
+    private void assignToModel() {
         List<TextInputControl> competencesInput = findAllTextFields(page.getCompetenceGridPane());
         HashSet<String> competencesToAdd = new HashSet<>();
         competencesInput.forEach(competence -> {
@@ -121,12 +129,5 @@ public class SkillsController extends FDMController implements HasToggleableSave
             interestsToAdd.add(interest.getText());
         });
         cvTemplate.setInterests(interestsToAdd);
-
-        saveObjectAsJson(cvTemplate, recent,cvTemplate);
-        try {
-            mainController.loadRecentCV(stage);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
