@@ -36,6 +36,7 @@ public class SaveObjectToDocument {
      * @param cvTemplate The CVTemplate object containing the data to be populated in the document.
      * @param format     The desired document format, either "Word" or "PDF" (case-insensitive).
      * @param outputPath The path where the generated document should be saved.
+     * @param recent     The Menu object representing recent files or actions (if applicable).
      * @throws IOException If an I/O error occurs while creating the auto-save file or generating the document.
      * @throws IllegalArgumentException If an unsupported document format is provided.
      */
@@ -54,29 +55,48 @@ public class SaveObjectToDocument {
         }
     }
 
-    // use without menu:
+    /**
+     * Overloaded method to create a document without a Menu object.
+     *
+     * @param cvTemplate The CVTemplate object containing the data to be populated in the document.
+     * @param format     The desired document format, either "Word" or "PDF" (case-insensitive).
+     * @param outputPath The path where the generated document should be saved.
+     * @throws IOException If an I/O error occurs while creating the auto-save file or generating the document.
+     * @throws IllegalArgumentException If an unsupported document format is provided.
+     */
     public static void createDocument(CVTemplate cvTemplate, String format, String outputPath) throws IOException {
         createDocument(cvTemplate, format, outputPath, new Menu());
     }
 
-//save word to auto chosen file in home directory:
+
     public static void saveObjectAsWord(CVTemplate cvTemplate) throws IOException {
         String documentsFolderPath = System.getProperty("user.home") + File.separator + "Documents"+ File.separator + "CVgenerator";
         String outputPath = documentsFolderPath + File.separator + "CvAutoSave.docx";
         saveObjectAsWord(cvTemplate, outputPath);
     }
 
-    //save word to outputPath, don't give pdf option.
+    /**
+     * Overloaded method call to save the CVTemplate object as a Word document to the specified output path.
+     *
+     * @param cvTemplate The CVTemplate object containing the data to be populated in the Word document.
+     * @param outputPath The path where the generated Word document should be saved.
+     * @throws IOException If an I/O error occurs while saving the document.
+     */
     public static void saveObjectAsWord(CVTemplate cvTemplate, String outputPath) throws IOException {
         saveObjectAsWord(cvTemplate, outputPath, false);
     }
 
     /**
      * Generates a Word document from a given CVTemplate object and saves it to the specified output path.
+     * if {@param createPdfLater} is set to true, the table formatting is changed to improve table structure in the pdf document
+     * (word by default uses automatic settings for e.g. table cell heights, which can not be read by the PDF libaries,
+     * therefore, we have to set cell heights to an estimated fixed value).
+     * if you don't want to use the  word file to create a pdf in a second step, set {@param createPdfLater} to false
+     * or use the overloaded method call without this parameter.
      *
      * @param cvTemplate The CVTemplate object containing the data to be populated in the Word document.
      * @param outputPath The path where the generated Word document should be saved.
-     * @param createPdfLater boolean that holds the information, if this wile is used to create a pdf out of it in the next step.
+     * @param createPdfLater Indicates if this document will be used to create a PDF in the next step.
      * @throws IOException If an I/O error occurs while reading the template or writing the output file.
      */
     public static void saveObjectAsWord(CVTemplate cvTemplate, String outputPath, boolean createPdfLater) throws IOException {
@@ -102,7 +122,8 @@ public class SaveObjectToDocument {
 
         //String wordTemplatePath = "./src/main/resources/templates/fdm_cv_template_v1.docx";
         String wordTemplatePath =
-                "./src/main/resources/com/fdmgroup/cvgeneratorgradle/templates/fdm_cv_template_test4.docx";
+             //   "./src/main/resources/com/fdmgroup/cvgeneratorgradle/templates/fdm_cv_template_test4.docx";
+                "./src/main/resources/com/fdmgroup/cvgeneratorgradle/templates/fdm_cv_template_international_v1.docx";
 
         try (FileInputStream templateInputStream = new FileInputStream(new File(wordTemplatePath));
              XWPFDocument document = new XWPFDocument(templateInputStream);
@@ -128,6 +149,39 @@ public class SaveObjectToDocument {
                 }
             }
             System.out.println("============End of table content=====================");
+
+            // Replace placeholders in headers
+            for (XWPFHeader header : document.getHeaderList()) {
+                for (XWPFParagraph paragraph : header.getParagraphs()) {
+                    replaceTextInParagraph(paragraph, cVHashMap);
+                }
+                for (XWPFTable table : header.getTables()) {
+                    for (XWPFTableRow row : table.getRows()) {
+                        for (XWPFTableCell cell : row.getTableCells()) {
+                            for (XWPFParagraph paragraph : cell.getParagraphs()) {
+                                replaceTextInParagraph(paragraph, cVHashMap);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Replace placeholders in footers
+            for (XWPFFooter footer : document.getFooterList()) {
+                for (XWPFParagraph paragraph : footer.getParagraphs()) {
+                    replaceTextInParagraph(paragraph, cVHashMap);
+                }
+                for (XWPFTable table : footer.getTables()) {
+                    for (XWPFTableRow row : table.getRows()) {
+                        for (XWPFTableCell cell : row.getTableCells()) {
+                            for (XWPFParagraph paragraph : cell.getParagraphs()) {
+                                replaceTextInParagraph(paragraph, cVHashMap);
+                            }
+                        }
+                    }
+                }
+            }
+
 
             String replacementString = "?????";
             //HelperClass.debugParagraphs(document);
@@ -175,45 +229,50 @@ public class SaveObjectToDocument {
         // Create a new run with the updated text
         String text = paragraph.getText();
         if (text.contains("{") && text.contains("}")) {
-            boolean textChanged = false;
 
-            // Analyze the runs and determine the status list
+            //call helper methods:
             List<Integer> statusList = HelperClassDocxCreation.analyzeRuns(paragraph);
-
-            // Rearrange the runs based on the status list
             List<Boolean> runContainsPlaceholder = HelperClassDocxCreation.rearrangeRuns(paragraph, statusList);
 
-            // Check if the number of runs matches the size of runContainsPlaceholder
+            // for debugging: Check if the number of runs matches the size of runContainsPlaceholder
             if (paragraph.getRuns().size() != runContainsPlaceholder.size()) {
                 throw new IllegalStateException("Mismatch between the number of runs and runContainsPlaceholder list.");
             }
 
             // Iterate over the runs and replace placeholders if possible
-            boolean alreadyShown = false;//so we display warning only once and do not spam the console
+            boolean alreadyShown = false;//We use this to display every warning only once and do not spam the console
             for (int i = 0; i < paragraph.getRuns().size(); i++) {
-                if (!alreadyShown && !runContainsPlaceholder.get(i) && paragraph.getRuns().get(i).getText(0).contains("{")) {
+                XWPFRun run = paragraph.getRuns().get(i);
+                String runText = run.getText(0);
+                if (runText == null){
+                    continue;
+                }
 
+                //check for debugging purposes only:
+                if (!alreadyShown && !runContainsPlaceholder.get(i) && runText.contains("{")) {
                     System.out.println();
                     System.out.println("***********WRONG VALUE IN RUNCONTAINSPLACEHOLDER LIST!!!!!!!!**************");
                     System.out.println("(Don't worry: the error is intercepted and has no effect!");
                     HelperClassDocxCreation.printRunsWithIndex(paragraph);
                     System.out.println("### " + runContainsPlaceholder);
                     System.out.println();
-
                     alreadyShown = true;
                 }
-                if (/*runContainsPlaceholder.get(i)*/ paragraph.getRuns().get(i).getText(0).contains("{")
-                && paragraph.getRuns().get(i).getText(0).contains("}")) {
-                    XWPFRun run = paragraph.getRuns().get(i);
-                    //if (run.getText(0).contains("{")) {
-                    //    System.out.println("### Run Text with Placeholder is: " + run.getText(0) + "Run number: " + i);
-                    //}
+
+                //since the runContainsPlaceholder list contains wrong values, we just check the run text for brackets...
+                if (/*runContainsPlaceholder.get(i)*/ runText.contains("{") && runText.contains("}")) {
                     for (Map.Entry<String, String> entry : replacements.entrySet()) {
                         String key = entry.getKey();
-                        if (run.getText(0).contains(key)) {
-                            //System.out.println("### PLaceholder found in this run: " + run.getText(0) + "; Key: " + key );
+                        if (runText.contains(key)) {
                             String replacementValue = entry.getValue();
-                            run.setText(run.getText(0).replace(key, replacementValue), 0);
+
+                            if (key.contains("startDate") || key.contains("endDate")){//reformatting dates
+                                replacementValue =
+                                        HelperClassDocxCreation.changeDateFormat
+                                                (replacementValue, "yyyy-MM-dd","MMM yyyy");
+                            }
+
+                            run.setText(runText.replace(key, replacementValue), 0);
                         }
                     }
                 }
@@ -224,18 +283,8 @@ public class SaveObjectToDocument {
     /**
      * Generates a PDF document from a given CVTemplate object and saves it to the specified output path.
      *
-     * <p>This method first generates a temporary Word document using the {@link #saveObjectAsWord(CVTemplate, String)}
+     * <p>This method first generates a temporary Word document using the {@link #saveObjectAsWord(CVTemplate, String, boolean)}
      * method, and then converts the Word document to a PDF file using the Apache POI XWPF Converter library.</p>
-     *
-     * <p>The steps involved in the conversion process are:
-     * <ol>
-     *     <li>Create a temporary Word document from the provided CVTemplate object.</li>
-     *     <li>Open the temporary Word document using an XWPFDocument instance.</li>
-     *     <li>Convert the XWPFDocument to a PDF file using the PdfConverter utility class.</li>
-     *     <li>Write the PDF file to the specified output path.</li>
-     *     <li>Delete the temporary Word document file.</li>
-     * </ol>
-     * </p>
      *
      * @param cvTemplate The CVTemplate object containing the data to be populated in the PDF document.
      * @param outputPath The path where the generated PDF document should be saved.
