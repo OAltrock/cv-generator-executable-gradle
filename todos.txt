@@ -1,4 +1,4 @@
-bugs
+bugs                                                                                            O = not yet solved ; X = solved
 =============================
 - 0 to ... addable fields: last can be removed                                X
 - index out of bounds remove addable (experience&education pages)             X
@@ -7,6 +7,10 @@ bugs
 - next can't have same validation logic in skills page (with languages)       O
 - count of experiences isn't correct when deleting not the last one           O
   (getChildren().size() won't work - maybe static counter somewhere?!)
+- ongoing isn't saved correctly                                               X
+- input isn't saved when using treeView or menu bar navigation                X
+- its possible to have more experiences than allowed by location when
+  changing page via left menu or previous button                              O
 
 functionalities
 =============================

@@ -1,6 +1,5 @@
 package com.fdmgroup.cvgeneratorgradle.views;
 
-import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.models.Location;
 import com.fdmgroup.cvgeneratorgradle.models.Stream;
 import com.fdmgroup.cvgeneratorgradle.models.User;
@@ -11,9 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import lombok.Getter;
-
-import java.util.ArrayList;
-import java.util.HashSet;
 
 @Getter
 public class PersonalInfoPage extends FDMPage{
@@ -32,32 +28,15 @@ public class PersonalInfoPage extends FDMPage{
     private FDMButton nextBtn;
     private FDMButton prevBtn;
 
-    private User user;
-    private Location location;
-    private Stream stream;
-
-    private ObservableList<TextInputControl> textFields;
-    private String forFutureReference;
+    private final User user;
+    private final Location location;
+    private final Stream stream;
 
     public PersonalInfoPage(User user, Location location, Stream stream, ObservableList<TextInputControl> textFields) {
         this.user = user;
         this.textFields = textFields;
         this.location = location;
         this.stream = stream;
-
-        initialize();
-    }
-
-    public PersonalInfoPage(ObservableList<TextInputControl> textFields) {
-        this.textFields = textFields;
-        this.stream = new Stream();
-        stream.setPresetCompetences(new HashSet<>());
-        //ToDo: list of competences,... of training
-        this.location = new Location();
-        user = new User();
-        user.setFirstName("");
-        user.setLastName("");
-        user.setEmail("");
 
         initialize();
     }

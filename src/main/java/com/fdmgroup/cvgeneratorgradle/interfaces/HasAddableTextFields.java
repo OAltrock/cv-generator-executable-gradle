@@ -1,6 +1,5 @@
 package com.fdmgroup.cvgeneratorgradle.interfaces;
 
-import com.fdmgroup.cvgeneratorgradle.CVGeneratorApp;
 import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.models.Language;
 import com.fdmgroup.cvgeneratorgradle.models.enums.LanguageLevel;
@@ -16,10 +15,8 @@ import javafx.scene.paint.Color;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Predicate;
 
-import static com.fdmgroup.cvgeneratorgradle.CVGeneratorApp.setCounter1;
 
 public interface HasAddableTextFields {
 
@@ -84,6 +81,10 @@ public interface HasAddableTextFields {
         });
     }
 
+    /**
+     * Adds listener to given {@link MenuButton} changing its text to the text of the {@link MenuItem} clicked.
+     * @param levelButton MenuButton to add the listener to
+     */
     default void addListenerToLanguageLevelButton(MenuButton levelButton) {
         levelButton.getItems().forEach(item -> {
             item.setOnAction(actionEvent -> {
@@ -94,6 +95,17 @@ public interface HasAddableTextFields {
 
     ;
 
+    /**
+     * Adds the remove-logic (ie: removes a before added {@link TextInputControl}) to the remove {@link Button}
+     * @param textFieldToRemove TextInputControl to the corresponding remove-button {@code removeButton}
+     * @param languageLevelButton {@link MenuButton} to choose a language level to the corresponding remove-button {@code removeButton}
+     * @param removeButton remove-button to which the logic should be added
+     * @param gridPane parent {@link GridPane} which contains all elements
+     * @param addModuleBtn add-button that corresponds with given remove-button {@code removeButton}
+     * @param textFields {@link ObservableList} of TextInputControls from which the given TextInputControl has to be removed since it no longer needs to be validated
+     * @param addableTextFields {@link List} of TextInputControls form which the given TextInputControl needs to be removed since it no longer needs to be validated
+     *                                      (this list contains exclusively addable TextInputControls)
+     */
     default void addListenerTooRemoveBtn(TextInputControl textFieldToRemove, MenuButton languageLevelButton, javafx.scene.control.Button removeButton,
                                          GridPane gridPane, javafx.scene.control.Button addModuleBtn,
                                          ObservableList<TextInputControl> textFields, List<TextInputControl> addableTextFields) {
@@ -148,6 +160,10 @@ public interface HasAddableTextFields {
             }, textField.textProperty());
             textField.tooltipProperty().bind(tooltipObjectBinding);
             Tooltip.install(textField, tooltipToAdd);
+            tooltipToAdd.textProperty().bind(Bindings.createStringBinding(()->{
+                if (validInput.get()) return o;
+                else return "";
+            },textField.textProperty()));
             textField.borderProperty().bind(objectBinding);
         });
     }
@@ -179,6 +195,7 @@ public interface HasAddableTextFields {
         addableAreaHelper(keyProperty, gridPane, addBtn, false, textFields, limit, removeButtonMsg, textFieldPromptMsg, null);
     }
 
+    //option to use an overloaded createAddableAreaFromModel()-method
     private void addableAreaHelper(List<TextInputControl> keyProperty, GridPane gridPane, Button addBtn, boolean isLanguageGrid, ObservableList<TextInputControl> textFields, int limit, String removeButtonMsg, String textFieldPromptMsg, CVTemplate cvTemplate) {
 
         addBtn.minWidth(80);
@@ -194,9 +211,7 @@ public interface HasAddableTextFields {
                 gridPane.add(languageLevelButton, 1, 0);
                 addListenerToLanguageLevelButton(languageLevelButton);
             }
-
             gridPane.add(addBtn, (isLanguageGrid) ? 3 : 2, 0);
-            //textFields.add(newTextField);
             keyProperty.add(newTextField);
             createAddableArea(gridPane, textFields, addBtn, isLanguageGrid, removeButtonMsg, textFieldPromptMsg,
                     (string -> !string.matches("^.*[a-zA-Z]+.*$")), limit, keyProperty);
@@ -263,14 +278,5 @@ public interface HasAddableTextFields {
                         (string -> !string.matches("^.*[a-zA-Z]+.*$")), limit, keyProperty);
             });
         }
-    }
-
-    default void createAddableAreaFromModel(List<TextInputControl> keyProperty, GridPane gridPane,
-                                            Button addBtn, MenuButton languageLevelButton,
-                                            ObservableList<TextInputControl> textFields,
-                                            int limit, String removeButtonMsg,
-                                            String textFieldPromptMsg, CVTemplate cvTemplate) {
-        addableAreaHelper(keyProperty, gridPane, addBtn, true, textFields, limit, removeButtonMsg, textFieldPromptMsg, cvTemplate);
-
     }
 }

@@ -39,9 +39,7 @@ public class EducationPage extends FDMPage implements HasAddableTextFields/*, Ha
     private GridPane keyModuleGridPane;
     private final List<TextInputControl> keyModules;
 
-    private FDMButton nextBtn;
-    private FDMButton prevBtn;
-    private FDMHBox buttonWrapper;
+
 
     private final ObservableList<TextInputControl> textFields;
 
@@ -113,12 +111,12 @@ public class EducationPage extends FDMPage implements HasAddableTextFields/*, Ha
         addBtn.setDesign();
         createAddableAreaFromModel(keyModules, keyModuleGridPane, addBtn, textFields, cvTemplate.getLocation().getMaxKeyModule(), "Remove key module", "Key module");
 
-        prevBtn = new FDMButton("Previous");
-        nextBtn = new FDMButton("Next");
-        buttonWrapper = new FDMHBox(prevBtn, nextBtn);
+        prev = new FDMButton("Previous");
+        next = new FDMButton("Next");
+        buttonWrapper = new FDMHBox(prev, next);
         buttonWrapper.setDesign();
-        prevBtn.setDesign("primary");
-        nextBtn.setDesign("primary");
+        prev.setDesign("primary");
+        next.setDesign("primary");
 
         centerBox = new FDMCenterVBoxWrapper(pageTitle, degree,
                 studyTitle,

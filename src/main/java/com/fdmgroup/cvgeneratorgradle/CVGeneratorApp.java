@@ -1,21 +1,14 @@
 package com.fdmgroup.cvgeneratorgradle;
 
-import com.fdmgroup.cvgeneratorgradle.controller.MainController;
-import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-import java.io.FileNotFoundException;
 import java.util.Objects;
 
 import static com.fdmgroup.cvgeneratorgradle.utils.GeneratorConfig.*;
@@ -24,9 +17,6 @@ import static com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson.recentFiles;
 
 @RequiredArgsConstructor
 public class CVGeneratorApp extends Application {
-    //private CVTemplate cvTemplate;
-    static int counter1=0;
-    static int experienceSkillCounter=0;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -61,12 +51,6 @@ public class CVGeneratorApp extends Application {
         }
 
     }
-
-    public static void setCounter1(int counter1) {
-        CVGeneratorApp.counter1 = counter1;
-    }
-
-
 
     public static void main(String[] args) {
         launch();
