@@ -82,7 +82,7 @@ public abstract class FDMController {
 
     /**
      * Ties the disable-property (ie:whether the button(s) can be clicked) of the given {@link Button}s to the condition, that if the language input {@link TextInputControl}
-     * isn't empty the corresponding language level {@link MenuButton} must be chosen.
+     * isn't empty the corresponding language level {@link MenuButton} must be selected.
      * @param languageLevelBtns {@link List} of MenuButtons that combined with the corresponding language input {@code languageInput} are considered for validating the given buttons {@code prevBtn}
      * @param languageInput List of TextInputControls that combined with the corresponding language level buttons {@code languageLevelBtns} are considered for validating the given buttons {@code prevBtn}
      * @param parent parent {@link GridPane} that contains {@code languageLevelBtns} and {@code languageInput}

@@ -67,7 +67,7 @@ public class EducationController extends FDMController implements HasToggleableS
         VBox centerBox;
 
         //validation is tied to changes in the list of textFields (eg: refresh validation
-        //when a textField is added via button
+        //when a textField is added via button)
         ObservableList<TextInputControl> textFields = FXCollections.observableArrayList();
         educationPage = new EducationPage(cvTemplate, textFields);
         educationPage.getCenterBox().setOnMouseExited(event->{
@@ -160,8 +160,8 @@ public class EducationController extends FDMController implements HasToggleableS
         //is in the future and ongoing will be selected (in that case the summary page lists the end date
         //as "ongoing"
         //System.out.println(end.getValue().toString());
-        if (educationPage.getEndDate().getValue()==null) educationPage.getEndDate().setValue(LocalDate.parse("9999-01-01"));
-        educations.getLast().setEndDate((!educationPage.getOngoing().isSelected()) ? (LocalDate.parse(end.getValue().toString()).isAfter(LocalDate.now())) ?
+        //if (educationPage.getEndDate().getValue()==null) educationPage.getEndDate().setValue(LocalDate.parse("9999-01-01"));
+        educations.getLast().setEndDate((educationPage.getEndDate().getValue()!=null && !educationPage.getOngoing().isSelected()) ? (LocalDate.parse(end.getValue().toString()).isAfter(LocalDate.now())) ?
                         "9999-01-01" : end.getValue().toString()
                  : "9999-01-01");
 

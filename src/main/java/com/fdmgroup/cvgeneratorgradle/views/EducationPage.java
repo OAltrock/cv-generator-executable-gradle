@@ -45,20 +45,16 @@ public class EducationPage extends FDMPage implements HasAddableTextFields/*, Ha
 
     public EducationPage(CVTemplate cvTemplate, ObservableList<TextInputControl> textFields) {
         this.cvTemplate = cvTemplate;
-        if (cvTemplate.getEducations() != null && !cvTemplate.getEducations().isEmpty())
-            education = cvTemplate.getEducations().getLast();
-        else {
+        if (cvTemplate.getEducations() == null) {
             List<Education> educations = new ArrayList<>(List.of(new Education("", "",
                     "", "", "", "", "", new ArrayList<>())));
             //educations.getLast().setKeyModules(new ArrayList<>());
             cvTemplate.setEducations(educations);
-            education = cvTemplate.getEducations().getLast();
         }
+        education = cvTemplate.getEducations().getLast();
         this.textFields = textFields;
         keyModules = new ArrayList<>();
         initialize();
-
-
     }
 
     private void initialize() {

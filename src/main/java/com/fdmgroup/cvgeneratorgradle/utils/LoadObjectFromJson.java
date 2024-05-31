@@ -1,7 +1,5 @@
 package com.fdmgroup.cvgeneratorgradle.utils;
 
-import com.fdmgroup.cvgeneratorgradle.CVGeneratorApp;
-import com.fdmgroup.cvgeneratorgradle.controller.MainController;
 import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.google.gson.Gson;
 
