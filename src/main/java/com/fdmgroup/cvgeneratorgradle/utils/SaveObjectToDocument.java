@@ -194,7 +194,7 @@ public class SaveObjectToDocument {
 
             HelperClassDocxCreation.removeTablesWithNoData(document,replacementString);
             HelperClassDocxCreation.removeParagraphsWithSearchString(document, replacementString);
-            HelperClassDocxCreation.removeConsecutiveEmptyParagraphs(document);
+            //HelperClassDocxCreation.removeConsecutiveEmptyParagraphs(document);
 
             if (createPdfLater) {//fix row heights, if this docx file is created to generate a pdf out of it.
                 HelperClassDocxCreation.calculateAndSetTableRowHeights(document);
