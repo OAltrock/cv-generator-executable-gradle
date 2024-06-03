@@ -2,15 +2,83 @@
 	-fx-font-family: "Varela Round", cursive;
 	-fx-font-size: 24px;
 	-fx-text-fill: white;
-	-fx-background-color: #1a1a1a;
-	/*-fx-focus-color: #c3c3bb;
-	-fx-accent: #c3c3bb;*/
-	-fx-cell-hover-color: #c3c3bb;
+	/*
+	-fx-focus-color: #c3c3bb;
+	-fx-accent: #c3c3bb;
+	-fx-cell-hover-color: #c3c3bb;*/
+}
+
+.text-field, .text-area {
+    -fx-background-color: #1a1a1a;
+}
+
+.text-area .content {
+    -fx-background-color: #1a1a1a;
+}
+
+.tree-view .tree-cell {
+    -fx-background-color: #1a1a1a;
+}
+
+.tree-view .tree-cell:focused {
+    -fx-background-color: #c3c3bb;
+}
+
+.tree-view .tree-cell:hover {
+    -fx-background-color: #000000;
+}
+
+.menu-item:focused {
+    -fx-background-color: #c3c3bb;
 }
 
 #menuBar, #topMenu {
 	-fx-background-color: #1a273d;
 	-fx-color: red;
+}
+
+#menuBar .menu-button {
+    -fx-background-color: #1a273d;
+}
+
+#menuBar .menu-button:hover {
+    -fx-background-color: #000000;
+}
+
+.menu-button .menu-item {
+    -fx-background-color: #1a1a1a;
+}
+
+.menu-button .menu-item:hover {
+    -fx-background-color: #000000;
+}
+
+.list-view .list-cell{
+    -fx-background-color: #1a1a1a;
+}
+
+.choice-box .context-menu {
+    -fx-background-color: #1a1a1a;
+}
+
+.choice-box .menu-item > .label {
+    -fx-background-color: #1a1a1a;
+}
+
+.choice-box .menu-item: hover{
+    -fx-background-color: #000000;
+}
+
+.choice-box .menu-item > .label: hover{
+    -fx-background-color: #000000;
+}
+
+.choice-box .menu-item: focused{
+    -fx-background-color: #000000;
+}
+
+.choice-box > .label {
+    -fx-text-fill: black;
 }
 
 #mainWindow {
@@ -33,6 +101,7 @@
     -fx-border-color: transparent;
 }
 
-#centerBox, .label {
+#centerBox {
     -fx-background-color: #363630;
 }
+

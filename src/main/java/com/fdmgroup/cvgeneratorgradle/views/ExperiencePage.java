@@ -30,7 +30,7 @@ public class ExperiencePage extends FDMPage implements HasAddableTextFields {
     private javafx.scene.control.TextField jobTitle;
     private javafx.scene.control.TextField companyName;
     private javafx.scene.control.TextField companyPlace;
-    private TextInputControl description;
+    private TextArea description;
 
     private FDMDateWrapper dateWrapper;
     private DatePicker startDate;
@@ -64,7 +64,7 @@ public class ExperiencePage extends FDMPage implements HasAddableTextFields {
         companyName.setPromptText("Name of company");
         companyPlace = (experience.getCompanyPlace() != null) ? new javafx.scene.control.TextField(experience.getCompanyPlace()) : new TextField("");
         companyPlace.setPromptText("Place of company");
-        description = (experience.getDescription() != null) ? new TextArea(experience.getDescription()) : new TextField("");
+        description = (experience.getDescription() != null) ? new TextArea(experience.getDescription()) : new TextArea("");
         description.setPromptText("Description");
         ongoing = new CheckBox("ongoing");
 

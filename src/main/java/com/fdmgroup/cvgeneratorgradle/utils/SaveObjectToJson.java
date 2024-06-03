@@ -34,7 +34,7 @@ public class SaveObjectToJson {
                 }
             }
         } else {
-            directory = "./saves/auto saves/";
+            directory = System.getProperty("user.home")+"/cv generator saves/auto saves/";
         }
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();

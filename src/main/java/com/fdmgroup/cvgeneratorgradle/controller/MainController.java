@@ -200,8 +200,10 @@ public class MainController implements Initializable {
      */
     private TreeView<String> createTreeView(TreeItem<String> cv) {
         TreeView<String> ret = new TreeView<>();
+
         ret.setRoot(cv);
         HBox leftBorderContainer = new HBox(ret);
+        leftBorderContainer.setId("leftBorderBox");
         ret.setPrefWidth(370);
         mainWindow.setLeft(leftBorderContainer);
         return ret;
