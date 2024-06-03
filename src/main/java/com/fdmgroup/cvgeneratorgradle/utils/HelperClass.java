@@ -4,14 +4,9 @@ import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.models.Education;
 import com.fdmgroup.cvgeneratorgradle.models.Experience;
 import com.fdmgroup.cvgeneratorgradle.models.Language;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 public class HelperClass {
 
@@ -59,6 +54,8 @@ public class HelperClass {
         hashMap.put("{user.email}", obj.getUser().getEmail());
         hashMap.put("{user.role}", obj.getUser().getRole());
 
+        hashMap.put("{profile}", obj.getProfile());
+
         // Extract location fields
         hashMap.put("{location.locationName}", obj.getLocation().getLocationName());
         //hashMap.put("{location.minExperience}", String.valueOf(obj.getLocation().getMinExperience()));
@@ -74,6 +71,7 @@ public class HelperClass {
             hashMap.put("{experiences[" + i + "].startDate}", exp.getStartDate());
             hashMap.put("{experiences[" + i + "].endDate}", exp.getEndDate());
             hashMap.put("{experiences[" + i + "].companyName}", exp.getCompanyName());
+            hashMap.put("{experiences[" + i + "].description}", exp.getDescription());
 
             // Extract positionFeatures
             for (int j = 0; j < exp.getPositionFeatures().size(); j++) {

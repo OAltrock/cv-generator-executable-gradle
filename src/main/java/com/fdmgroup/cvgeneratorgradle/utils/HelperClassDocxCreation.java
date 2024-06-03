@@ -5,13 +5,19 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STVerticalJc;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//this class contains helper methods used for generating the CV output in docx format with desired data and formatting;
+/**
+ * This class contains helper methods used for generating the CV output in DOCX format with desired data and formatting.
+ */
 public class HelperClassDocxCreation {
 
     /**
@@ -154,21 +160,19 @@ public class HelperClassDocxCreation {
         System.out.println("Total paragraphs with placeholders: " + paragraphCount);
     }
 
-    /**
-     * This method was replaced by replaceNotFoundPlaceholder (and the deletion method removeParagraphsWithSearchString in the second step
-     * (but for now, only paragraphs with not found placeholders get removed. Inside the document, only a mark is set for not foundplaceholders))
-     * Removes paragraphs and table cells that contain placeholders from the given XWPFDocument.
-     *
-     * <p>This method iterates over all paragraphs in the document body and table cells, and identifies
-     * those that contain placeholders (text enclosed in curly braces '{...}'). It then removes these
-     * paragraphs from the document body and clears the text content of the table cell paragraphs.</p>
-     *
-     * <p>Note that removing paragraphs from table cells directly is not possible due to a limitation
-     * in the Apache POI library. Therefore, this method clears the text content of table cell paragraphs
-     * containing placeholders instead of removing them.</p>
-     *
-     * @param document The XWPFDocument from which to remove paragraphs with placeholders.
-     */
+/**
+ * This method removes paragraphs and table cells that contain placeholders from the given XWPFDocument.
+ * It iterates over all paragraphs in the document body and table cells, and identifies those that contain
+ * placeholders (text enclosed in curly braces '{...}'). It then removes these paragraphs from the document
+ * body and clears the text content of the table cell paragraphs.
+ *
+ * Note: Removing paragraphs from table cells directly is not possible due to a limitation in the Apache POI
+ * library. Therefore, this method clears the text content of table cell paragraphs containing placeholders
+ * instead of removing them.
+ *
+ * @param document The XWPFDocument from which to remove paragraphs with placeholders.
+ */
+    /*
     public static void removeParagraphsWithPlaceholders(XWPFDocument document) {
         List<XWPFParagraph> paragraphsToRemove = new ArrayList<>();
         for (XWPFParagraph paragraph : document.getParagraphs()) {
@@ -209,7 +213,16 @@ public class HelperClassDocxCreation {
         }
 
     }
+     */
 
+    /**
+     * Replaces placeholders in the document that could not be matched with any key value in the cvTemplate hashmap list.
+     * This method iterates through paragraphs in the document body and table cells, replacing text enclosed
+     * in curly braces '{...}' with the provided replacement string.
+     *
+     * @param document    The XWPFDocument object containing the text to be replaced
+     * @param replacement The string to replace the placeholders with
+     */
     public static void replaceNotFoundPlaceholders(XWPFDocument document, String replacement) {
         // create pattern for this syntax {....}
         Pattern pattern = Pattern.compile("\\{[^}]*\\}");
@@ -248,7 +261,12 @@ public class HelperClassDocxCreation {
         }
     }
 
-    // a table that contains the searchString in all cells is removed, since the data are missing.
+    /**
+     * Removes tables that contain the search string in all cells, indicating missing data.
+     *
+     * @param document    The XWPFDocument to be modified.
+     * @param searchString The string to search for in table cells.
+     */
     public static void removeTablesWithNoData(XWPFDocument document, String searchString) {
         List<XWPFTable> tablesToRemove = new ArrayList<>();
         for (XWPFTable table : document.getTables()) {
@@ -275,6 +293,12 @@ public class HelperClassDocxCreation {
         return true;
     }
 
+    /**
+     * Removes paragraphs in tables that contain the search string.
+     *
+     * @param document    The XWPFDocument to be modified.
+     * @param searchString The string to search for in paragraphs.
+     */
     public static void removeParagraphsWithSearchString(XWPFDocument document, String searchString) {
 
         // Remove paragraphs in the document body
@@ -299,7 +323,7 @@ public class HelperClassDocxCreation {
                     List<XWPFParagraph> paragraphs = cell.getParagraphs();
                     List<Integer> indicesToRemove = new ArrayList<>();
                     for (int i = 0; i < paragraphs.size(); i++) {
-                        if (paragraphs.get(i).getText().contains(searchString)) {
+                        if (paragraphs.get(i).getText().contains(searchString) && paragraphs.size()> 1 ) {
                             indicesToRemove.add(i);
                         }
                     }
@@ -315,6 +339,31 @@ public class HelperClassDocxCreation {
         }
     }
 
+    //Remove empty paragraphs if they are left after removing of empty tables
+    //this is not working as intended yet. Removes all grouped empty paragraphs .....
+    public static void removeConsecutiveEmptyParagraphs(XWPFDocument document) {
+        List<XWPFParagraph> paragraphs = document.getParagraphs();
+        for (int i = paragraphs.size() - 1; i > 0; i--) {
+            XWPFParagraph currentParagraph = paragraphs.get(i);
+            XWPFParagraph previousParagraph = paragraphs.get(i - 1);
+            if (isParagraphEmpty(currentParagraph) && isParagraphEmpty(previousParagraph)) {
+                document.removeBodyElement(document.getPosOfParagraph(currentParagraph));
+            }
+        }
+    }
+
+    private static boolean isParagraphEmpty(XWPFParagraph paragraph) {
+        return paragraph.getText().trim().isEmpty();
+    }
+
+
+
+    /**
+     * Prints the text of each run within a paragraph, including their index within the paragraph.
+     * This is only used for testing/debugging
+     *
+     * @param paragraph The XWPFParagraph object whose runs will be printed.
+     */
     public static void printRunsWithIndex(XWPFParagraph paragraph) {
         System.out.println("#### Paragraph text: " + paragraph.getText());
         for (int i = 0; i < paragraph.getRuns().size(); i++) {
@@ -322,7 +371,12 @@ public class HelperClassDocxCreation {
             System.out.println("#### Run index: " + i + ", Run text: " + run.getText(0));
         }
     }
-
+    /**
+     * Displays the content of each table in the document.
+     * This is only used for testing/debugging.
+     *
+     * @param document The XWPFDocument containing the tables to be displayed.
+     */
     public static void displayTableContent(XWPFDocument document) {
         List<XWPFTable> tables = document.getTables();
         for (int t = 0; t < tables.size(); t++) {
@@ -352,6 +406,7 @@ public class HelperClassDocxCreation {
 
     /**
      * Calculates the height of each row in a table based on the content of the cells.
+     * Setting the height of a row to a fixed value is necessary for the right table formating in pdf documents.
      *
      * @param document The XWPFDocument containing the table.
      */
@@ -366,11 +421,6 @@ public class HelperClassDocxCreation {
     }
 
 
-    /**
-     * Sets the vertical alignment of text in each cell of a table row to center.
-     *
-     * @param row The XWPFTableRow to set the vertical alignment for.
-     */
     private static void centerTextVerticallyInRow(XWPFTableRow row) {
         for (XWPFTableCell cell : row.getTableCells()) {
             CTTc ctTc = cell.getCTTc();
@@ -381,12 +431,6 @@ public class HelperClassDocxCreation {
     }
 
 
-    /**
-     * Calculates the height of a table row based on the content of its cells.
-     *
-     * @param row The XWPFTableRow to calculate the height for.
-     * @return The calculated height in twips (twentieth of a point).
-     */
     private static int calculateRowHeight(XWPFTableRow row) {
         int maxHeight = 0;
         for (XWPFTableCell cell : row.getTableCells()) {
@@ -398,12 +442,6 @@ public class HelperClassDocxCreation {
         return maxHeight;
     }
 
-    /**
-     * Calculates the height of a table cell based on its content.
-     *
-     * @param cell The XWPFTableCell to calculate the height for.
-     * @return The calculated height in twips (twentieth of a point).
-     */
     private static int calculateCellHeight(XWPFTableCell cell) {
         int cellWidth = getCellWidth(cell);
         int totalHeight = 0;
@@ -416,13 +454,6 @@ public class HelperClassDocxCreation {
         return totalHeight;
     }
 
-    /**
-     * Calculates the height of a paragraph based on its content and the width of the cell.
-     *
-     * @param paragraph The XWPFParagraph to calculate the height for.
-     * @param cellWidth The width of the cell in twips (twentieth of a point).
-     * @return The calculated height in twips (twentieth of a point).
-     */
     private static int calculateParagraphHeight(XWPFParagraph paragraph, int cellWidth) {
         int totalHeight = 0;
 
@@ -440,27 +471,39 @@ public class HelperClassDocxCreation {
         return totalHeight;
     }
 
-    /**
-     * Calculates the width of the text based on its length and font size.
-     *
-     * @param text     The text to calculate the width for.
-     * @param fontSize The font size of the text.
-     * @return The calculated width in twips (twentieth of a point).
-     */
     private static int calculateTextWidth(String text, int fontSize) {
         // Approximate character width in twips (twentieth of a point)
         int charWidth = fontSize * 10; // Adjust the multiplier based on the font and actual measurements
         return text.length() * charWidth;
     }
 
-    /**
-     * Gets the width of a table cell in twips (twentieth of a point).
-     *
-     * @param cell The XWPFTableCell to get the width for.
-     * @return The width of the cell in twips (twentieth of a point).
-     */
     private static int getCellWidth(XWPFTableCell cell) {
         // Approximate width of a table cell; adjust based on actual measurements or requirements
         return 5000; // Default width in twips (adjust as needed)
     }
+
+    /**
+     * Changes the format of a date string from a given input format to a desired output format.
+     *
+     * @param dateStr      The date string to be reformatted.
+     * @param inputFormat  The format of the input date string.
+     * @param outputFormat The desired format of the output date string.
+     * @return The date string in the desired format.
+     * @throws DateTimeParseException If the input date string cannot be parsed.
+     * @throws IllegalArgumentException If the input or output format is invalid.
+     */
+    public static String changeDateFormat(String dateStr, String inputFormat, String outputFormat) {
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern(inputFormat, Locale.ENGLISH);
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(outputFormat, Locale.ENGLISH);
+
+        // Define the date, that represents the state "ongoing"
+        LocalDate ongoingDate = LocalDate.of(9999, 1, 1);
+        String ongoingDateString = ongoingDate.format(inputFormatter);
+        if (dateStr.equals(ongoingDateString)) {
+            return "ongoing";
+        }
+        LocalDate date = LocalDate.parse(dateStr, inputFormatter);
+        return date.format(outputFormatter);
+    }
+
 }

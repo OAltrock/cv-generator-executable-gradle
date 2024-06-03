@@ -14,8 +14,8 @@ import com.fdmgroup.cvgeneratorgradle.models.*;
 import com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToDocument;
 import javafx.scene.control.Menu;
 
-
-//this is for debugging/testing only
+//this class was used to test and debug document creation (word + pdf)
+//execute this class to create a cvTemplate object with example data and creates json, docx and pdf document in home directory: ~/Documents/cvGenerator/
 public class CVTemplateExampleValues {
 
     public static void main(String[] args) {
@@ -42,18 +42,17 @@ public class CVTemplateExampleValues {
         System.out.println("PDF file path: " + outpathPDF);
 
         SaveObjectToJson.saveObjectAsJson(cVExampleTemplate, outpathjson, new Menu());
+
         try {
-            SaveObjectToDocument.createDocument(cVExampleTemplate, "Word", outpathWord, new Menu());
+            SaveObjectToDocument.createDocument(cVExampleTemplate, "Word", outpathWord);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         try {
-            SaveObjectToDocument.createDocument(cVExampleTemplate, "pdf", outpathPDF, new Menu());
+            SaveObjectToDocument.createDocument(cVExampleTemplate, "pdf", outpathPDF);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
 
     }
 
@@ -80,6 +79,8 @@ public class CVTemplateExampleValues {
         experience.setStartDate("2018-01-01");
         experience.setEndDate("2022-12-31");
         experience.setCompanyName("google");
+        experience.setDescription("what I did: Stuff, Stuff and more Stuff!!!!!");
+
         List<String> positionFeatures = new ArrayList<>();
         positionFeatures.add("Team Leader");
         positionFeatures.add("React Developer");
@@ -90,9 +91,11 @@ public class CVTemplateExampleValues {
         experience2.setJobTitle("Software Developer");
         experience2.setStartDate("2016-01-01");
         experience2.setEndDate("2017-12-31");
+        experience2.setCompanyName("FDM");
+        experience2.setDescription("what I did: other Stuff, more Stuff and Stuff!!!!!");
         List<String> positionFeatures2 = new ArrayList<>();
-        positionFeatures.add("Team Leader");
-        positionFeatures.add("Java Developer");
+        positionFeatures2.add("Team Leader");
+        positionFeatures2.add("Java Developer");
         experience2.setPositionFeatures(positionFeatures2);
         experiences.add(experience2);
 
@@ -133,6 +136,9 @@ public class CVTemplateExampleValues {
         interests.add("Traveling");
 
         // Create a new CVTemplate object with the example values
-        return new CVTemplate(user, "John", "Doe", location, stream, null, experiences, educations, competences, certificates, languages, interests);
+        CVTemplate cvTemplate = new CVTemplate(user, "John", "Doe", location, stream, null, experiences, educations, competences, certificates, languages, interests);
+        cvTemplate.setProfile("This is the profile Text for the generated CV. Hire me, I am the best.");
+
+        return cvTemplate;
     }
 }
