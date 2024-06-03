@@ -133,6 +133,9 @@ public class CVTemplateExampleValues {
         interests.add("Traveling");
 
         // Create a new CVTemplate object with the example values
-        return new CVTemplate(user, "John", "Doe", location, stream, null, experiences, educations, competences, certificates, languages, interests);
+        CVTemplate cvTemplate = new CVTemplate(user, "John", "Doe", location, stream, null, experiences, educations, competences, certificates, languages, interests);
+        cvTemplate.setProfile("This is the profile Text for the generated CV. Hire me, I am the best.");
+
+        return cvTemplate;
     }
 }
