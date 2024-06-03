@@ -79,6 +79,8 @@ public class CVTemplateExampleValues {
         experience.setStartDate("2018-01-01");
         experience.setEndDate("2022-12-31");
         experience.setCompanyName("google");
+        experience.setDescription("what I did: Stuff, Stuff and more Stuff!!!!!");
+
         List<String> positionFeatures = new ArrayList<>();
         positionFeatures.add("Team Leader");
         positionFeatures.add("React Developer");
@@ -90,6 +92,7 @@ public class CVTemplateExampleValues {
         experience2.setStartDate("2016-01-01");
         experience2.setEndDate("2017-12-31");
         experience2.setCompanyName("FDM");
+        experience2.setDescription("what I did: other Stuff, more Stuff and Stuff!!!!!");
         List<String> positionFeatures2 = new ArrayList<>();
         positionFeatures2.add("Team Leader");
         positionFeatures2.add("Java Developer");

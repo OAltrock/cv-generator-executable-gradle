@@ -71,6 +71,7 @@ public class HelperClass {
             hashMap.put("{experiences[" + i + "].startDate}", exp.getStartDate());
             hashMap.put("{experiences[" + i + "].endDate}", exp.getEndDate());
             hashMap.put("{experiences[" + i + "].companyName}", exp.getCompanyName());
+            //hashMap.put("{experiences[" + i + "].description}", exp.getDescription());
 
             // Extract positionFeatures
             for (int j = 0; j < exp.getPositionFeatures().size(); j++) {

@@ -339,6 +339,25 @@ public class HelperClassDocxCreation {
         }
     }
 
+    //Remove empty paragraphs if they are left after removing of empty tables
+    //this is not working as intended yet. Removes all grouped empty paragraphs .....
+    public static void removeConsecutiveEmptyParagraphs(XWPFDocument document) {
+        List<XWPFParagraph> paragraphs = document.getParagraphs();
+        for (int i = paragraphs.size() - 1; i > 0; i--) {
+            XWPFParagraph currentParagraph = paragraphs.get(i);
+            XWPFParagraph previousParagraph = paragraphs.get(i - 1);
+            if (isParagraphEmpty(currentParagraph) && isParagraphEmpty(previousParagraph)) {
+                document.removeBodyElement(document.getPosOfParagraph(currentParagraph));
+            }
+        }
+    }
+
+    private static boolean isParagraphEmpty(XWPFParagraph paragraph) {
+        return paragraph.getText().trim().isEmpty();
+    }
+
+
+
     /**
      * Prints the text of each run within a paragraph, including their index within the paragraph.
      * This is only used for testing/debugging

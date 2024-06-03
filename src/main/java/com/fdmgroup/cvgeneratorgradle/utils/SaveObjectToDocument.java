@@ -12,6 +12,7 @@ import org.apache.poi.xwpf.usermodel.*;
 
 import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
+import picocli.CommandLine;
 
 import java.io.*;
 import java.util.List;
@@ -183,7 +184,7 @@ public class SaveObjectToDocument {
             }
 
 
-            String replacementString = "?????";
+            String replacementString = "[MISSING]";//string used to replace leftover placeholders in the docx file
             //HelperClass.debugParagraphs(document);
             //HelperClassDocxCreation.displayTableContent(document);
             HelperClassDocxCreation.replaceNotFoundPlaceholders(document, replacementString);//change remaining placeholders to chosen string
@@ -193,6 +194,7 @@ public class SaveObjectToDocument {
 
             HelperClassDocxCreation.removeTablesWithNoData(document,replacementString);
             HelperClassDocxCreation.removeParagraphsWithSearchString(document, replacementString);
+            HelperClassDocxCreation.removeConsecutiveEmptyParagraphs(document);
 
             if (createPdfLater) {//fix row heights, if this docx file is created to generate a pdf out of it.
                 HelperClassDocxCreation.calculateAndSetTableRowHeights(document);
