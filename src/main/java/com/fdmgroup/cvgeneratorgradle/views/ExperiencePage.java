@@ -98,7 +98,7 @@ public class ExperiencePage extends FDMPage implements HasAddableTextFields {
 
         centerBox = new FDMCenterVBoxWrapper();
         removePage = new FDMButton("Remove experience");
-        removePage.setDesign("primary");
+
         centerBox.getChildren().addAll(pageTitle, jobTitle, companyName, companyPlace, description,
                 dateWrapper, keySkillsGridPane, removePage);
 
