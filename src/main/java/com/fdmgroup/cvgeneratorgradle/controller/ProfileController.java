@@ -20,23 +20,28 @@ import java.util.function.Predicate;
 import static com.fdmgroup.cvgeneratorgradle.controller.AppUtils.findAllTextFields;
 import static com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson.saveObjectAsJson;
 
-public class ProfileController implements HasToggleableSaveButtons, HasAddableTextFields {
+public class ProfileController extends FDMController implements HasToggleableSaveButtons, HasAddableTextFields {
 
     private final Stage stage;
     private final CVTemplate cvTemplate;
     private final String profile;
     private final TreeView<String> treeView;
+    private ProfilePage page;
 
-    public ProfileController(CVTemplate cvTemplate, TreeView<String> treeView, Stage stage) {
+    public ProfileController(CVTemplate cvTemplate, TreeView<String> treeView, Stage stage, Menu recent) {
         this.stage = stage;
         this.cvTemplate = cvTemplate;
         profile = cvTemplate.getProfile();
         this.treeView = treeView;
+        this.recent = recent;
     }
 
-    public void initialize(BorderPane main, Menu recent, MainController mainController) {
+    public void initialize(BorderPane main, MainController mainController) {
         ObservableList<TextInputControl> textAreas = FXCollections.observableArrayList();
-        ProfilePage page = new ProfilePage(profile, textAreas);
+        page = new ProfilePage(profile, textAreas);
+        page.getCenterBox().setOnMouseExited(event->{
+            assignToModel();
+        });
 
         main.setCenter(page.createCenterPage(page.getCenterBox()));
         FDMCenterVBoxWrapper centerBox = page.getCenterBox();
@@ -49,8 +54,7 @@ public class ProfileController implements HasToggleableSaveButtons, HasAddableTe
             @Override
             public void invalidated(Observable observable) {
                 textAreas.forEach(textInputControl -> textInputControl.setOnMouseClicked(actionEvent -> {
-                            cvTemplate.setProfile(page.getProfile().getText());
-                            saveObjectAsJson(cvTemplate, recent,cvTemplate);
+                            assignInput(mainController);
                             try {
                                 mainController.loadRecentCV(stage);
                             } catch (FileNotFoundException e) {
@@ -66,8 +70,8 @@ public class ProfileController implements HasToggleableSaveButtons, HasAddableTe
 
         createValidationForTextFields(atLeast50Chars.negate(), textAreas, "Write at least 50 letters.");
 
-        saveBtn.setOnAction(actionEvent -> {            cvTemplate.setProfile(page.getProfile().getText());
-            saveObjectAsJson(cvTemplate, recent,cvTemplate);
+        saveBtn.setOnAction(actionEvent -> {
+            assignInput(mainController);
 
             treeView.getSelectionModel().select(2);
             try {
@@ -75,9 +79,18 @@ public class ProfileController implements HasToggleableSaveButtons, HasAddableTe
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
-            new PersonalInformationController(cvTemplate, treeView, stage).initialize(main, recent, mainController);
+            new PersonalInformationController(cvTemplate, treeView, stage, recent).initialize(main, mainController);
         });
 
         page.getPrev().setVisible(false);
+    }
+
+    void assignInput(MainController mainController) {
+        assignToModel();
+        saveObjectAsJson(cvTemplate, recent);
+    }
+
+    private void assignToModel() {
+        cvTemplate.setProfile(page.getProfile().getText());
     }
 }

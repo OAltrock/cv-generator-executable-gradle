@@ -18,11 +18,11 @@ public class SaveObjectToJson {
     public static TreeMap<String, String> recentFiles = new TreeMap<>();
     public static Set<String> recentFileNames = new HashSet<>();
 
-    public static void saveObjectAsJson(Object object, Menu recent, CVTemplate cvTemplate) {
-        doSave(object, "", true, recent, cvTemplate);
+    public static void saveObjectAsJson(Object object, Menu recent) {
+        doSave(object, "", true, recent);
     }
 
-    private static void doSave(Object object, String fileName, boolean isAutoSave, Menu recent, CVTemplate cvTemplate) {
+    private static void doSave(Object object, String fileName, boolean isAutoSave, Menu recent) {
         String fileNameWODir = fileName;
         String directory = "";
         if (!isAutoSave) {
@@ -97,8 +97,8 @@ public class SaveObjectToJson {
         System.out.println(object.getClass().getSimpleName() + " saved as JSON");
     }
 
-    public static void saveObjectAsJson(Object object, String fileName, Menu recent, CVTemplate cvTemplate) {
-        doSave(object, fileName, false, recent, cvTemplate);
+    public static void saveObjectAsJson(Object object, String fileName, Menu recent) {
+        doSave(object, fileName, false, recent);
         //create directory if it doesn't exist
 
 

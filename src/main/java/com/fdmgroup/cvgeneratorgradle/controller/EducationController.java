@@ -29,31 +29,34 @@ import java.util.function.Predicate;
 import static com.fdmgroup.cvgeneratorgradle.controller.AppUtils.findAllTextFields;
 import static com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson.saveObjectAsJson;
 
-public class EducationController implements HasToggleableSaveButtons, HasAddableTextFields, HasDateValidation {
+public class EducationController extends FDMController implements HasToggleableSaveButtons, HasAddableTextFields, HasDateValidation {
 
 
     @Setter
     @Getter
     private List<Education> educations;
 
-    CVTemplate cvTemplate;
-
     EducationPage educationPage;
 
-    private final Stage stage;
+    private DatePicker start;
+    private DatePicker end;
+
     Predicate<String> predicate = input -> !input.matches("^.*[a-zA-Z]+.*$");
-    TreeView<String> treeView;
+
 
     /**
      * @param cvTemplate {@link CVTemplate} main class to store and create the cv
      * @param treeView {@link TreeView} contains app navigation. needed to set selected to current page
      * @param stage {@link Stage} of the app
+     * @param recent {@link Menu} that contains the recently saved files. Every page needs to modify this
+     *                           when saving.
      */
-    public EducationController(CVTemplate cvTemplate, TreeView<String> treeView, Stage stage) {
+    public EducationController(CVTemplate cvTemplate, TreeView<String> treeView, Stage stage, Menu recent) {
         this.cvTemplate = cvTemplate;
         educations = cvTemplate.getEducations();
         this.treeView = treeView;
         this.stage = stage;
+        this.recent = recent;
     }
 
     /**
@@ -61,22 +64,26 @@ public class EducationController implements HasToggleableSaveButtons, HasAddable
      * Also handles validation for the page
      * @param main main {@link BorderPane} that contains all views of the app
      */
-    public void initialize(BorderPane main, Menu recent, MainController mainController) {
+    public void initialize(BorderPane main, MainController mainController) {
         CheckBox checkBox;
         VBox centerBox;
-        DatePicker start;
-        DatePicker end;
 
         //validation is tied to changes in the list of textFields (eg: refresh validation
-        //when a textField is added via button
+        //when a textField is added via button)
         ObservableList<TextInputControl> textFields = FXCollections.observableArrayList();
         educationPage = new EducationPage(cvTemplate, textFields);
+        educationPage.getCenterBox().setOnMouseExited(event->{
+            assignToModel();
+        });
 
-        Button[] buttons = new Button[]{educationPage.getNextBtn()};
+        Button[] buttons = new Button[]{educationPage.getNext()};
         main.setCenter(educationPage.createCenterPage(educationPage.getCenterBox()));
         centerBox = educationPage.getCenterBox();
         start = educationPage.getStartDate();
         end = educationPage.getEndDate();
+        List<DatePicker> datePickers = List.of(start,end);
+        datePickers.forEach(datePicker -> datePicker.setOnMouseExited(event -> assignToModel()));
+
         checkBox = educationPage.getOngoing();
 
         //predicate to check if start date is before now and start date is before
@@ -88,14 +95,14 @@ public class EducationController implements HasToggleableSaveButtons, HasAddable
                 return !startDate.isAfter(LocalDate.now());
             } else if (endDate == null) return false;
             else {
-                return startDate.isBefore(endDate) || startDate.isEqual(endDate);
+                return (startDate.isBefore(endDate) || startDate.isEqual(endDate)) && startDate.isBefore(LocalDate.now());
             }
         };
         textFields.addListener(new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
                 textFields.forEach(textInputControl -> textInputControl.setOnMouseClicked(actionEvent ->
-                        assignEducationInput(start,end, recent,mainController)));
+                        assignInput(mainController)));
             }
         });
 
@@ -106,26 +113,34 @@ public class EducationController implements HasToggleableSaveButtons, HasAddable
 
         createValidationForTextFields(predicate, textFields, "Must contain at least one letter");
         addValidationToDates(start, end, checkDate, checkBox);
-        //ToDo: change way data is saved for instance with an additional button
-        educationPage.getPrevBtn().setOnAction(actionEvent -> {
-            assignEducationInput(start, end, recent,mainController);
+        educationPage.getPrev().setOnAction(actionEvent -> {
+            assignInput(mainController);
             treeView.getSelectionModel().select(3);
-            new ExperienceController(cvTemplate, treeView, stage).initialize(main, recent,mainController);
+            new ExperienceController(cvTemplate, treeView, stage, recent).initialize(main, mainController);
         });
         buttons[0].setOnAction(actionEvent -> {
-            assignEducationInput(start, end, recent,mainController);
+            assignInput(mainController);
             treeView.getSelectionModel().select(5);
-            new SkillsController(cvTemplate, treeView, stage).initialize(main, recent, mainController);
+            new SkillsController(cvTemplate, treeView, stage, recent).initialize(main, mainController);
         });
     }
 
     /**
-     * reads out the elements of the page
-     * @param start {@link DatePicker} for the start date of an education
-     * @param end {@link DatePicker} for the end date of an education
+     * Reads out the elements of the page
+     * @param mainController {@link MainController} passed down to be able to call its methods
      */
-    private void assignEducationInput(DatePicker start, DatePicker end, Menu recent, MainController mainController) {
+    void assignInput(MainController mainController) {
 
+        assignToModel();
+        saveObjectAsJson(cvTemplate, recent);
+        try {
+            mainController.loadRecentCV(stage);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void assignToModel() {
         if (educations == null) educations = new ArrayList<>();
         if (educations.isEmpty()) educations.add(new Education());
 
@@ -146,15 +161,11 @@ public class EducationController implements HasToggleableSaveButtons, HasAddable
         //is chosen. when reading out cvTemplate, the end date picker will be automatically disabled if the date
         //is in the future and ongoing will be selected (in that case the summary page lists the end date
         //as "ongoing"
-        educations.getLast().setEndDate((end.getValue() != null) ? end.getValue().toString() : LocalDate.now().plusMonths(1).toString());
+        educations.getLast().setEndDate((educationPage.getEndDate().getValue()!=null && !educationPage.getOngoing().isSelected()) ? (LocalDate.parse(end.getValue().toString()).isAfter(LocalDate.now())) ?
+                        "9999-01-01" : end.getValue().toString()
+                 : "9999-01-01");
 
         cvTemplate.setEducations(educations);
-        saveObjectAsJson(cvTemplate, recent,cvTemplate);
-        try {
-            mainController.loadRecentCV(stage);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 }

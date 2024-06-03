@@ -20,11 +20,11 @@ import java.util.List;
 @Getter
 public class ExperiencePage extends FDMPage implements HasAddableTextFields {
     private final CVTemplate cvTemplate;
-    //private List<Experience> experiences;
+
     private final Experience experience;
     private final boolean singleExperience;
     private javafx.scene.control.ScrollPane center;
-    private FDMCenterVBoxWrapper centerBox;
+
     private javafx.scene.control.Label pageTitle;
 
     private javafx.scene.control.TextField jobTitle;
@@ -45,33 +45,11 @@ public class ExperiencePage extends FDMPage implements HasAddableTextFields {
     @Setter
     private FDMButton removePage;
 
-    private FDMButton nextBtn;
-    private FDMButton prevBtn;
-    private FDMHBox buttonWrapper;
-
-    private final ObservableList<TextInputControl> textFields;
-
-    /*public ExperiencePage(ObservableList<TextInputControl> textFields, String forFutureReference) {
-        this.forFutureReference = forFutureReference;
-        this.textFields = textFields;
-        keySkills = new ArrayList<>();
-        experience = new Experience();
-        experience.setPositionFeatures(new ArrayList<>());
-        initialize();
-    }*/
-
     public ExperiencePage(CVTemplate cvTemplate, ObservableList<TextInputControl> textFields, Experience experience, boolean singleExperience) {
         this.cvTemplate = cvTemplate;
         this.singleExperience = singleExperience;
-        /*if (cvTemplate.getExperiences() != null && !cvTemplate.getExperiences().isEmpty())
-            experiences = cvTemplate.getExperiences();
-        else {
-            cvTemplate.setExperiences(new ArrayList<>());
-            cvTemplate.getExperiences().add(new Experience("", "", "", new ArrayList<>(), "", "", ""));
-        }*/
         this.textFields = textFields;
         this.experience = experience;
-
         keySkills = new ArrayList<>();
 
         initialize();
@@ -79,15 +57,14 @@ public class ExperiencePage extends FDMPage implements HasAddableTextFields {
     }
 
     private void initialize() {
-        /*String number = (cvTemplate.getExperiences() != null) ? String.valueOf(cvTemplate.getExperiences().size()) : "1";*/
-        pageTitle = new Label(); /*"Experience" + number);*/
+        pageTitle = new Label();
         jobTitle = (experience.getJobTitle() != null) ? new javafx.scene.control.TextField(experience.getJobTitle()) : new TextField("");
         jobTitle.setPromptText("Title of job");
         companyName = (experience.getJobTitle() != null) ? new javafx.scene.control.TextField(experience.getCompanyName()) : new TextField("");
         companyName.setPromptText("Name of company");
-        companyPlace = (experience.getJobTitle() != null) ? new javafx.scene.control.TextField(experience.getCompanyName()) : new TextField("");
+        companyPlace = (experience.getCompanyPlace() != null) ? new javafx.scene.control.TextField(experience.getCompanyPlace()) : new TextField("");
         companyPlace.setPromptText("Place of company");
-        description = (experience.getJobTitle() != null) ? new TextArea(experience.getDescription()) : new TextField("");
+        description = (experience.getDescription() != null) ? new TextArea(experience.getDescription()) : new TextField("");
         description.setPromptText("Description");
         ongoing = new CheckBox("ongoing");
 
@@ -119,15 +96,10 @@ public class ExperiencePage extends FDMPage implements HasAddableTextFields {
             cvTemplate.setLocation(new Location("", 1, 1, 1, 3, 1, 3, 1, 3, 0, 1, 0, 1, 1, 3, 0, 3, false));
         createAddableAreaFromModel(keySkills, keySkillsGridPane, addBtn, textFields, cvTemplate.getLocation().getMaxPositionFeature(), "Remove key skill", "Key skill");
 
-                    /*nextBtn = new FDMButton("Next");
-                    prevBtn = new FDMButton("Previous");
-                    buttonWrapper = new FDMHBox(prevBtn, nextBtn);
-                    buttonWrapper.setDesign();*/
-
         centerBox = new FDMCenterVBoxWrapper();
         removePage = new FDMButton("Remove experience");
         removePage.setDesign("primary");
-        centerBox.getChildren().addAll(pageTitle, jobTitle, companyName, companyPlace,
+        centerBox.getChildren().addAll(pageTitle, jobTitle, companyName, companyPlace, description,
                 dateWrapper, keySkillsGridPane, removePage);
 
 

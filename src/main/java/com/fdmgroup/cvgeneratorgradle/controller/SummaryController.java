@@ -11,7 +11,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -21,18 +20,16 @@ import java.io.IOException;
 import static com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson.saveObjectAsJson;
 import static com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson.selectFileFromFileChooser;
 
-public class SummaryController {
-    CVTemplate cvTemplate;
-    TreeView<String> treeView;
-    private final Stage stage;
+public class SummaryController extends FDMController{
 
-    public SummaryController(CVTemplate cvTemplate, TreeView<String> treeView, Stage stage) {
+    public SummaryController(CVTemplate cvTemplate, TreeView<String> treeView, Stage stage, Menu recent) {
         this.cvTemplate = cvTemplate;
         this.treeView = treeView;
         this.stage = stage;
+        this.recent = recent;
     }
 
-    public void initialize(BorderPane main, Menu recent, MainController mainController) {
+    public void initialize(BorderPane main, MainController mainController) {
         SummaryPage page = new SummaryPage(cvTemplate, stage);
         main.setCenter(page.createCenterPage(page.getCenterBox()));
         if (cvTemplate.getUser()==null) cvTemplate.setUser(new User("","",""));
@@ -42,15 +39,9 @@ public class SummaryController {
 
         page.getPersonalInformation().setItems(personalInformationList);
         page.getSaveCV().setOnAction(action -> {
-                    //FileChooser fileChooser = new FileChooser();
-                    //fileChooser.setTitle("Save");
-                    //fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-                    //fileChooser.getExtensionFilters().addAll(
-                    //        new FileChooser.ExtensionFilter("JSON File","*.json"));
                     File selectedFile = selectFileFromFileChooser("Save", "JSON File", "*.json", stage);
-                    //File selectedFile = fileChooser.showSaveDialog(stage);
                     if (selectedFile != null) {
-                        saveObjectAsJson(cvTemplate, selectedFile.getPath(), recent, cvTemplate);
+                        saveObjectAsJson(cvTemplate, selectedFile.getPath(), recent);
                         try {
                             mainController.loadRecentCV(stage);
                         } catch (FileNotFoundException e) {
@@ -84,4 +75,8 @@ public class SummaryController {
     }
 
 
+    //not used by this class
+    @Override
+    void assignInput(MainController mainController) {
+    }
 }

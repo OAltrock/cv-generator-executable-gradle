@@ -39,28 +39,22 @@ public class EducationPage extends FDMPage implements HasAddableTextFields/*, Ha
     private GridPane keyModuleGridPane;
     private final List<TextInputControl> keyModules;
 
-    private FDMButton nextBtn;
-    private FDMButton prevBtn;
-    private FDMHBox buttonWrapper;
+
 
     private final ObservableList<TextInputControl> textFields;
 
     public EducationPage(CVTemplate cvTemplate, ObservableList<TextInputControl> textFields) {
         this.cvTemplate = cvTemplate;
-        if (cvTemplate.getEducations() != null && !cvTemplate.getEducations().isEmpty())
-            education = cvTemplate.getEducations().getLast();
-        else {
+        if (cvTemplate.getEducations() == null) {
             List<Education> educations = new ArrayList<>(List.of(new Education("", "",
                     "", "", "", "", "", new ArrayList<>())));
             //educations.getLast().setKeyModules(new ArrayList<>());
             cvTemplate.setEducations(educations);
-            education = cvTemplate.getEducations().getLast();
         }
+        education = cvTemplate.getEducations().getLast();
         this.textFields = textFields;
         keyModules = new ArrayList<>();
         initialize();
-
-
     }
 
     private void initialize() {
@@ -113,12 +107,12 @@ public class EducationPage extends FDMPage implements HasAddableTextFields/*, Ha
         addBtn.setDesign();
         createAddableAreaFromModel(keyModules, keyModuleGridPane, addBtn, textFields, cvTemplate.getLocation().getMaxKeyModule(), "Remove key module", "Key module");
 
-        prevBtn = new FDMButton("Previous");
-        nextBtn = new FDMButton("Next");
-        buttonWrapper = new FDMHBox(prevBtn, nextBtn);
+        prev = new FDMButton("Previous");
+        next = new FDMButton("Next");
+        buttonWrapper = new FDMHBox(prev, next);
         buttonWrapper.setDesign();
-        prevBtn.setDesign("primary");
-        nextBtn.setDesign("primary");
+        prev.setDesign("primary");
+        next.setDesign("primary");
 
         centerBox = new FDMCenterVBoxWrapper(pageTitle, degree,
                 studyTitle,
