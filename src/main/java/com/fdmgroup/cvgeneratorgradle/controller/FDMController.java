@@ -120,8 +120,6 @@ public abstract class FDMController {
                                     ))
                             .reduce(Bindings::or)
                             .get();
-                    System.out.println("change listener on button for map: " + validateLanguages.get());
-
                     Arrays.stream(prevBtn).forEach(btn -> btn.disableProperty()
                             .bind(validateLanguages));
                 }

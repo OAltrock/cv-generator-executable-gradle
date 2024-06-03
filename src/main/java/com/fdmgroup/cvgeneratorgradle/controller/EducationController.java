@@ -48,6 +48,8 @@ public class EducationController extends FDMController implements HasToggleableS
      * @param cvTemplate {@link CVTemplate} main class to store and create the cv
      * @param treeView {@link TreeView} contains app navigation. needed to set selected to current page
      * @param stage {@link Stage} of the app
+     * @param recent {@link Menu} that contains the recently saved files. Every page needs to modify this
+     *                           when saving.
      */
     public EducationController(CVTemplate cvTemplate, TreeView<String> treeView, Stage stage, Menu recent) {
         this.cvTemplate = cvTemplate;
@@ -159,8 +161,6 @@ public class EducationController extends FDMController implements HasToggleableS
         //is chosen. when reading out cvTemplate, the end date picker will be automatically disabled if the date
         //is in the future and ongoing will be selected (in that case the summary page lists the end date
         //as "ongoing"
-        //System.out.println(end.getValue().toString());
-        //if (educationPage.getEndDate().getValue()==null) educationPage.getEndDate().setValue(LocalDate.parse("9999-01-01"));
         educations.getLast().setEndDate((educationPage.getEndDate().getValue()!=null && !educationPage.getOngoing().isSelected()) ? (LocalDate.parse(end.getValue().toString()).isAfter(LocalDate.now())) ?
                         "9999-01-01" : end.getValue().toString()
                  : "9999-01-01");
