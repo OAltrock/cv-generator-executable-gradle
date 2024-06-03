@@ -323,7 +323,7 @@ public class HelperClassDocxCreation {
                     List<XWPFParagraph> paragraphs = cell.getParagraphs();
                     List<Integer> indicesToRemove = new ArrayList<>();
                     for (int i = 0; i < paragraphs.size(); i++) {
-                        if (paragraphs.get(i).getText().contains(searchString)) {
+                        if (paragraphs.get(i).getText().contains(searchString) && paragraphs.size()> 1 ) {
                             indicesToRemove.add(i);
                         }
                     }
