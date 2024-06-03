@@ -102,6 +102,11 @@ dependencies {
     // Lombok for reducing boilerplate code
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+    testImplementation("org.testfx:testfx-junit5:4.0.18")
+    testImplementation(group: 'org.hamcrest', name: 'hamcrest', version: '2.1')
+    testImplementation(group: 'org.assertj', name: 'assertj-core', version: '3.13.2')
 }
 
 test {

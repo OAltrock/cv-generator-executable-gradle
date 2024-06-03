@@ -16,10 +16,8 @@ import java.util.*;
 @Getter
 public class SkillsPage extends FDMPage implements HasAddableTextFields {
     private final CVTemplate cvTemplate;
-    private FDMCenterVBoxWrapper centerBox;
 
     String languageLevelSelected;
-
     Label pageTitle;
     Label competencesLabel;
     Label certificatesLabel;
@@ -32,10 +30,6 @@ public class SkillsPage extends FDMPage implements HasAddableTextFields {
     GridPane languageGridPane;
     GridPane hobbiesGridPane;
 
-    ObservableList<TextInputControl> textFields;
-    private FDMButton nextBtn;
-    private FDMButton prevBtn;
-    private FDMHBox buttonWrapper;
 
     public SkillsPage(CVTemplate cvTemplate, ObservableList<TextInputControl> textFields) {
         this.cvTemplate = cvTemplate;
@@ -56,9 +50,7 @@ public class SkillsPage extends FDMPage implements HasAddableTextFields {
         List<TextInputControl> competencesToAdd = new ArrayList<>();
 
         HashSet<String> competencesTemp = (cvTemplate.getCompetences() == null) ? new HashSet<>() : cvTemplate.getCompetences();
-        competencesTemp.forEach(competence -> {
-            competencesToAdd.add(new TextField(competence));
-        });
+        competencesTemp.forEach(competence -> competencesToAdd.add(new TextField(competence)));
 
         competenceGridPane = new GridPane(3, competencesToAdd.size());
         FDMButton addBtn = new FDMButton("Add competence");
@@ -67,26 +59,15 @@ public class SkillsPage extends FDMPage implements HasAddableTextFields {
         certificatesLabel = new Label("Add " + location.getMinCertificate() + " to " + location.getMaxCertificate() + " Certificates");
         List<TextInputControl> certsToAdd = new ArrayList<>();
         HashSet<String> certsTemp = (cvTemplate.getCertificates() == null) ? new HashSet<>() : cvTemplate.getCertificates();
-        certsTemp.forEach(competence -> {
-            certsToAdd.add(new TextField(competence));
-        });
-        //textFields.addAll(certsToAdd);
+        certsTemp.forEach(competence -> certsToAdd.add(new TextField(competence)));
         certificateGridPane = new GridPane(3, certsToAdd.size());
         FDMButton addCertBtn = new FDMButton("Add certificate");
         addCertBtn.setDesign("primary");
         createAddableAreaFromModel(certsToAdd, certificateGridPane, addCertBtn, textFields, location.getMaxCertificate(), "Remove certificate", "Certificate");
 
         languagesLabel = new Label("Add " + location.getMinLanguage() + " to " + location.getMaxLanguage() + " Languages");
-        /*List<TextInputControl> languagesToAdd = new ArrayList<>();
-        HashSet<Language> languagesTemp = (cvTemplate.getLanguages() == null) ? new HashSet<>() : cvTemplate.getLanguages();
-        languagesTemp.forEach(competence -> {
-            languagesToAdd.add(new TextField(competence.getLanguageType()));
-        });*/
-        //textFields.addAll(languagesToAdd);
-        //ToDo: language level
         languageGridPane = new GridPane(2, location.getMaxLanguage());
         languageGridPane.setMinWidth(600);
-
         if (cvTemplate.getLocation() == null) cvTemplate.setLocation(
                 new Location("Germany",
                         1, 3, 1, 1,
@@ -94,24 +75,17 @@ public class SkillsPage extends FDMPage implements HasAddableTextFields {
                         3, 1, 3,
                         1, 3, 1, 3,
                         1, 3, true));
-        //languageLevelButton.setMinWidth(100);
         if (cvTemplate.getLanguages() != null) {
             Iterator<Language> languageIterator = cvTemplate.getLanguages().iterator();
             for (int i = 0; i < cvTemplate.getLocation().getMaxLanguage(); i++) {
                 List<MenuItem> languageLevels = Arrays.stream(LanguageLevel.values()).map(languageLevel ->
                 {
                     MenuItem menuItem = new MenuItem(languageLevel.toString());
-                    menuItem.setOnAction(action -> {
-                        languageLevelSelected = menuItem.getText();
-                    });
+                    menuItem.setOnAction(action -> languageLevelSelected = menuItem.getText());
                     return menuItem;
                 }).toList();
                 Language current =  (languageIterator.hasNext()) ? languageIterator.next() : null;
                 setLanguageRow(Objects.requireNonNullElseGet(current, Language::new), languageLevels, i);
-
-                //textFields.add(textField);
-                //FDMButton addLanguageBtn = new FDMButton("Add language");
-                //TextInputControl language = new TextField(){};
             }
         }
         else {
@@ -119,39 +93,27 @@ public class SkillsPage extends FDMPage implements HasAddableTextFields {
                 List<MenuItem> languageLevels = Arrays.stream(LanguageLevel.values()).map(languageLevel ->
                 {
                     MenuItem menuItem = new MenuItem(languageLevel.toString());
-                    menuItem.setOnAction(action -> {
-                        languageLevelSelected = menuItem.getText();
-                    });
+                    menuItem.setOnAction(action -> languageLevelSelected = menuItem.getText());
                     return menuItem;
                 }).toList();
                 setLanguageRow(new Language(), languageLevels, i);
-
-                //textFields.add(textField);
-                //FDMButton addLanguageBtn = new FDMButton("Add language");
-                //TextInputControl language = new TextField(){};
             }
         }
-
-
-        //createAddableAreaFromModel(languagesToAdd, languageGridPane,  addLanguageBtn, languageLevelButton, textFields, location.getMaxLanguage(), "Remove language", "Language", cvTemplate);
 
         hobbiesLabel = new Label("Add " + location.getMinInterest() + " to " + location.getMaxInterest() + " Hobbies or Interests");
         List<TextInputControl> hobbiesToAdd = new ArrayList<>();
         HashSet<String> hobbiesTemp = (cvTemplate.getInterests() == null) ? new HashSet<>() : cvTemplate.getInterests();
-        hobbiesTemp.forEach(competence -> {
-            hobbiesToAdd.add(new TextField(competence));
-        });
-        //textFields.addAll(hobbiesToAdd);
+        hobbiesTemp.forEach(competence -> hobbiesToAdd.add(new TextField(competence)));
         hobbiesGridPane = new GridPane(3, hobbiesToAdd.size());
         FDMButton addHobbyBtn = new FDMButton("Add interest or hobby");
         addHobbyBtn.setDesign("primary");
         createAddableAreaFromModel(hobbiesToAdd, hobbiesGridPane, addHobbyBtn, textFields, location.getMaxInterest(), "Remove interest", "Interest or hobby");
 
-        prevBtn = new FDMButton("Previous");
-        prevBtn.setDesign("primary");
-        nextBtn = new FDMButton("Next");
-        nextBtn.setDesign("primary");
-        buttonWrapper = new FDMHBox(prevBtn, nextBtn);
+        prev = new FDMButton("Previous");
+        prev.setDesign("primary");
+        next = new FDMButton("Next");
+        next.setDesign("primary");
+        buttonWrapper = new FDMHBox(prev, next);
         buttonWrapper.setDesign();
 
         centerBox = new FDMCenterVBoxWrapper(pageTitle, competencesLabel, competenceGridPane, certificatesLabel,

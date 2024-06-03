@@ -28,29 +28,28 @@ import java.util.Objects;
 
 import static com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson.saveObjectAsJson;
 
-public class PersonalInformationController implements HasToggleableSaveButtons, HasAddableTextFields {
+public class PersonalInformationController extends FDMController implements HasToggleableSaveButtons, HasAddableTextFields {
 
-    private final Stage stage;
+
     private PersonalInfoPage page;
     private User user;
     private Stream stream;
     private Location location;
 
-    private final CVTemplate cvTemplate;
-    private final TreeView<String> treeView;
     private final HashSet<String> TECHNICAL = new HashSet<>(List.of("Java", "HTML/CSS/JavaScript", "JUnit", "Eclipse", "Maven", "Git", "MySQL", "UML"));
     private final HashSet<String> BUSINESS = new HashSet<>(List.of("MySQL", "BPMN", "UML"));
 
-    public PersonalInformationController(CVTemplate cvTemplate, TreeView<String> treeView, Stage stage) {
+    public PersonalInformationController(CVTemplate cvTemplate, TreeView<String> treeView, Stage stage, Menu recent) {
         this.cvTemplate = cvTemplate;
         user = cvTemplate.getUser();
         stream = cvTemplate.getStream();
         location = cvTemplate.getLocation();
         this.treeView = treeView;
         this.stage = stage;
+        this.recent = recent;
     }
 
-    public void initialize(BorderPane main, Menu recent, MainController mainController) {
+    public void initialize(BorderPane main, MainController mainController) {
         ObservableList<TextInputControl> textFields = FXCollections.observableArrayList();
         if (user == null) user = new User("", "", "", "");
         if (stream == null) stream = new Stream("", new ArrayList<>(), new HashSet<>());
@@ -58,11 +57,14 @@ public class PersonalInformationController implements HasToggleableSaveButtons, 
         page = new PersonalInfoPage(user, location, stream, textFields);
         main.setCenter(page.createCenterPage(page.getCenterBox()));
         Button[] buttons = new Button[]{page.getNextBtn()};
+        page.getCenterBox().setOnMouseExited(event->{
+            assignToModel();
+        });
         textFields.addListener(new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
                 textFields.forEach(textInputControl -> textInputControl.setOnMouseClicked(actionEvent ->
-                        assignInfoInput(recent, mainController)));
+                        assignInput(mainController)));
             }
         });
 
@@ -103,22 +105,32 @@ public class PersonalInformationController implements HasToggleableSaveButtons, 
         });
 
         buttons[0].setOnAction(actionEvent -> {
-            assignInfoInput(recent, mainController);
+            assignInput(mainController);
             treeView.getSelectionModel().select(3);
-            new ExperienceController(cvTemplate, treeView, stage).initialize(main, recent, mainController);
+            new ExperienceController(cvTemplate, treeView, stage, recent).initialize(main, mainController);
         });
 
         page.getPrevBtn().setOnAction(actionEvent -> {
-            assignInfoInput(recent, mainController);
+            assignInput(mainController);
             treeView.getSelectionModel().select(1);
-            new ProfileController(cvTemplate, treeView, stage).initialize(main, recent, mainController);
+            new ProfileController(cvTemplate, treeView, stage, recent).initialize(main, mainController);
         });
 
 
     }
 
-    private void assignInfoInput(Menu recent, MainController mainController) {
+    void assignInput(MainController mainController) {
 
+        assignToModel();
+        saveObjectAsJson(cvTemplate, recent);
+        try {
+            mainController.loadRecentCV(stage);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void assignToModel() {
         user.setFirstName(page.getFirstName().getText());
         user.setLastName(page.getLastName().getText());
         user.setEmail(page.getEmail().getText());
@@ -131,11 +143,5 @@ public class PersonalInformationController implements HasToggleableSaveButtons, 
         //ToDo: add addable competences
         cvTemplate.setCompetences(temp);
         cvTemplate.setLocation(location);
-        saveObjectAsJson(cvTemplate, recent,cvTemplate);
-        try {
-            mainController.loadRecentCV(stage);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

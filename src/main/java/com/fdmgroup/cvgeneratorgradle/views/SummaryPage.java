@@ -22,8 +22,8 @@ import java.util.List;
 
 @Getter
 public class SummaryPage extends FDMPage {
-    private Stage stage;
-    private CVTemplate cvTemplate;
+    private final Stage stage;
+    private final CVTemplate cvTemplate;
 
     private FDMCenterVBoxWrapper centerBox;
 
@@ -89,6 +89,7 @@ public class SummaryPage extends FDMPage {
                     "Job title: " + experience1.getJobTitle(),
                     "Company: " + experience1.getCompanyName(),
                     "at: " + experience1.getCompanyPlace(),
+                    "description: " + experience1.getDescription(),
                     "from: " + experience1.getStartDate(),
                     "to: " + ongoing);
             if (experience1.getPositionFeatures() != null) {
