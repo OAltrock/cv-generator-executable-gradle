@@ -1,20 +1,22 @@
 package com.fdmgroup.cvgeneratorgradle.utils;
 
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
+
+
 
 public class GeneratorConfig {
-    static final String path = System.getProperty("user.home")+"/cv-generator-config/config";
+    static final String path = String.valueOf(Paths.get(".", File.separator , "config").normalize());
 
     public static void saveRecent(TreeMap<String, String> recentFiles, Set<String> names){
         File newFile = new File(path);
         if (!newFile.exists()) {
-            newFile.mkdirs();
+            System.out.println(newFile.mkdirs()+" created");
         }
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path+ "/recent.ser")))
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path+File.separator+"recent.ser")))
         {
 
             oos.writeObject(recentFiles);
@@ -25,7 +27,7 @@ public class GeneratorConfig {
             e.printStackTrace();
         }
         try (ObjectOutputStream objectOutputStream =
-                     new ObjectOutputStream(new FileOutputStream(path+ "/nameSet.set"))) {
+                     new ObjectOutputStream(new FileOutputStream(path+File.separator+ "nameSet.set"))) {
             objectOutputStream.writeObject(names);
             System.out.println("Name set successfully serialized");
         }
@@ -35,50 +37,59 @@ public class GeneratorConfig {
     }
 
     public static TreeMap<String, String> loadRecentFiles(){
-        TreeMap<String, String> deserializedTreeMap = null;
         File newTemp = new  File(path);
         if (!newTemp.exists()) {
-            newTemp.mkdirs();
-
+            System.out.println(newTemp.mkdirs()+" created");
         }
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path+ "/recent.ser")))
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path+File.separator+ "recent.ser")))
         {
-            deserializedTreeMap = (TreeMap<String, String>) ois.readObject();
-            if (deserializedTreeMap==null) deserializedTreeMap = new TreeMap<>();
+            TreeMap<String,String> deserializedTreeMap = new TreeMap<>();
+            Object obj = ois.readObject();
+            if (obj==null) return new TreeMap<>();
+            if (obj instanceof TreeMap<?,?>) ((TreeMap<?, ?>) obj).forEach((key,value) -> {
+                if (key instanceof String && value instanceof String) deserializedTreeMap.put((String) key, (String) value);
+            });
             System.out.println("TreeMap deserialized successfully.");
+            return deserializedTreeMap;
         }
         catch (IOException | ClassNotFoundException e)
         {
-            try(FileOutputStream fileOutputStream = new FileOutputStream(path + "/recent.ser")){
+            try(FileOutputStream fileOutputStream = new FileOutputStream(path +File.separator+ "recent.ser")){
+                fileOutputStream.flush();
+                System.out.println("New config file created");
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
             return new TreeMap<>();
         }
-        return deserializedTreeMap;
     }
 
-    public static HashSet<String> loadRecentFileNames(){
-        HashSet<String> deserializedTreeSet = null;
+    public static HashSet<? extends String> loadRecentFileNames(){
         File newTemp = new  File(path);
         if (!newTemp.exists()) {
-                newTemp.mkdirs();
-
+            System.out.println(newTemp.mkdirs()+ " created");
         }
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path + "/nameSet.set")))
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path +File.separator+ "nameSet.set")))
         {
-            deserializedTreeSet = (HashSet<String>) ois.readObject();
-            if (deserializedTreeSet==null) deserializedTreeSet = new HashSet<>();
+            Object obj = ois.readObject();
+            HashSet<String> res = new HashSet<>();
+            if (obj==null) return new HashSet<>();
+
+            if (obj instanceof HashSet) ((HashSet<?>) obj).forEach(item -> {
+                if (item instanceof String) res.add((String) item);
+            });
             System.out.println("Recent names deserialized successfully.");
+            return res;
         }
         catch (IOException | ClassNotFoundException e)
         {
-            try(FileOutputStream fileOutputStream = new FileOutputStream(path + "/nameSet.set")){
+            try(FileOutputStream fileOutputStream = new FileOutputStream(path +File.separator+ "nameSet.set")){
+                fileOutputStream.flush();
+                System.out.println("New config file created");
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
             return new HashSet<>();
         }
-        return deserializedTreeSet;
     }
 }

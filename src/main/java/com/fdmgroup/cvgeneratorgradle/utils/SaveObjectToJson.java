@@ -1,6 +1,5 @@
 package com.fdmgroup.cvgeneratorgradle.utils;
 
-import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import javafx.scene.control.Menu;
@@ -8,34 +7,35 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class SaveObjectToJson {
-    //static final String AUTO_SAVE_PATH = "./saves/autosave_part.json";
     public static TreeMap<String, String> recentFiles = new TreeMap<>();
     public static Set<String> recentFileNames = new HashSet<>();
-    static final String savePath = System.getProperty("user.home")+"/cv generator saves/";
+    static final String savePath = String.valueOf(Paths.get(".", File.separator, "saves").normalize());
 
     public static void saveObjectAsJson(Object object, Menu recent) {
-        doSave(object, "", true, recent);
+        doSave(object, "", true);
     }
 
-    private static void doSave(Object object, String fileName, boolean isAutoSave, Menu recent) {
+    private static void doSave(Object object, String fileName, boolean isAutoSave) {
         String fileNameWODir = fileName;
         String directory = "";
         if (!isAutoSave) {
             for (int i = fileName.length() - 1; i >= 0; i--) {
-                if (fileName.charAt(i) == '/') {
+                if (fileName.charAt(i) == File.pathSeparatorChar) {
                     fileNameWODir = fileName.substring(i + 1);
                     directory = fileName.substring(0, i + 1);
                     break;
                 }
             }
         } else {
-            directory = savePath +  "auto saves/";
+            directory = savePath + File.separator + "auto saves"+File.separator;
         }
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -44,7 +44,7 @@ public class SaveObjectToJson {
         System.out.println("dir name: "+ directory);*/
         File newFile = new File(directory);
         if (!newFile.exists()) {
-            newFile.mkdirs();
+            System.out.println(newFile.mkdirs()+" created");
         }
         if (isAutoSave) {
             FolderStructurePrinter folderStructurePrinter = new FolderStructurePrinter();
@@ -69,7 +69,8 @@ public class SaveObjectToJson {
                 if (recentFiles.size() < 10) {
                     recentFiles.putIfAbsent(String.valueOf(Files.getLastModifiedTime(Path.of(newFileWithDir.getAbsolutePath()))), newFileWithDir.getAbsolutePath());
                 } else {
-                    recentFiles.remove(recentFiles.lastEntry());
+                    recentFiles.pollLastEntry();
+                    //recentFiles.remove(recentFiles.lastEntry());
                     recentFiles.putIfAbsent(String.valueOf(Files.getLastModifiedTime(Path.of(newFileWithDir.getAbsolutePath()))), newFileWithDir.getAbsolutePath());
                 }
             }
@@ -99,9 +100,7 @@ public class SaveObjectToJson {
     }
 
     public static void saveObjectAsJson(Object object, String fileName, Menu recent) {
-        doSave(object, fileName, false, recent);
-        //create directory if it doesn't exist
-
+        doSave(object, fileName, false);
 
         // create file path with user and his local documents folder e.g. C:\Users\Username\Documents
         //String documentsFolderPath = System.getProperty("user.home") + File.separator + "Documents";

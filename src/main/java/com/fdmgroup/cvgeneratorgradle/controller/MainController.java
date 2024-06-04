@@ -22,10 +22,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.fdmgroup.cvgeneratorgradle.utils.GeneratorConfig.*;
 import static com.fdmgroup.cvgeneratorgradle.utils.LoadObjectFromJson.loadObjectFromJson;
@@ -222,7 +220,7 @@ public class MainController implements Initializable {
             recentFile.setStyle("-fx-color: white");
             return recentFile;
         }).toList());
-        recentFileNames = loadRecentFileNames();
+        recentFileNames = new HashSet<>(loadRecentFileNames());
         recentFiles = loadRecentFiles();
         menuBar.setOnMouseEntered(event -> {
             loadRecent();
