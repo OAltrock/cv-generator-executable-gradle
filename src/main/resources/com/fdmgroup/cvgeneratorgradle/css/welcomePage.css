@@ -2,6 +2,10 @@
 	-fx-font-family: "Varela Round", cursive;
 	-fx-font-size: 24px;
 	-fx-text-fill: white;
+	-fx-fdm-darkGrey: #1a1a1a;
+	-fx-fdm-gray: #232323;
+	-fx-fdm-lightGray: #303030;
+	-fx-fdm-coconut: #E9EDF6;
 	/*
 	-fx-focus-color: #c3c3bb;
 	-fx-accent: #c3c3bb;
@@ -9,15 +13,15 @@
 }
 
 .text-field, .text-area {
-    -fx-background-color: #1a1a1a;
+    -fx-background-color: -fx-fdm-lightGray;
 }
 
 .text-area .content {
-    -fx-background-color: #1a1a1a;
+    -fx-background-color: -fx-fdm-lightGray;
 }
 
 .tree-view .tree-cell {
-    -fx-background-color: #1a1a1a;
+    -fx-background-color: -fx-fdm-darkGrey;
 }
 
 .tree-view .tree-cell:focused {
@@ -33,7 +37,7 @@
 }
 
 #menuBar, #topMenu {
-	-fx-background-color: #1a273d;
+	-fx-background-color: -fx-fdm-lightGray;
 	-fx-color: red;
 }
 
@@ -42,7 +46,7 @@
 }
 
 #menuBar .menu-button {
-    -fx-background-color: #1a273d;
+    -fx-background-color: -fx-fdm-lightGray;
 }
 
 #menuBar .menu-button:hover {
@@ -50,7 +54,7 @@
 }
 
 .menu-button .menu-item {
-    -fx-background-color: #1a1a1a;
+    -fx-background-color: -fx-fdm-darkGrey;
 }
 
 .menu-button .menu-item:hover {
@@ -58,15 +62,15 @@
 }
 
 .list-view .list-cell{
-    -fx-background-color: #1a1a1a;
+    -fx-background-color: -fx-fdm-lightGray;
 }
 
 .list-view {
-    -fx-background-color: #1a1a1a;
+    -fx-background-color: -fx-fdm-darkGrey;
 }
 
 .choice-box .context-menu {
-    -fx-background-color: #1a1a1a;
+    -fx-background-color: -fx-fdm-darkGrey;
 }
 
 .choice-box .menu-item > .label {
@@ -90,7 +94,7 @@
 }
 
 #mainWindow {
-    -fx-background-color: #1a1a1a;
+    -fx-background-color: -fx-fdm-gray;
 }
 
 #centerScrollPaneWrapper {
@@ -117,12 +121,12 @@
 }
 
 .date-picker-popup > .month-year-pane {
-    -fx-background-color: #1a1a1a;
+    -fx-background-color: -fx-fdm-darkGrey;
 }
 
 
 .date-picker-popup > * >.day-name-cell {
-    -fx-background-color: #1a1a1a;
+    -fx-background-color: -fx-fdm-darkGrey;
     -fx-border-color: white;
 }
 
@@ -132,12 +136,12 @@
 }
 
 .date-picker-popup > * > .week-number-cell {
-    -fx-background-color: #1a1a1a;
+    -fx-background-color: -fx-fdm-darkGrey;
 }
 
 
 .date-picker .arrow-button {
-    -fx-background-color: #1a1a1a;
+    -fx-background-color: -fx-fdm-darkGrey;
     -fx-border-color: white;
 }
 
@@ -146,7 +150,7 @@
 }
 
 .date-picker-popup > * > .today {
-    -fx-background-color: #1a1a1a;
+    -fx-background-color: -fx-fdm-darkGrey;
 }
 
 #centerBox .menu-button >.label {
@@ -154,13 +158,13 @@
 }
 
 .button:hover, .menu-button:hover, .choice-box:hover {
-    -fx-background-color: #00cc00;
+    -fx-background-color: -fx-fdm-coconut;
     -fx-scale-x: 1.1;
     -fx-scale-y: 1.1;
     -fx-scale-z: 1.1;
 }
 
 #centerBox {
-    -fx-background-color: #363630;
+    -fx-background-color: -fx-fdm-darkGrey;
 }
 

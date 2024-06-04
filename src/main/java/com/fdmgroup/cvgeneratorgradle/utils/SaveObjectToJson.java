@@ -17,6 +17,7 @@ public class SaveObjectToJson {
     //static final String AUTO_SAVE_PATH = "./saves/autosave_part.json";
     public static TreeMap<String, String> recentFiles = new TreeMap<>();
     public static Set<String> recentFileNames = new HashSet<>();
+    static final String savePath = System.getProperty("user.home")+"/cv generator saves/";
 
     public static void saveObjectAsJson(Object object, Menu recent) {
         doSave(object, "", true, recent);
@@ -34,7 +35,7 @@ public class SaveObjectToJson {
                 }
             }
         } else {
-            directory = System.getProperty("user.home")+"/cv generator saves/auto saves/";
+            directory = savePath +  "auto saves/";
         }
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();

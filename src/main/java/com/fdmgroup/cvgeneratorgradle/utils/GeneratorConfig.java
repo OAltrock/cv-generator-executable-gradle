@@ -7,7 +7,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 public class GeneratorConfig {
-    private static final String path = System.getProperty("user.home")+"/cv-generator-config/config";
+    static final String path = System.getProperty("user.home")+"/cv-generator-config/config";
 
     public static void saveRecent(TreeMap<String, String> recentFiles, Set<String> names){
         File newFile = new File(path);
