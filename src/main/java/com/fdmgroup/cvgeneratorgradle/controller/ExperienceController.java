@@ -207,7 +207,7 @@ public class ExperienceController extends FDMController implements HasToggleable
 
     void assignInput(MainController mainController) {
         assignToModel();
-        saveObjectAsJson(cvTemplate, recent);
+        saveObjectAsJson(cvTemplate);
         try {
             mainController.loadRecentCV(stage);
         } catch (FileNotFoundException e) {

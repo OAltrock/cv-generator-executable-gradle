@@ -14,7 +14,7 @@ public class GeneratorConfig {
     public static void saveRecent(TreeMap<String, String> recentFiles, Set<String> names){
         File newFile = new File(path);
         if (!newFile.exists()) {
-            System.out.println(newFile.mkdirs()+" created");
+            if(newFile.mkdirs()) System.out.println(newFile+" created");
         }
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path+File.separator+"recent.ser")))
         {
@@ -39,7 +39,7 @@ public class GeneratorConfig {
     public static TreeMap<String, String> loadRecentFiles(){
         File newTemp = new  File(path);
         if (!newTemp.exists()) {
-            System.out.println(newTemp.mkdirs()+" created");
+            if(newTemp.mkdirs()) System.out.println(newTemp+" created");
         }
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path+File.separator+ "recent.ser")))
         {
@@ -67,7 +67,7 @@ public class GeneratorConfig {
     public static HashSet<? extends String> loadRecentFileNames(){
         File newTemp = new  File(path);
         if (!newTemp.exists()) {
-            System.out.println(newTemp.mkdirs()+ " created");
+            if(newTemp.mkdirs()) System.out.println(newTemp+" created");
         }
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path +File.separator+ "nameSet.set")))
         {

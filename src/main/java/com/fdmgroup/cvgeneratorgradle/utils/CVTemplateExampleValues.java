@@ -41,7 +41,7 @@ public class CVTemplateExampleValues {
         System.out.println("Word file path: " + outpathWord);
         System.out.println("PDF file path: " + outpathPDF);
 
-        SaveObjectToJson.saveObjectAsJson(cVExampleTemplate, outpathjson, new Menu());
+        SaveObjectToJson.saveObjectAsJson(cVExampleTemplate, outpathjson);
 
         try {
             SaveObjectToDocument.createDocument(cVExampleTemplate, "Word", outpathWord);

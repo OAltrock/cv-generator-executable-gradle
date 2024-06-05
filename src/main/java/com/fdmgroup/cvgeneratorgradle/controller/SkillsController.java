@@ -89,7 +89,7 @@ public class SkillsController extends FDMController implements HasToggleableSave
     void assignInput(MainController mainController) {
         assignToModel();
 
-        saveObjectAsJson(cvTemplate, recent);
+        saveObjectAsJson(cvTemplate);
         try {
             mainController.loadRecentCV(stage);
         } catch (FileNotFoundException e) {

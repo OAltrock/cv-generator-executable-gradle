@@ -45,7 +45,7 @@ public class SaveObjectToDocument {
 
         //creating an auto save in json format:
         String saveFilePath = SaveObjectToJson.savePath+File.separator+"autosave_fullCV.json";
-        SaveObjectToJson.saveObjectAsJson(cvTemplate, saveFilePath, recent);
+        SaveObjectToJson.saveObjectAsJson(cvTemplate, saveFilePath);
 
         if ("docx".equalsIgnoreCase(format) || "word".equalsIgnoreCase(format)) {
             saveObjectAsWord(cvTemplate, outputPath, false);

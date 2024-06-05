@@ -238,7 +238,7 @@ public class MainController implements Initializable {
     public void saveCV(ActionEvent event) {
         File selectedFile = selectFileFromFileChooser("Save", "JSON File", "*.json", (Stage) mainWindow.getScene().getWindow());
         if (selectedFile != null) {
-            saveObjectAsJson(cvTemplate, selectedFile.getPath(), recent);
+            saveObjectAsJson(cvTemplate, selectedFile.getPath());
             try {
                 this.loadRecentCV((Stage) mainWindow.getScene().getWindow());
             } catch (FileNotFoundException e) {

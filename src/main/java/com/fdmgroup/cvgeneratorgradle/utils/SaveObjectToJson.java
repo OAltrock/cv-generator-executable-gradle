@@ -19,7 +19,7 @@ public class SaveObjectToJson {
     public static Set<String> recentFileNames = new HashSet<>();
     static final String savePath = String.valueOf(Paths.get(".", File.separator, "saves").normalize());
 
-    public static void saveObjectAsJson(Object object, Menu recent) {
+    public static void saveObjectAsJson(Object object) {
         doSave(object, "", true);
     }
 
@@ -44,7 +44,7 @@ public class SaveObjectToJson {
         System.out.println("dir name: "+ directory);*/
         File newFile = new File(directory);
         if (!newFile.exists()) {
-            System.out.println(newFile.mkdirs()+" created");
+            if(newFile.mkdirs()) System.out.println(newFile+" created");
         }
         if (isAutoSave) {
             FolderStructurePrinter folderStructurePrinter = new FolderStructurePrinter();
@@ -99,7 +99,7 @@ public class SaveObjectToJson {
         System.out.println(object.getClass().getSimpleName() + " saved as JSON");
     }
 
-    public static void saveObjectAsJson(Object object, String fileName, Menu recent) {
+    public static void saveObjectAsJson(Object object, String fileName) {
         doSave(object, fileName, false);
 
         // create file path with user and his local documents folder e.g. C:\Users\Username\Documents

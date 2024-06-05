@@ -87,7 +87,7 @@ public class ProfileController extends FDMController implements HasToggleableSav
 
     void assignInput(MainController mainController) {
         assignToModel();
-        saveObjectAsJson(cvTemplate, recent);
+        saveObjectAsJson(cvTemplate);
     }
 
     private void assignToModel() {

@@ -132,7 +132,7 @@ public class EducationController extends FDMController implements HasToggleableS
     void assignInput(MainController mainController) {
 
         assignToModel();
-        saveObjectAsJson(cvTemplate, recent);
+        saveObjectAsJson(cvTemplate);
         try {
             mainController.loadRecentCV(stage);
         } catch (FileNotFoundException e) {
