@@ -269,12 +269,11 @@ public class SaveObjectToDocument {
                         if (runText.contains(key)) {
                             String replacementValue = entry.getValue();
 
-                            if (key.contains("startDate") || key.contains("endDate")){//reformatting dates
-                                replacementValue =
-                                        HelperClassDocxCreation.changeDateFormat
-                                                (replacementValue, "yyyy-MM-dd","MMM yyyy");
+                            if ((key.contains("startDate") || key.contains("endDate"))) {//reformatting dates
+                                    replacementValue =
+                                            HelperClassDocxCreation.changeDateFormat
+                                                    (replacementValue, "yyyy-MM-dd", "MMM yyyy");
                             }
-
                             run.setText(runText.replace(key, replacementValue), 0);
                         }
                     }

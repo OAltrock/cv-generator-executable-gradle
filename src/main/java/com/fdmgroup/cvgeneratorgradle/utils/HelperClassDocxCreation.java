@@ -242,7 +242,43 @@ public class HelperClassDocxCreation {
                 }
             }
         }
+
+        // Replace placeholders in headers
+        for (XWPFHeader header : document.getHeaderList()) {
+            for (XWPFParagraph paragraph : header.getParagraphs()) {
+                replaceTextForNotFoundPlaceholders(paragraph, pattern, replacement);
+            }
+            for (XWPFTable table : header.getTables()) {
+                for (XWPFTableRow row : table.getRows()) {
+                    for (XWPFTableCell cell : row.getTableCells()) {
+                        for (XWPFParagraph paragraph : cell.getParagraphs()) {
+                            replaceTextForNotFoundPlaceholders(paragraph, pattern, replacement);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Replace placeholders in footers
+        for (XWPFFooter footer : document.getFooterList()) {
+            for (XWPFParagraph paragraph : footer.getParagraphs()) {
+                replaceTextForNotFoundPlaceholders(paragraph, pattern, replacement);
+            }
+            for (XWPFTable table : footer.getTables()) {
+                for (XWPFTableRow row : table.getRows()) {
+                    for (XWPFTableCell cell : row.getTableCells()) {
+                        for (XWPFParagraph paragraph : cell.getParagraphs()) {
+                            replaceTextForNotFoundPlaceholders(paragraph, pattern, replacement);
+                        }
+                    }
+                }
+            }
+        }
+
     }
+
+
+
 
     private static void replaceTextForNotFoundPlaceholders(XWPFParagraph paragraph, Pattern pattern, String replacement) {
         for (XWPFRun run : paragraph.getRuns()) {

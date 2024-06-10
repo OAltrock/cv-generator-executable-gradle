@@ -49,55 +49,64 @@ public class HelperClass {
         Map<String, String> hashMap = new HashMap<>();
 
         // Extract user fields
-        if (obj.getUser().getFirstName() != null) {
+        if (obj.getUser().getFirstName() != null && !obj.getUser().getFirstName().isEmpty()) {
             hashMap.put("{user.firstName}", obj.getUser().getFirstName());
         }
-        if (obj.getUser().getLastName() != null) {
+        if (obj.getUser().getLastName() != null && !obj.getUser().getLastName().isEmpty()) {
             hashMap.put("{user.lastName}", obj.getUser().getLastName());
         }
-        if (obj.getUser().getEmail() != null) {
+        if (obj.getUser().getEmail() != null && !obj.getUser().getEmail().isEmpty()) {
             hashMap.put("{user.email}", obj.getUser().getEmail());
         }
-        if (obj.getUser().getRole() != null) {
+        if (obj.getUser().getRole() != null && !obj.getUser().getRole().isEmpty()) {
             hashMap.put("{user.role}", obj.getUser().getRole());
         }
-        if (obj.getProfile() != null) {
+        if (obj.getProfile() != null && !obj.getProfile().isEmpty()) {
             hashMap.put("{profile}", obj.getProfile());
         }
 
         // Extract location fields
         if (obj.getLocation() != null) {
-            hashMap.put("{location.locationName}", obj.getLocation().getLocationName());
+            if (obj.getLocation().getLocationName() != null && !obj.getLocation().getLocationName().isEmpty()) {
+                hashMap.put("{location.locationName}", obj.getLocation().getLocationName());
+            }
         }
 
         // Extract stream fields
-        if (obj.getStream() != null && obj.getStream().getStreamName() != null) {
-            hashMap.put("{stream.streamName}", obj.getStream().getStreamName());
+        if (obj.getStream() != null) {
+            if (obj.getStream().getStreamName() != null && !obj.getStream().getStreamName().isEmpty()) {
+                hashMap.put("{stream.streamName}", obj.getStream().getStreamName());
+            }
         }
 
         // Extract experiences
-        for (int i = 0; i < obj.getExperiences().size(); i++) {
-            Experience exp = obj.getExperiences().get(i);
-            if (exp.getJobTitle() != null) {
-                hashMap.put("{experiences[" + i + "].jobTitle}", exp.getJobTitle());
-            }
-            if (exp.getStartDate() != null) {
-                hashMap.put("{experiences[" + i + "].startDate}", exp.getStartDate());
-            }
-            if (exp.getEndDate() != null) {
-                hashMap.put("{experiences[" + i + "].endDate}", exp.getEndDate());
-            }
-            if (exp.getCompanyName() != null) {
-                hashMap.put("{experiences[" + i + "].companyName}", exp.getCompanyName());
-            }
-            if (exp.getDescription() != null) {
-                hashMap.put("{experiences[" + i + "].description}", exp.getDescription());
-            }
+        if (obj.getExperiences() != null) {
+            for (int i = 0; i < obj.getExperiences().size(); i++) {
+                Experience exp = obj.getExperiences().get(i);
+                if (exp.getJobTitle() != null && !exp.getJobTitle().isEmpty()) {
+                    hashMap.put("{experiences[" + i + "].jobTitle}", exp.getJobTitle());
+                }
+                if (exp.getStartDate() != null && !exp.getStartDate().isEmpty()) {
+                    hashMap.put("{experiences[" + i + "].startDate}", exp.getStartDate());
+                }
+                if (exp.getEndDate() != null && !exp.getEndDate().isEmpty()) {
+                    hashMap.put("{experiences[" + i + "].endDate}", exp.getEndDate());
+                }
+                if (exp.getCompanyName() != null && !exp.getCompanyName().isEmpty()) {
+                    hashMap.put("{experiences[" + i + "].companyName}", exp.getCompanyName());
+                }
+                if (exp.getDescription() != null && !exp.getDescription().isEmpty()) {
+                    hashMap.put("{experiences[" + i + "].description}", exp.getDescription());
+                }
 
-            // Extract positionFeatures
-            if (exp.getPositionFeatures() != null) {
-                for (int j = 0; j < exp.getPositionFeatures().size(); j++) {
-                    hashMap.put("{experiences[" + i + "].positionFeature[" + j + "]}", exp.getPositionFeatures().get(j));
+                // Extract positionFeatures
+                if (exp.getPositionFeatures() != null) {
+                    for (int j = 0; j < exp.getPositionFeatures().size(); j++) {
+                        String positionFeature = exp.getPositionFeatures().get(j);
+                        if (positionFeature != null && !positionFeature.isEmpty()) {
+                            hashMap.put("{experiences[" + i + "].positionFeature[" + j + "]}", positionFeature);
+                        }
+                    }
                 }
             }
         }
@@ -106,32 +115,35 @@ public class HelperClass {
         if (obj.getEducations() != null) {
             for (int i = 0; i < obj.getEducations().size(); i++) {
                 Education edu = obj.getEducations().get(i);
-                if (edu.getDegree() != null) {
+                if (edu.getDegree() != null && !edu.getDegree().isEmpty()) {
                     hashMap.put("{educations[" + i + "].degree}", edu.getDegree());
                 }
-                if (edu.getStudyTitle() != null) {
+                if (edu.getStudyTitle() != null && !edu.getStudyTitle().isEmpty()) {
                     hashMap.put("{educations[" + i + "].studyTitle}", edu.getStudyTitle());
                 }
-                if (edu.getUniversityName() != null) {
+                if (edu.getUniversityName() != null && !edu.getUniversityName().isEmpty()) {
                     hashMap.put("{educations[" + i + "].universityName}", edu.getUniversityName());
                 }
-                if (edu.getUniversityPlace() != null) {
+                if (edu.getUniversityPlace() != null && !edu.getUniversityPlace().isEmpty()) {
                     hashMap.put("{educations[" + i + "].universityPlace}", edu.getUniversityPlace());
                 }
-                if (edu.getStartDate() != null) {
+                if (edu.getStartDate() != null && !edu.getStartDate().isEmpty()) {
                     hashMap.put("{educations[" + i + "].startDate}", edu.getStartDate());
                 }
-                if (edu.getEndDate() != null) {
+                if (edu.getEndDate() != null && !edu.getEndDate().isEmpty()) {
                     hashMap.put("{educations[" + i + "].endDate}", edu.getEndDate());
                 }
-                if (edu.getThesisTitle() != null) {
+                if (edu.getThesisTitle() != null && !edu.getThesisTitle().isEmpty()) {
                     hashMap.put("{educations[" + i + "].thesisTitle}", edu.getThesisTitle());
                 }
 
                 // Extract keyModules
                 if (edu.getKeyModules() != null) {
                     for (int j = 0; j < edu.getKeyModules().size(); j++) {
-                        hashMap.put("{educations[" + i + "].keyModules[" + j + "]}", edu.getKeyModules().get(j));
+                        String keyModule = edu.getKeyModules().get(j);
+                        if (keyModule != null && !keyModule.isEmpty()) {
+                            hashMap.put("{educations[" + i + "].keyModules[" + j + "]}", keyModule);
+                        }
                     }
                 }
             }
@@ -141,7 +153,9 @@ public class HelperClass {
         if (obj.getCompetences() != null) {
             int index = 0;
             for (String competence : obj.getCompetences()) {
-                hashMap.put("{competences[" + index++ + "]}", competence);
+                if (competence != null && !competence.isEmpty()) {
+                    hashMap.put("{competences[" + index++ + "]}", competence);
+                }
             }
         }
 
@@ -149,7 +163,9 @@ public class HelperClass {
         if (obj.getCertificates() != null) {
             int index = 0;
             for (String certificate : obj.getCertificates()) {
-                hashMap.put("{certificates[" + index++ + "]}", certificate);
+                if (certificate != null && !certificate.isEmpty()) {
+                    hashMap.put("{certificates[" + index++ + "]}", certificate);
+                }
             }
         }
 
@@ -157,8 +173,13 @@ public class HelperClass {
         if (obj.getLanguages() != null) {
             int index = 0;
             for (Language lang : obj.getLanguages()) {
-                hashMap.put("{languages[" + index + "].languageType}", lang.getLanguageType());
-                // Add other language fields similarly
+                if (lang.getLanguageType() != null && !lang.getLanguageType().isEmpty()) {
+                    hashMap.put("{languages[" + index + "].languageType}", lang.getLanguageType());
+                }
+                if (lang.getLanguageLevel() != null) {
+                    hashMap.put("{languages[" + index + "].languageLevel}", lang.getLanguageLevel().toString());
+                }
+
                 index++;
             }
         }
@@ -167,7 +188,9 @@ public class HelperClass {
         if (obj.getInterests() != null) {
             int index = 0;
             for (String interest : obj.getInterests()) {
-                hashMap.put("{interests[" + index++ + "]}", interest);
+                if (interest != null && !interest.isEmpty()) {
+                    hashMap.put("{interests[" + index++ + "]}", interest);
+                }
             }
         }
 

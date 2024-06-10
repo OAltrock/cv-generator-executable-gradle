@@ -15,7 +15,6 @@ public class Language {
 	private String languageType;
 
 	private LanguageLevel languageLevel;
-	
 
 	public Language(String languageType, LanguageLevel languageLevel) {
 		this.languageType = languageType;
