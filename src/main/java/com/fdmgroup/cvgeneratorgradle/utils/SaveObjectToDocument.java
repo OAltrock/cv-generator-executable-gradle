@@ -103,7 +103,7 @@ public class SaveObjectToDocument {
     public static void saveObjectAsWord(CVTemplate cvTemplate, String outputPath, boolean createPdfLater) throws IOException {
 
         Map<String, String> cVHashMap = HelperClass.convertCVObjectToHashMap(cvTemplate);
-        System.out.println(cVHashMap);
+        //System.out.println(cVHashMap);
         String documentsFolderPath = System.getProperty("user.home") + File.separator + "Documents"+ File.separator + "CVgenerator";
         //String outputPath = documentsFolderPath + File.separator + "CvAutoSave.docx";
         String outputPathTestFile = documentsFolderPath + File.separator + "paragraphsFound.txt";
@@ -192,10 +192,11 @@ public class SaveObjectToDocument {
             //HelperClassDocxCreation.displayTableContent(document);
 
 
+
             HelperClassDocxCreation.removeTablesWithNoData(document,replacementString);
             HelperClassDocxCreation.removeParagraphsWithSearchString(document, replacementString);
             //HelperClassDocxCreation.removeConsecutiveEmptyParagraphs(document);
-
+            //HelperClassDocxCreation.printDocumentElements(document);
             if (createPdfLater) {//fix row heights, if this docx file is created to generate a pdf out of it.
                 HelperClassDocxCreation.calculateAndSetTableRowHeights(document);
             }

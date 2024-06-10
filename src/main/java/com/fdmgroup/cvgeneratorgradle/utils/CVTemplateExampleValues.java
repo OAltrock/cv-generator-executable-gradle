@@ -5,14 +5,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 
 import com.fdmgroup.cvgeneratorgradle.models.*;
 import com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToDocument;
 import javafx.scene.control.Menu;
+import picocli.CommandLine;
 
 //this class was used to test and debug document creation (word + pdf)
 //execute this class to create a cvTemplate object with example data and creates json, docx and pdf document in home directory: ~/Documents/cvGenerator/
@@ -21,6 +20,12 @@ public class CVTemplateExampleValues {
     public static void main(String[] args) {
 
         CVTemplate cVExampleTemplate = createCVTemplateWithExampleValues();
+
+        //Map<String, String> testHashMap = HelperClass.convertAnyObjectToHashMap(cVExampleTemplate);
+        //HelperClass.printHashMap(testHashMap);
+        //System.exit(0);
+
+
         String userHome = System.getProperty("user.home");
         Path documentsPath = Paths.get(userHome, "Documents", "CVgenerator");
 

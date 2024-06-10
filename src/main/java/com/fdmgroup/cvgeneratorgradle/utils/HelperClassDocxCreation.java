@@ -262,7 +262,8 @@ public class HelperClassDocxCreation {
     }
 
     /**
-     * Removes tables that contain the search string in all cells, indicating missing data.
+     * Removes tables from the document that contain the search string in all cells, indicating missing data.
+     * If a table gets removed, the method also makes sure, that the following empty paragraph is removed.
      *
      * @param document    The XWPFDocument to be modified.
      * @param searchString The string to search for in table cells.
@@ -277,6 +278,7 @@ public class HelperClassDocxCreation {
         for (XWPFTable table : tablesToRemove) {
             int pos = document.getPosOfTable(table);
             if (pos != -1) {
+                removeEmptyParagraphAfterTable(document, pos);
                 document.removeBodyElement(pos);
             }
         }
@@ -291,6 +293,17 @@ public class HelperClassDocxCreation {
             }
         }
         return true;
+    }
+
+    private static void removeEmptyParagraphAfterTable(XWPFDocument document, int tablePos) {
+        int paragraphPos = tablePos + 1;//index of paragraph after the table that gets removed
+        if (paragraphPos < document.getBodyElements().size() &&
+                document.getBodyElements().get(paragraphPos) instanceof XWPFParagraph) {
+            XWPFParagraph paragraph = (XWPFParagraph) document.getBodyElements().get(paragraphPos);
+            if (paragraph.getText().trim().isEmpty()) {
+                document.removeBodyElement(paragraphPos);
+            }
+        }
     }
 
     /**
@@ -505,5 +518,24 @@ public class HelperClassDocxCreation {
         LocalDate date = LocalDate.parse(dateStr, inputFormatter);
         return date.format(outputFormatter);
     }
+
+    /* //for debugging only
+    public static void printDocumentElements(XWPFDocument document) {
+        List<IBodyElement> bodyElements = document.getBodyElements();
+        System.out.println("##################Document Elements are:####################################");
+        for (int i = 0; i < bodyElements.size(); i++) {
+            IBodyElement element = bodyElements.get(i);
+            if (element instanceof XWPFParagraph) {
+                XWPFParagraph paragraph = (XWPFParagraph) element;
+                System.out.println("Index: " + i + " - Paragraph: " + paragraph.getText());
+            } else if (element instanceof XWPFTable) {
+                System.out.println("Index: " + i + " - [Table]");
+            } else {
+                System.out.println("Index: " + i + " - [Other Element]");
+            }
+        }
+        System.out.println();
+    }*/
+
 
 }
