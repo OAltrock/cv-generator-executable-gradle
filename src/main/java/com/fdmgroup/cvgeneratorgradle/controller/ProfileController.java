@@ -70,7 +70,7 @@ public class ProfileController extends FDMController implements HasToggleableSav
 
         createValidationForTextFields(atLeast50Chars.negate(), textAreas, "Write at least 50 letters.");
 
-        saveBtn.setOnAction(actionEvent -> {
+        saveBtn.setOnMousePressed(actionEvent -> {
             assignInput(mainController);
 
             treeView.getSelectionModel().select(2);

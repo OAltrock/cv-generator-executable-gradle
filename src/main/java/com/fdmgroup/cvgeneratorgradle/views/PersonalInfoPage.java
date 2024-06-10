@@ -5,11 +5,10 @@ import com.fdmgroup.cvgeneratorgradle.models.Stream;
 import com.fdmgroup.cvgeneratorgradle.models.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputControl;
+import javafx.scene.control.*;
 import lombok.Getter;
+
+import java.time.LocalDate;
 
 @Getter
 public class PersonalInfoPage extends FDMPage{
@@ -22,6 +21,11 @@ public class PersonalInfoPage extends FDMPage{
     private Label streamLabel;
 
     private ChoiceBox<String> streamChooser;
+    private DatePicker streamStart;
+    private DatePicker streamEnd;
+    private CheckBox ongoing;
+    private Label dateLabel;
+    private FDMDateWrapper dateWrapper;
     private Label locationLabel;
     private ChoiceBox<String> locationChooser;
     private FDMHBox buttonWrapper;
@@ -52,7 +56,22 @@ public class PersonalInfoPage extends FDMPage{
         streamLabel = new Label("Choose your practise");
         streamChooser = new ChoiceBox<>(FXCollections.observableArrayList("Business","Technical"));
         streamChooser.setValue("");
+        dateLabel = new Label("Choose start and end");
+        streamStart = (stream.getStartDate() != null && !stream.getStartDate().isEmpty() ) ? new DatePicker(LocalDate.parse(stream.getStartDate()))
+                : new DatePicker();
+        streamEnd = (stream.getStartDate() != null && !stream.getStartDate().isEmpty()) ?
+                (LocalDate.parse(stream.getEndDate()).isAfter(LocalDate.parse(stream.getStartDate()))) ? new DatePicker(LocalDate.parse(stream.getEndDate()))
+                        : new DatePicker(LocalDate.now().plusMonths(1))
+                : new DatePicker();
 
+
+        ongoing = new CheckBox("ongoing");
+        if (streamEnd.getValue() != null) {
+            ongoing.setSelected(streamEnd.getValue().isAfter(LocalDate.now()));
+            streamEnd.setDisable(streamEnd.getValue().isAfter(LocalDate.now()) || streamEnd.getValue().isBefore(streamStart.getValue()));
+        }
+        dateWrapper = new FDMDateWrapper(streamStart, streamEnd, ongoing);
+        dateWrapper.setDesign();
         locationLabel = new Label("Choose your location");
         locationChooser = new ChoiceBox<>(FXCollections.observableArrayList("Germany", "International"));
         locationChooser.setValue("");
@@ -63,6 +82,6 @@ public class PersonalInfoPage extends FDMPage{
         buttonWrapper = new FDMHBox(prevBtn,nextBtn);
         buttonWrapper.setDesign();
         centerBox = new FDMCenterVBoxWrapper(pageTitle, firstName,lastName, email,
-                streamLabel,streamChooser,locationLabel,locationChooser, buttonWrapper);
+                streamLabel,streamChooser,dateLabel, dateWrapper, locationLabel,locationChooser, buttonWrapper);
     }
 }

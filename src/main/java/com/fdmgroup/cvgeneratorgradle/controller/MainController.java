@@ -58,7 +58,7 @@ public class MainController implements Initializable {
         if (alert.showAndWait().isPresent() && alert.showAndWait().get() == ButtonType.OK) {
             Stage stage = (Stage) mainWindow.getScene().getWindow();
             System.out.println("got here");
-            saveRecent(recentFiles, recentFileNames);
+            saveRecent(recentFiles, recentFileNames, mainWindow);
             stage.close();
         }
 
@@ -220,8 +220,8 @@ public class MainController implements Initializable {
             recentFile.setStyle("-fx-color: white");
             return recentFile;
         }).toList());
-        recentFileNames = new HashSet<>(loadRecentFileNames());
-        recentFiles = loadRecentFiles();
+        recentFileNames = new HashSet<>(loadRecentFileNames(mainWindow));
+        recentFiles = loadRecentFiles(mainWindow);
         menuBar.setOnMouseEntered(event -> {
             loadRecent();
         });

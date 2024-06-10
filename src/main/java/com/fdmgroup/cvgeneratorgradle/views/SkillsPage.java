@@ -46,14 +46,14 @@ public class SkillsPage extends FDMPage implements HasAddableTextFields {
                         0, 1, 1, 3, 0, 3, false) :
                 cvTemplate.getLocation();
         pageTitle = new Label("Skills");
-        competencesLabel = new Label("Add " + location.getMinCompetence() + " to " + location.getMaxCompetence() + " Competences");
+        competencesLabel = new Label("Add " + location.getMinCompetence() + " to " + location.getMaxCompetence() + " key skills");
         List<TextInputControl> competencesToAdd = new ArrayList<>();
 
-        HashSet<String> competencesTemp = (cvTemplate.getCompetences() == null) ? new HashSet<>() : cvTemplate.getCompetences();
+        List<String> competencesTemp = (cvTemplate.getKeySkills() == null) ? new ArrayList<>() : cvTemplate.getKeySkills();
         competencesTemp.forEach(competence -> competencesToAdd.add(new TextField(competence)));
 
         competenceGridPane = new GridPane(3, competencesToAdd.size());
-        FDMButton addBtn = new FDMButton("Add competence");
+        FDMButton addBtn = new FDMButton("Add key skill");
         createAddableAreaFromModel(competencesToAdd, competenceGridPane, addBtn, textFields, location.getMaxCompetence(), "Remove competence", "Competence");
 
         certificatesLabel = new Label("Add " + location.getMinCertificate() + " to " + location.getMaxCertificate() + " Certificates");
@@ -99,13 +99,13 @@ public class SkillsPage extends FDMPage implements HasAddableTextFields {
             }
         }
 
-        hobbiesLabel = new Label("Add " + location.getMinInterest() + " to " + location.getMaxInterest() + " Hobbies or Interests");
+        hobbiesLabel = new Label("Add " + location.getMinInterest() + " to " + location.getMaxInterest() + " achievements or additional skills");
         List<TextInputControl> hobbiesToAdd = new ArrayList<>();
         HashSet<String> hobbiesTemp = (cvTemplate.getInterests() == null) ? new HashSet<>() : cvTemplate.getInterests();
         hobbiesTemp.forEach(competence -> hobbiesToAdd.add(new TextField(competence)));
         hobbiesGridPane = new GridPane(3, hobbiesToAdd.size());
-        FDMButton addHobbyBtn = new FDMButton("Add interest or hobby");
-        createAddableAreaFromModel(hobbiesToAdd, hobbiesGridPane, addHobbyBtn, textFields, location.getMaxInterest(), "Remove interest", "Interest or hobby");
+        FDMButton addHobbyBtn = new FDMButton("Add achievement or additional skill");
+        createAddableAreaFromModel(hobbiesToAdd, hobbiesGridPane, addHobbyBtn, textFields, location.getMaxInterest(), "Remove achievement", "Achievement or additional skill");
 
         prev = new FDMButton("Previous");
         next = new FDMButton("Next");

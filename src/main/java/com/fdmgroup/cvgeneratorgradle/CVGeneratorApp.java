@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import lombok.RequiredArgsConstructor;
 
@@ -46,7 +47,7 @@ public class CVGeneratorApp extends Application {
         alert.setContentText("Do you really want to exit");
 
         if(alert.showAndWait().get()== ButtonType.OK) {
-            saveRecent(recentFiles, recentFileNames);
+            saveRecent(recentFiles, recentFileNames, (BorderPane) stage.getScene().lookup("#mainWindow"));
             stage.close();
         }
 

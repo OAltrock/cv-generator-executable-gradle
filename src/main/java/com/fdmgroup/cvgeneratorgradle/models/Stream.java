@@ -17,6 +17,10 @@ public class Stream {
 
 	private String streamName;
 
+	private String startDate;
+
+	private String endDate;
+
 	private List<String> presetTraining;
 
 	private Set<String> presetCompetences;

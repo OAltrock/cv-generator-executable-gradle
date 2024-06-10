@@ -113,12 +113,12 @@ public class EducationController extends FDMController implements HasToggleableS
 
         createValidationForTextFields(predicate, textFields, "Must contain at least one letter");
         addValidationToDates(start, end, checkDate, checkBox);
-        educationPage.getPrev().setOnAction(actionEvent -> {
+        educationPage.getPrev().setOnMousePressed(actionEvent -> {
             assignInput(mainController);
             treeView.getSelectionModel().select(3);
             new ExperienceController(cvTemplate, treeView, stage, recent).initialize(main, mainController);
         });
-        buttons[0].setOnAction(actionEvent -> {
+        buttons[0].setOnMousePressed(actionEvent -> {
             assignInput(mainController);
             treeView.getSelectionModel().select(5);
             new SkillsController(cvTemplate, treeView, stage, recent).initialize(main, mainController);

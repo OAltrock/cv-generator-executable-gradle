@@ -98,7 +98,7 @@ public class HelperClass {
 
         // Extract competences
         int index = 0;
-        for (String competence : obj.getCompetences()) {
+        for (String competence : obj.getFdmSkills()) {
             hashMap.put("{competences[" + index++ + "]}", competence);
         }
 

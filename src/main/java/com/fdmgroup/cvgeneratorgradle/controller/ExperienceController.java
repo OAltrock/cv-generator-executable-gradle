@@ -112,7 +112,7 @@ public class ExperienceController extends FDMController implements HasToggleable
                     return (startDate.isBefore(endDate) || startDate.isEqual(endDate)) && startDate.isBefore(LocalDate.now());
                 }
             };
-            experiencePage1.getRemovePage().setOnAction(action -> {
+            experiencePage1.getRemovePage().setOnMousePressed(action -> {
                 FDMButton btn = (FDMButton) action.getSource();
                 FDMCenterVBoxWrapper parent = (FDMCenterVBoxWrapper) btn.getParent();
                 textFields.removeAll(findAllTextFields(experiencePage1.getCenterBox()));
@@ -143,19 +143,19 @@ public class ExperienceController extends FDMController implements HasToggleable
         wrapper.getChildren().addLast(buttonWrapper[0]);
         main.setCenter(experiencePages.getLast().createCenterPage(wrapper));
 
-        buttons[0].setOnAction(actionEvent -> {
+        buttons[0].setOnMousePressed(actionEvent -> {
             assignInput(mainController);
             treeView.getSelectionModel().select(4);
             new EducationController(cvTemplate, treeView, stage, recent).initialize(main, mainController);
         });
 
-        prevBtn.setOnAction(actionEvent -> {
+        prevBtn.setOnMousePressed(actionEvent -> {
             assignInput(mainController);
             treeView.getSelectionModel().select(2);
             new PersonalInformationController(cvTemplate, treeView, stage, recent).initialize(main, mainController);
         });
 
-        addExpBtn.setOnAction(actionEvent -> {
+        addExpBtn.setOnMousePressed(actionEvent -> {
             Experience newExperience = new Experience("", "", "",
                     new ArrayList<>(), "", "", "");
             ExperiencePage page = new ExperiencePage(cvTemplate, textFields,
@@ -184,7 +184,7 @@ public class ExperienceController extends FDMController implements HasToggleable
                     return startDate.isBefore(endDate) || startDate.isEqual(endDate);
                 }
             };
-            page.getRemovePage().setOnAction(action -> {
+            page.getRemovePage().setOnMousePressed(action -> {
                 FDMButton btn = (FDMButton) action.getSource();
                 FDMCenterVBoxWrapper parent = (FDMCenterVBoxWrapper) btn.getParent();
                 textFields.removeAll(findAllTextFields(page.getCenterBox()));
