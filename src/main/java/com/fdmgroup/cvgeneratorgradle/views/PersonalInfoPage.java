@@ -59,8 +59,7 @@ public class PersonalInfoPage extends FDMPage{
 
         prevBtn = new FDMButton("Previous");
         nextBtn = new FDMButton("Next");
-        prevBtn.setDesign("primary");
-        nextBtn.setDesign("primary");
+
         buttonWrapper = new FDMHBox(prevBtn,nextBtn);
         buttonWrapper.setDesign();
         centerBox = new FDMCenterVBoxWrapper(pageTitle, firstName,lastName, email,

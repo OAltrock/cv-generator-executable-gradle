@@ -62,7 +62,6 @@ public class SkillsPage extends FDMPage implements HasAddableTextFields {
         certsTemp.forEach(competence -> certsToAdd.add(new TextField(competence)));
         certificateGridPane = new GridPane(3, certsToAdd.size());
         FDMButton addCertBtn = new FDMButton("Add certificate");
-        addCertBtn.setDesign("primary");
         createAddableAreaFromModel(certsToAdd, certificateGridPane, addCertBtn, textFields, location.getMaxCertificate(), "Remove certificate", "Certificate");
 
         languagesLabel = new Label("Add " + location.getMinLanguage() + " to " + location.getMaxLanguage() + " Languages");
@@ -106,13 +105,10 @@ public class SkillsPage extends FDMPage implements HasAddableTextFields {
         hobbiesTemp.forEach(competence -> hobbiesToAdd.add(new TextField(competence)));
         hobbiesGridPane = new GridPane(3, hobbiesToAdd.size());
         FDMButton addHobbyBtn = new FDMButton("Add interest or hobby");
-        addHobbyBtn.setDesign("primary");
         createAddableAreaFromModel(hobbiesToAdd, hobbiesGridPane, addHobbyBtn, textFields, location.getMaxInterest(), "Remove interest", "Interest or hobby");
 
         prev = new FDMButton("Previous");
-        prev.setDesign("primary");
         next = new FDMButton("Next");
-        next.setDesign("primary");
         buttonWrapper = new FDMHBox(prev, next);
         buttonWrapper.setDesign();
 

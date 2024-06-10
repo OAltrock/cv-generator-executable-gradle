@@ -22,10 +22,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.fdmgroup.cvgeneratorgradle.utils.GeneratorConfig.*;
 import static com.fdmgroup.cvgeneratorgradle.utils.LoadObjectFromJson.loadObjectFromJson;
@@ -200,8 +198,10 @@ public class MainController implements Initializable {
      */
     private TreeView<String> createTreeView(TreeItem<String> cv) {
         TreeView<String> ret = new TreeView<>();
+
         ret.setRoot(cv);
         HBox leftBorderContainer = new HBox(ret);
+        leftBorderContainer.setId("leftBorderBox");
         ret.setPrefWidth(370);
         mainWindow.setLeft(leftBorderContainer);
         return ret;
@@ -220,7 +220,7 @@ public class MainController implements Initializable {
             recentFile.setStyle("-fx-color: white");
             return recentFile;
         }).toList());
-        recentFileNames = loadRecentFileNames();
+        recentFileNames = new HashSet<>(loadRecentFileNames());
         recentFiles = loadRecentFiles();
         menuBar.setOnMouseEntered(event -> {
             loadRecent();
@@ -238,7 +238,7 @@ public class MainController implements Initializable {
     public void saveCV(ActionEvent event) {
         File selectedFile = selectFileFromFileChooser("Save", "JSON File", "*.json", (Stage) mainWindow.getScene().getWindow());
         if (selectedFile != null) {
-            saveObjectAsJson(cvTemplate, selectedFile.getPath(), recent);
+            saveObjectAsJson(cvTemplate, selectedFile.getPath());
             try {
                 this.loadRecentCV((Stage) mainWindow.getScene().getWindow());
             } catch (FileNotFoundException e) {

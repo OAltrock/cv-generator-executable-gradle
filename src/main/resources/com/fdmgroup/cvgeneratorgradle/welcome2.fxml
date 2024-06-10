@@ -11,7 +11,7 @@
    <top>
       <MenuBar fx:id="menuBar" BorderPane.alignment="CENTER">
         <menus>
-          <Menu mnemonicParsing="false" text="File">
+          <Menu fx:id="topMenu" mnemonicParsing="false" text="File">
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#createNewCV" text="New CV" />
                   <Menu fx:id="recent" mnemonicParsing="false" text="Recent" />

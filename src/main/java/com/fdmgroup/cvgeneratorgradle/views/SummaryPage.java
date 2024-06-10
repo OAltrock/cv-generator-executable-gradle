@@ -130,11 +130,13 @@ public class SummaryPage extends FDMPage {
 
         competences.setMinHeight(200);
         competences.setMinWidth(250);
+        competences.setPrefWidth(700);
         ObservableList<String> competencesList = FXCollections.observableArrayList((cvTemplate.getCompetences() != null) ? cvTemplate.getCompetences() : new ArrayList<>());
         competences.setItems(competencesList);
 
         certificates.setMinHeight(200);
         certificates.setMinWidth(250);
+        certificates.setPrefWidth(700);
         ObservableList<String> certificatesList = FXCollections.observableArrayList((cvTemplate.getCertificates() != null) ? cvTemplate.getCertificates() : new ArrayList<>());
         certificates.setItems(certificatesList);
 
@@ -165,7 +167,6 @@ public class SummaryPage extends FDMPage {
         experiences.forEach(experienceLV -> centerBox.getChildren().add(experienceLV));
         centerBox.getChildren().addAll(educationLabel, education, summaryGrid, saveCV, generateCV);
         centerBox.setDesign();
-        saveCV.setDesign("primary");
 
     }
 

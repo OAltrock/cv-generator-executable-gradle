@@ -41,7 +41,7 @@ public class SummaryController extends FDMController{
         page.getSaveCV().setOnAction(action -> {
                     File selectedFile = selectFileFromFileChooser("Save", "JSON File", "*.json", stage);
                     if (selectedFile != null) {
-                        saveObjectAsJson(cvTemplate, selectedFile.getPath(), recent);
+                        saveObjectAsJson(cvTemplate, selectedFile.getPath());
                         try {
                             mainController.loadRecentCV(stage);
                         } catch (FileNotFoundException e) {

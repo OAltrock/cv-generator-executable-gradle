@@ -70,10 +70,6 @@ public class ExperienceController extends FDMController implements HasToggleable
         FDMButton addExpBtn = new FDMButton("Add Experience");
         ObservableBooleanValue canAdd = Bindings.createBooleanBinding(() -> experiencePages.size() >= cvTemplate.getLocation().getMaxExperience(), experiencePages);
         addExpBtn.disableProperty().bind(canAdd);
-
-        ((FDMButton) buttons[0]).setDesign("primary");
-        prevBtn.setDesign("primary");
-        addExpBtn.setDesign("primary");
         final FDMHBox[] buttonWrapper = {new FDMHBox(prevBtn, addExpBtn, buttons[0])};
         buttonWrapper[0].setDesign();
 
@@ -211,7 +207,7 @@ public class ExperienceController extends FDMController implements HasToggleable
 
     void assignInput(MainController mainController) {
         assignToModel();
-        saveObjectAsJson(cvTemplate, recent);
+        saveObjectAsJson(cvTemplate);
         try {
             mainController.loadRecentCV(stage);
         } catch (FileNotFoundException e) {

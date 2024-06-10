@@ -19,7 +19,9 @@ public abstract class FDMPage {
     public ScrollPane createCenterPage(Pane centerBox) {
         FDMScrollPaneWrapper center = new FDMScrollPaneWrapper(centerBox);
         if (centerBox instanceof FDMCenterVBoxWrapper) ((FDMCenterVBoxWrapper) centerBox).setDesign();
+        centerBox.setId("centerBox");
         center.setDesign();
+        center.setId("centerScrollPaneWrapper");
         return center;
     }
 

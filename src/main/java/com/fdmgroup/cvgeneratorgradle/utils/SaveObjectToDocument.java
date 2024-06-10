@@ -44,8 +44,8 @@ public class SaveObjectToDocument {
     public static void createDocument(CVTemplate cvTemplate, String format, String outputPath, Menu recent) throws IOException {
 
         //creating an auto save in json format:
-        String saveFilePath = ".\\saves\\autosave_fullCV.json";
-        SaveObjectToJson.saveObjectAsJson(cvTemplate, saveFilePath, recent);
+        String saveFilePath = SaveObjectToJson.savePath+File.separator+"autosave_fullCV.json";
+        SaveObjectToJson.saveObjectAsJson(cvTemplate, saveFilePath);
 
         if ("docx".equalsIgnoreCase(format) || "word".equalsIgnoreCase(format)) {
             saveObjectAsWord(cvTemplate, outputPath, false);

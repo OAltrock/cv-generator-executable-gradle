@@ -122,7 +122,7 @@ public class PersonalInformationController extends FDMController implements HasT
     void assignInput(MainController mainController) {
 
         assignToModel();
-        saveObjectAsJson(cvTemplate, recent);
+        saveObjectAsJson(cvTemplate);
         try {
             mainController.loadRecentCV(stage);
         } catch (FileNotFoundException e) {

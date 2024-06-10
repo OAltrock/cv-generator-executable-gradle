@@ -23,9 +23,7 @@ public class ProfilePage extends FDMPage{
 
     private void initialize() {
         next = new FDMButton("Next");
-        next.setDesign("primary");
         prev = new FDMButton("Previous");
-        prev.setDesign("primary");
         buttonWrapper = new FDMHBox(prev, next);
         buttonWrapper.setDesign();
 
