@@ -79,8 +79,15 @@ public class HelperClass {
             if (obj.getStream().getStreamName() != null && !obj.getStream().getStreamName().isEmpty()) {
                 hashMap.put("{stream.streamName}", obj.getStream().getStreamName());
             }
-        }
+            if (obj.getStream().getStartDate() != null && !obj.getStream().getStartDate().isEmpty()) {
+                hashMap.put("{stream.startDate}", obj.getStream().getStartDate());
+            }
+            if (obj.getStream().getEndDate() != null && !obj.getStream().getEndDate().isEmpty()) {
+                hashMap.put("{stream.endDate}", obj.getStream().getEndDate());
+            }
 
+        }
+/*
         //Extract Stream Modules from HashSet in PersonalInfoControler:
         {
             HashSet<String> streamSkillSet = new HashSet<>();
@@ -93,6 +100,16 @@ public class HelperClass {
             for (String skill : streamSkillSet) {
                 hashMap.put("{stream.Skills[" + i + "]}", skill);
                 i++;
+            }
+        }*/
+
+        // Extract competences key skills
+        if (obj.getFdmSkills() != null) {
+            int index = 0;
+            for (String streamSkill : obj.getFdmSkills()) {
+                if (streamSkill != null && !streamSkill.isEmpty()) {
+                    hashMap.put("{stream.Skills[" + index++ + "]}", streamSkill);
+                }
             }
         }
 
@@ -167,15 +184,18 @@ public class HelperClass {
             }
         }
 
-        // Extract competences
-        if (obj.getFdmSkills() != null) {
-            int index = 0;
-            for (String competence : obj.getFdmSkills()) {
-                if (competence != null && !competence.isEmpty()) {
-                    hashMap.put("{competences[" + index++ + "]}", competence);
+        // Extract key skills
+            if (obj.getKeySkills() != null) {
+                int index = 0;
+                for (String keySkill : obj.getKeySkills()) {
+                    if (keySkill != null && !keySkill.isEmpty()) {
+                        hashMap.put("{keySkills[" + index++ + "]}", keySkill);
+                    }
                 }
             }
-        }
+
+
+
 
         // Extract certificates
         if (obj.getCertificates() != null) {
@@ -202,12 +222,12 @@ public class HelperClass {
             }
         }
 
-        // Extract interests
+        // Extract interests //achievements & additional skills!!!
         if (obj.getInterests() != null) {
             int index = 0;
-            for (String interest : obj.getInterests()) {
-                if (interest != null && !interest.isEmpty()) {
-                    hashMap.put("{interests[" + index++ + "]}", interest);
+            for (String achievement : obj.getInterests()) {
+                if (achievement != null && !achievement.isEmpty()) {
+                    hashMap.put("{achievements[" + index++ + "]}", achievement);
                 }
             }
         }
@@ -216,6 +236,8 @@ public class HelperClass {
     }
 
     public static void printHashMap(Map<String, String> hashMap) {
+        System.out.println("**************************************************************");
+        System.out.println("**************** hashMap entries: ****************************");
         for (String key : hashMap.keySet()) {
             System.out.println(key + ": " + hashMap.get(key));
         }
