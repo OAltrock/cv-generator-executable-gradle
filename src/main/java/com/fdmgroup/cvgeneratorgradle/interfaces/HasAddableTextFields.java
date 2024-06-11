@@ -38,7 +38,7 @@ public interface HasAddableTextFields {
                                    Button addBtn, boolean isLanguageGridPane, String removeBtnMessage, String promptMessage, Predicate<String> predicate,
                                    int limit, List<TextInputControl> addableTextFields) {
 
-        addBtn.setOnAction(event -> {
+        addBtn.setOnMousePressed(event -> {
             MenuButton languageLevelButton = null;
             if (parent.getChildren().size() / 2 + 1 <= limit) {
                 javafx.scene.control.TextField textFieldToAdd = new javafx.scene.control.TextField();
@@ -109,7 +109,7 @@ public interface HasAddableTextFields {
     default void addListenerTooRemoveBtn(TextInputControl textFieldToRemove, MenuButton languageLevelButton, javafx.scene.control.Button removeButton,
                                          GridPane gridPane, javafx.scene.control.Button addModuleBtn,
                                          ObservableList<TextInputControl> textFields, List<TextInputControl> addableTextFields) {
-        removeButton.setOnAction(event -> {
+        removeButton.setOnMousePressed(event -> {
             textFields.remove(textFieldToRemove);
             addableTextFields.remove(textFieldToRemove);
 

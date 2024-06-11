@@ -5,13 +5,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 
 import com.fdmgroup.cvgeneratorgradle.models.*;
 import com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToDocument;
 import javafx.scene.control.Menu;
-import picocli.CommandLine;
+import javafx.scene.layout.BorderPane;
 
 //this class was used to test and debug document creation (word + pdf)
 //execute this class to create a cvTemplate object with example data and creates json, docx and pdf document in home directory: ~/Documents/cvGenerator/
@@ -49,12 +51,12 @@ public class CVTemplateExampleValues {
         SaveObjectToJson.saveObjectAsJson(cVExampleTemplate, outpathjson);
 
         try {
-            SaveObjectToDocument.createDocument(cVExampleTemplate, "Word", outpathWord);
+            SaveObjectToDocument.createDocument(cVExampleTemplate, "Word", outpathWord, new BorderPane());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         try {
-            SaveObjectToDocument.createDocument(cVExampleTemplate, "pdf", outpathPDF);
+            SaveObjectToDocument.createDocument(cVExampleTemplate, "pdf", outpathPDF, new BorderPane());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -141,7 +143,7 @@ public class CVTemplateExampleValues {
         interests.add("Traveling");
 
         // Create a new CVTemplate object with the example values
-        CVTemplate cvTemplate = new CVTemplate(user, "John", "Doe", location, stream, null, experiences, educations, competences, certificates, languages, interests);
+        CVTemplate cvTemplate = new CVTemplate(user, location, stream, null, experiences, educations, competences, new ArrayList<>(), certificates, languages, interests);
         cvTemplate.setProfile("This is the profile Text for the generated CV. Hire me, I am the best.");
 
         return cvTemplate;

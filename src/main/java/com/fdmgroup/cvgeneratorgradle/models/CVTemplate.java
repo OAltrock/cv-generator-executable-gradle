@@ -52,7 +52,9 @@ public class CVTemplate {
 
 	private List<Education> educations;
 
-	private HashSet<String> competences;
+	private HashSet<String> fdmSkills;
+
+	private List<String> keySkills;
 
 	private HashSet<String> certificates;
 
@@ -60,16 +62,17 @@ public class CVTemplate {
 
 	private HashSet<String> interests;
 
-	public CVTemplate(User user, String firstName, String lastName, Location location, Stream stream,
+	public CVTemplate(User user, Location location, Stream stream,
 			ProfilePicture profilePicture, List<Experience> experience, List<Education> education,
-			HashSet<String> competence, HashSet<String> certificate, HashSet<Language> language,
-			HashSet<String> interest) {
+			HashSet<String> fdmSkills, List<String> keySkills, HashSet<String> certificate,
+					  HashSet<Language> language, HashSet<String> interest) {
 		this.user = user;
 		this.location = location;
 		this.stream = stream;
 		this.experiences = experience;
 		this.educations = education;
-		this.competences = competence;
+		this.fdmSkills = fdmSkills;
+		this.keySkills = keySkills;
 		this.certificates = certificate;
 		this.languages = language;
 		this.interests = interest;

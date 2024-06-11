@@ -1,29 +1,31 @@
 package com.fdmgroup.cvgeneratorgradle.utils;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import javafx.scene.control.Menu;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
 
+
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class SaveObjectToJson {
     public static TreeMap<String, String> recentFiles = new TreeMap<>();
     public static Set<String> recentFileNames = new HashSet<>();
-    static final String savePath = String.valueOf(Paths.get(".", File.separator, "saves").normalize());
+
+    static String savePath = System.getProperty("user.home") +
+                    "/cvGeneratorSaves";
 
     public static void saveObjectAsJson(Object object) {
         doSave(object, "", true);
     }
 
     private static void doSave(Object object, String fileName, boolean isAutoSave) {
+
         String fileNameWODir = fileName;
         String directory = "";
         if (!isAutoSave) {
@@ -35,7 +37,7 @@ public class SaveObjectToJson {
                 }
             }
         } else {
-            directory = savePath + File.separator + "auto saves"+File.separator;
+            directory = savePath + "/auto saves/";
         }
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -44,26 +46,27 @@ public class SaveObjectToJson {
         System.out.println("dir name: "+ directory);*/
         File newFile = new File(directory);
         if (!newFile.exists()) {
-            if(newFile.mkdirs()) System.out.println(newFile+" created");
+            if (newFile.mkdirs()) System.out.println(newFile + " created");
         }
         if (isAutoSave) {
             FolderStructurePrinter folderStructurePrinter = new FolderStructurePrinter();
-            TreeMap<String, String> autosaves = null;
+            TreeMap<String, String> autoSaves;
             try {
-                autosaves = (TreeMap<String, String>) folderStructurePrinter.listFilesUsingFileWalkAndVisitor(directory);
+                autoSaves = (TreeMap<String, String>) folderStructurePrinter.listFilesUsingFileWalkAndVisitor(directory);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            if (autosaves.size() < 5) {
-                fileNameWODir = "autosave" + (autosaves.size() + 1) + "_part.json";
+            if (autoSaves.size() < 5) {
+                fileNameWODir = "autosave" + (autoSaves.size() + 1) + "_part.json";
             } else {
-                fileNameWODir = autosaves.lastEntry().getValue();
+                fileNameWODir = autoSaves.lastEntry().getValue();
             }
             System.out.println(fileNameWODir);
         }
         //fileNameWODir = "autosave_part.json";
         File newFileWithDir = new File(directory + fileNameWODir);
         try (FileWriter fw = new FileWriter(newFileWithDir);) {
+            System.out.println(newFileWithDir);
             fw.write(json);
             if (recentFileNames.add(newFileWithDir.getAbsolutePath())) {
                 if (recentFiles.size() < 10) {
@@ -73,12 +76,11 @@ public class SaveObjectToJson {
                     //recentFiles.remove(recentFiles.lastEntry());
                     recentFiles.putIfAbsent(String.valueOf(Files.getLastModifiedTime(Path.of(newFileWithDir.getAbsolutePath()))), newFileWithDir.getAbsolutePath());
                 }
-            }
-            else {
+            } else {
                 AtomicReference<String> toRemove = new AtomicReference<>("");
                 recentFiles.forEach((key, value) -> {
                     if (value.equals(newFileWithDir.getAbsolutePath())) {
-                         toRemove.set(key);
+                        toRemove.set(key);
                     }
                 });
 

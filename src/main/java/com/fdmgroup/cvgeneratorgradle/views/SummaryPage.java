@@ -3,19 +3,16 @@ package com.fdmgroup.cvgeneratorgradle.views;
 import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.models.Education;
 import com.fdmgroup.cvgeneratorgradle.models.Experience;
-import com.fdmgroup.cvgeneratorgradle.models.User;
-import com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToDocument;
+import com.fdmgroup.cvgeneratorgradle.models.Stream;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Region;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import lombok.Getter;
 
-import java.io.File;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -39,13 +36,15 @@ public class SummaryPage extends FDMPage {
     private final Label educationLabel = new Label("Education");
     private final ListView<String> education = new ListView<>();
 
-    private final Label competencesLabel = new Label("Competences");
-    private final ListView<String> competences = new ListView<>();
+    private final Label fdmSkillsLabel = new Label("Skills Lab Competences");
+    private final ListView<String> fdmSkills = new ListView<>();
+    private final Label keySkillsLabel = new Label("Key skills");
+    private final ListView<String> keySkills = new ListView<>();
     private final Label certificatesLabel = new Label("Certificates");
     private final ListView<String> certificates = new ListView<>();
     private final Label languagesLabel = new Label("Languages");
     private final ListView<String> languages = new ListView<>();
-    private final Label interestsLabel = new Label("Interests");
+    private final Label interestsLabel = new Label("Achievements");
     private final ListView<String> interests = new ListView<>();
     private GridPane summaryGrid;
 
@@ -57,7 +56,6 @@ public class SummaryPage extends FDMPage {
             generatePDFDocument, generateWordDocument);
     //generatePDFDocument.setOnAction(event -> SaveObjectToDocument.createDocument(cvTemplate, "PDF", ));
     //generateWordDocument.setOnAction(event -> generateWord());
-
 
 
     public SummaryPage(CVTemplate cvTemplate, Stage stage) {
@@ -115,7 +113,7 @@ public class SummaryPage extends FDMPage {
                 : "";
         ObservableList<String> educationList = FXCollections.observableArrayList(
                 "Degree: " + lastEducation.getDegree(),
-                "Study title: "+ lastEducation.getStudyTitle(),
+                "Study title: " + lastEducation.getStudyTitle(),
                 "University: " + lastEducation.getUniversityName(),
                 "at: " + lastEducation.getUniversityPlace(),
                 "Thesis title: " + lastEducation.getThesisTitle(),
@@ -128,11 +126,23 @@ public class SummaryPage extends FDMPage {
         }
         education.setItems(educationList);
 
-        competences.setMinHeight(200);
-        competences.setMinWidth(250);
-        competences.setPrefWidth(700);
-        ObservableList<String> competencesList = FXCollections.observableArrayList((cvTemplate.getCompetences() != null) ? cvTemplate.getCompetences() : new ArrayList<>());
-        competences.setItems(competencesList);
+        fdmSkills.setMinHeight(200);
+        fdmSkills.setMinWidth(250);
+        fdmSkills.setPrefWidth(700);
+        ObservableList<String> competencesList = FXCollections.observableArrayList((cvTemplate.getFdmSkills() != null) ? cvTemplate.getFdmSkills() : new ArrayList<>());
+        fdmSkills.setItems(competencesList);
+        if (cvTemplate.getStream() == null)
+            cvTemplate.setStream(new Stream("", "", "", new ArrayList<>(), new HashSet<>()));
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMM yyyy");
+        if (cvTemplate.getStream().getStartDate().isEmpty()) cvTemplate.getStream().setStartDate("9999-01-01");
+        if (cvTemplate.getStream().getEndDate().isEmpty()) cvTemplate.getStream().setEndDate("9999-01-01");
+        Label streamDur = new Label(LocalDate.parse(cvTemplate.getStream().getStartDate()).format(dateTimeFormatter)
+                + " - "
+                + LocalDate.parse(cvTemplate.getStream().getEndDate()).format(dateTimeFormatter));
+        streamDur.setStyle("-fx-font-size: 12px");
+
+        ObservableList<String> keySkillsList = FXCollections.observableArrayList((cvTemplate.getKeySkills() != null) ? cvTemplate.getKeySkills() : new ArrayList<>());
+        keySkills.setItems(keySkillsList);
 
         certificates.setMinHeight(200);
         certificates.setMinWidth(250);
@@ -153,14 +163,17 @@ public class SummaryPage extends FDMPage {
         languages.setItems(languagesList);
 
         summaryGrid = new GridPane(2, 4);
-        summaryGrid.add(competencesLabel, 0, 0);
+        summaryGrid.add(fdmSkillsLabel, 0, 0);
         summaryGrid.add(certificatesLabel, 1, 0);
-        summaryGrid.add(competences, 0, 1);
-        summaryGrid.add(certificates, 1, 1);
-        summaryGrid.add(interestsLabel, 0, 2);
-        summaryGrid.add(languagesLabel, 1, 2);
-        summaryGrid.add(interests, 0, 3);
-        summaryGrid.add(languages, 1, 3);
+        summaryGrid.add(streamDur, 0, 1);
+        summaryGrid.add(fdmSkills, 0, 2);
+        summaryGrid.add(certificates, 1, 2);
+        summaryGrid.add(keySkillsLabel, 0, 3);
+        summaryGrid.add(interestsLabel, 1, 3);
+        summaryGrid.add(keySkills, 0, 4);
+        summaryGrid.add(interests, 1, 4);
+        summaryGrid.add(languagesLabel, 0, 5);
+        summaryGrid.add(languages, 0, 6);
 
         centerBox = new FDMCenterVBoxWrapper(profileLabel, profile, personalInformationLabel, personalInformation,
                 experienceLabel);

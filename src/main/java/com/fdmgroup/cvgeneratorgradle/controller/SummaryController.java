@@ -2,6 +2,8 @@ package com.fdmgroup.cvgeneratorgradle.controller;
 
 
 import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
+import com.fdmgroup.cvgeneratorgradle.models.Location;
+import com.fdmgroup.cvgeneratorgradle.models.Stream;
 import com.fdmgroup.cvgeneratorgradle.models.User;
 import com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToDocument;
 import com.fdmgroup.cvgeneratorgradle.views.SummaryPage;
@@ -16,6 +18,8 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 import static com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson.saveObjectAsJson;
 import static com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson.selectFileFromFileChooser;
@@ -38,7 +42,8 @@ public class SummaryController extends FDMController{
                 "Email: " + cvTemplate.getUser().getEmail());
 
         page.getPersonalInformation().setItems(personalInformationList);
-        page.getSaveCV().setOnAction(action -> {
+
+        page.getSaveCV().setOnMousePressed(action -> {
                     File selectedFile = selectFileFromFileChooser("Save", "JSON File", "*.json", stage);
                     if (selectedFile != null) {
                         saveObjectAsJson(cvTemplate, selectedFile.getPath());
@@ -54,7 +59,7 @@ public class SummaryController extends FDMController{
             File selectedFilePDF = selectFileFromFileChooser("Save", "PDF File", "*.pdf", stage);
             if (selectedFilePDF!=null) {
                 try {
-                    SaveObjectToDocument.createDocument(cvTemplate, "PDF", selectedFilePDF.getPath(), recent);
+                    SaveObjectToDocument.createDocument(cvTemplate, "PDF", selectedFilePDF.getPath(), main);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -62,10 +67,11 @@ public class SummaryController extends FDMController{
         });
 
         page.getGenerateWordDocument().setOnAction(action -> {
+            checkForNull();
             File selectedFileWord = selectFileFromFileChooser( "Save", "Word File", "*.docx", stage);
             if (selectedFileWord != null) {
                 try {
-                    SaveObjectToDocument.createDocument(cvTemplate, "docx", selectedFileWord.getPath(), recent);
+                    SaveObjectToDocument.createDocument(cvTemplate, "docx", selectedFileWord.getPath(),main);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -74,6 +80,17 @@ public class SummaryController extends FDMController{
 
     }
 
+    private void checkForNull() {
+        cvTemplate.setUser((cvTemplate.getUser()!=null) ? cvTemplate.getUser() : new User());
+        cvTemplate.setLocation((cvTemplate.getLocation()!=null) ? cvTemplate.getLocation() : new Location());
+        cvTemplate.setStream((cvTemplate.getStream()!=null) ? cvTemplate.getStream() : new Stream());
+        cvTemplate.setKeySkills((cvTemplate.getKeySkills()!=null) ? cvTemplate.getKeySkills() : new ArrayList<>());
+        cvTemplate.setCertificates((cvTemplate.getCertificates()!=null) ? cvTemplate.getCertificates() : new HashSet<>());
+        cvTemplate.setInterests((cvTemplate.getInterests()!=null) ? cvTemplate.getInterests() : new HashSet<>());
+        cvTemplate.setExperiences((cvTemplate.getExperiences()!=null) ? cvTemplate.getExperiences() : new ArrayList<>());
+        cvTemplate.setEducations((cvTemplate.getEducations()!=null) ? cvTemplate.getEducations() : new ArrayList<>());
+        cvTemplate.setLanguages((cvTemplate.getLanguages()!=null) ? cvTemplate.getLanguages() : new HashSet<>());
+    }
 
     //not used by this class
     @Override

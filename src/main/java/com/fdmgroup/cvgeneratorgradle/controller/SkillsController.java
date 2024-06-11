@@ -17,6 +17,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -70,12 +71,12 @@ public class SkillsController extends FDMController implements HasToggleableSave
         languageInput.addAll(findAllTextFields(page.getLanguageGridPane()));
         createValidationForTextFields(string -> !string.matches("^.*[a-zA-Z]+.*$"), textFields, "Must contain at least one letter");
 
-        page.getPrev().setOnAction(actionEvent -> {
+        page.getPrev().setOnMousePressed(actionEvent -> {
             assignInput(mainController);
             treeView.getSelectionModel().select(4);
             new EducationController(cvTemplate, treeView, stage, recent).initialize(main, mainController);
         });
-        buttons[0].setOnAction(actionEvent -> {
+        buttons[0].setOnMousePressed(actionEvent -> {
             assignInput(mainController);
             treeView.getSelectionModel().select(6);
             new SummaryController(cvTemplate, treeView, stage, recent).initialize(main, mainController);
@@ -100,11 +101,11 @@ public class SkillsController extends FDMController implements HasToggleableSave
     //model should be set but not necessarily saved to file, therefore assign input is separated from saving
     private void assignToModel() {
         List<TextInputControl> competencesInput = findAllTextFields(page.getCompetenceGridPane());
-        HashSet<String> competencesToAdd = new HashSet<>();
+        List<String> competencesToAdd = new ArrayList<>();
         competencesInput.forEach(competence -> {
             competencesToAdd.add(competence.getText());
         });
-        cvTemplate.setCompetences(competencesToAdd);
+        cvTemplate.setKeySkills(competencesToAdd);
 
         List<TextInputControl> certificateInput = findAllTextFields(page.getCertificateGridPane());
         HashSet<String> certificatesToAdd = new HashSet<>();
