@@ -180,7 +180,7 @@ public class SaveObjectToDocument {
                     //HelperClassDocxCreation.displayTableContent(document);
 
 
-                    //HelperClassDocxCreation.removeTablesWithNoData(document, replacementString);
+                    HelperClassDocxCreation.removeTablesWithNoData(document, replacementString);
                     HelperClassDocxCreation.removeParagraphsWithSearchString(document, replacementString);
                     //HelperClassDocxCreation.removeConsecutiveEmptyParagraphs(document);
 
