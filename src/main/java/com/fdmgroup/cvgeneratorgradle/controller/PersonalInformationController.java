@@ -36,8 +36,8 @@ public class PersonalInformationController extends FDMController implements HasT
     private Stream stream;
     private Location location;
 
-    private final HashSet<String> TECHNICAL = new HashSet<>(List.of("Java", "HTML/CSS/JavaScript", "JUnit", "Eclipse", "Maven", "Git", "MySQL", "UML"));
-    private final HashSet<String> BUSINESS = new HashSet<>(List.of("MySQL", "BPMN", "UML"));
+    public final static HashSet<String> TECHNICAL = new HashSet<>(List.of("Java", "HTML/CSS/JavaScript", "JUnit", "Eclipse", "Maven", "Git", "MySQL", "UML"));
+    public final static HashSet<String> BUSINESS = new HashSet<>(List.of("MySQL", "BPMN", "UML"));
 
     public PersonalInformationController(CVTemplate cvTemplate, TreeView<String> treeView, Stage stage, Menu recent) {
         this.cvTemplate = cvTemplate;

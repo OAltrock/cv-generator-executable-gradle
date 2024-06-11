@@ -4,9 +4,11 @@ import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.models.Education;
 import com.fdmgroup.cvgeneratorgradle.models.Experience;
 import com.fdmgroup.cvgeneratorgradle.models.Language;
+import com.fdmgroup.cvgeneratorgradle.controller.PersonalInformationController;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 public class HelperClass {
 
@@ -78,6 +80,22 @@ public class HelperClass {
                 hashMap.put("{stream.streamName}", obj.getStream().getStreamName());
             }
         }
+
+        //Extract Stream Modules from HashSet in PersonalInfoControler:
+        {
+            HashSet<String> streamSkillSet = new HashSet<>();
+            if (obj.getStream().getStreamName().equalsIgnoreCase("technical")) {
+                streamSkillSet = PersonalInformationController.TECHNICAL;
+            } else if (obj.getStream().getStreamName().equalsIgnoreCase("business")) {
+                streamSkillSet = PersonalInformationController.BUSINESS;
+            }
+            int i = 0;
+            for (String skill : streamSkillSet) {
+                hashMap.put("{stream.Skills[" + i + "]}", skill);
+                i++;
+            }
+        }
+
 
         // Extract experiences
         if (obj.getExperiences() != null) {
@@ -200,8 +218,8 @@ public class HelperClass {
     public static void printHashMap(Map<String, String> hashMap) {
         for (String key : hashMap.keySet()) {
             System.out.println(key + ": " + hashMap.get(key));
-            System.out.println("-------");
         }
+        System.out.println();
     }
 
 

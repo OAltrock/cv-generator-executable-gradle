@@ -104,6 +104,7 @@ public class SaveObjectToDocument {
 
         Map<String, String> cVHashMap = HelperClass.convertCVObjectToHashMap(cvTemplate);
         //System.out.println(cVHashMap);
+        HelperClass.printHashMap(cVHashMap);
         String documentsFolderPath = System.getProperty("user.home") + File.separator + "Documents"+ File.separator + "CVgenerator";
         //String outputPath = documentsFolderPath + File.separator + "CvAutoSave.docx";
         String outputPathTestFile = documentsFolderPath + File.separator + "paragraphsFound.txt";
