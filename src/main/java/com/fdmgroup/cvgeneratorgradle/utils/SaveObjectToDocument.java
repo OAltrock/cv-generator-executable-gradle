@@ -84,7 +84,6 @@ public class SaveObjectToDocument {
         Map<String, String> cVHashMap = HelperClass.convertCVObjectToHashMap(cvTemplate);
         System.out.println(cVHashMap);
         String documentsFolderPath = System.getProperty("user.home") + File.separator + "Documents" + File.separator + "CVgenerator";
-        //String outputPath = documentsFolderPath + File.separator + "CvAutoSave.docx";
         String outputPathTestFile = documentsFolderPath + File.separator + "paragraphsFound.txt";
         String outputPathTestFile2 = documentsFolderPath + File.separator + "replacementsRecord.txt";
         Label errLabel = new Label();
@@ -106,21 +105,6 @@ public class SaveObjectToDocument {
         //System.out.println("saving word file under:");
         //System.out.println(outputPath);
 
-        /*if (test.isFile()) {
-            JarFile jarFile = new JarFile(test);
-            final Enumeration<JarEntry> jarEntryEnum = jarFile.entries();
-            while (jarEntryEnum.hasMoreElements()) {
-                final String name = jarEntryEnum.nextElement().getName();
-                if (name.contains("fdm_cv_template_international_v1.docx")) {
-                    template = new File(test+File.separator+name);
-                    errLabel.setText(errLabel.getText() + "\n" + test+File.separator+name);
-                }
-            }
-        }
-        else {
-            template = new File(Main.class.getResource("templates/fdm_cv_template_international_v1.docx").getPath());
-            errLabel.setText(errLabel.getText() + "\nNot jar File, path: " + template.getCanonicalPath());
-        }*/
         //String wordTemplatePath = "./src/main/resources/templates/fdm_cv_template_v1.docx";
         /*String wordTemplatePath =
              //   "./src/main/resources/com/fdmgroup/cvgeneratorgradle/templates/fdm_cv_template_test4.docx";
@@ -321,4 +305,5 @@ public class SaveObjectToDocument {
             System.out.println((new File(wordTempPath).delete() ? "deleted!" : wordTempPath+" couldn't be deleted"));
         }
     }
+
 }

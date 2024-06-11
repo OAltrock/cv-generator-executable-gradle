@@ -134,6 +134,8 @@ public class SummaryPage extends FDMPage {
         if (cvTemplate.getStream() == null)
             cvTemplate.setStream(new Stream("", "", "", new ArrayList<>(), new HashSet<>()));
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMM yyyy");
+        if (cvTemplate.getStream().getStartDate().isEmpty()) cvTemplate.getStream().setStartDate("9999-01-01");
+        if (cvTemplate.getStream().getEndDate().isEmpty()) cvTemplate.getStream().setEndDate("9999-01-01");
         Label streamDur = new Label(LocalDate.parse(cvTemplate.getStream().getStartDate()).format(dateTimeFormatter)
                 + " - "
                 + LocalDate.parse(cvTemplate.getStream().getEndDate()).format(dateTimeFormatter));

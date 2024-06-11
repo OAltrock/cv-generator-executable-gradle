@@ -22,6 +22,12 @@ public class CVTemplateExampleValues {
     public static void main(String[] args) {
 
         CVTemplate cVExampleTemplate = createCVTemplateWithExampleValues();
+
+        //Map<String, String> testHashMap = HelperClass.convertAnyObjectToHashMap(cVExampleTemplate);
+        //HelperClass.printHashMap(testHashMap);
+        //System.exit(0);
+
+
         String userHome = System.getProperty("user.home");
         Path documentsPath = Paths.get(userHome, "Documents", "CVgenerator");
 
