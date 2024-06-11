@@ -33,7 +33,7 @@ public class SaveObjectToDocument {
      * @param outputPath The path where the generated document should be saved.
      * @throws IOException              If an I/O error occurs while creating the auto-save file or generating the document.
      * @throws IllegalArgumentException If an unsupported document format is provided.
-     */git 
+     */
     public static void createDocument(CVTemplate cvTemplate, String format, String outputPath, BorderPane main) throws IOException {
         //creating an auto save in json format:
         String saveFilePath = SaveObjectToJson.savePath + File.separator + "autosave_fullCV.json";
