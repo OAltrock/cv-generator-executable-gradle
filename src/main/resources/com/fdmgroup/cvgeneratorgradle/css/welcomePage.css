@@ -150,7 +150,7 @@
 }
 
 .date-picker-popup > * > .today {
-    -fx-background-color: -fx-fdm-darkGrey;
+    -fx-background-color: #999999;
 }
 
 #centerBox .menu-button >.label {

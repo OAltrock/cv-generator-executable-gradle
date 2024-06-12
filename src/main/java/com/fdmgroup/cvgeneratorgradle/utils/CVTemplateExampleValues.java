@@ -10,10 +10,13 @@ import java.util.HashSet;
 import java.util.List;
 
 
+import com.fdmgroup.cvgeneratorgradle.controller.MainController;
 import com.fdmgroup.cvgeneratorgradle.models.*;
 import com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToDocument;
 import javafx.scene.control.Menu;
+import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 //this class was used to test and debug document creation (word + pdf)
 //execute this class to create a cvTemplate object with example data and creates json, docx and pdf document in home directory: ~/Documents/cvGenerator/
@@ -51,12 +54,12 @@ public class CVTemplateExampleValues {
         SaveObjectToJson.saveObjectAsJson(cVExampleTemplate, outpathjson);
 
         try {
-            SaveObjectToDocument.createDocument(cVExampleTemplate, "Word", outpathWord, new BorderPane());
+            SaveObjectToDocument.createDocument(cVExampleTemplate, "Word", outpathWord, new BorderPane(), new TreeView<>(), new Stage(),new Menu(), new MainController());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         try {
-            SaveObjectToDocument.createDocument(cVExampleTemplate, "pdf", outpathPDF, new BorderPane());
+            SaveObjectToDocument.createDocument(cVExampleTemplate, "pdf", outpathPDF, new BorderPane(), new TreeView<>(), new Stage(), new Menu(), new MainController());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

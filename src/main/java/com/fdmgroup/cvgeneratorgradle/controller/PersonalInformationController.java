@@ -107,11 +107,11 @@ public class PersonalInformationController extends FDMController
 
         page.getLocationChooser().setOnAction(actionEvent -> {
             if (Objects.equals(page.getLocationChooser().getValue(), "Germany")) {
-                location = new Location("Germany", 1, 5, 1, 1,
+                location = new Location("Germany", 1, 3, 1, 1,
                         1, 3, 1,
                         3, 1, 5, 1,
-                        5, 1, 5, 0,
-                        5, false);
+                        4, 1, 4, 0,
+                        4, false);
             } else if (Objects.equals(page.getLocationChooser().getValue(), "International")) {
                 location = new Location("International", 1, 1, 1,
                         3, 1, 3,

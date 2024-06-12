@@ -79,6 +79,7 @@ public class SummaryPage extends FDMPage {
         }
         //if there are more than one, nodes could be created for each one (same for education)
 
+        cvTemplate.getExperiences().forEach(System.out::println);
         for (Experience experience1 : cvTemplate.getExperiences()) {
             String ongoing = (!experience1.getEndDate().isEmpty()) ?
                     (LocalDate.parse(experience1.getEndDate()).isAfter(LocalDate.now()))
