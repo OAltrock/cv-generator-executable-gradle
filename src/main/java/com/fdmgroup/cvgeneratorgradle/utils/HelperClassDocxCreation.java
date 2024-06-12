@@ -307,7 +307,7 @@ public class HelperClassDocxCreation {
     public static void removeTablesWithNoData(XWPFDocument document, String searchString) {
         List<XWPFTable> tablesToRemove = new ArrayList<>();
         for (XWPFTable table : document.getTables()) {
-            if (isTableContainingStringInAllCells(table, searchString)) {
+            if (isTableContainingStringInAllParagraphs(table, searchString)) {
                 tablesToRemove.add(table);
             }
         }
@@ -320,10 +320,18 @@ public class HelperClassDocxCreation {
         }
     }
 
-    private static boolean isTableContainingStringInAllCells(XWPFTable table, String searchString) {
+    private static boolean isTableContainingStringInAllParagraphs(XWPFTable table, String searchString) {
         for (XWPFTableRow row : table.getRows()) {
             for (XWPFTableCell cell : row.getTableCells()) {
-                if (!cell.getText().contains(searchString)) {
+                boolean foundInAllParagraphs = true;
+                for (XWPFParagraph paragraph : cell.getParagraphs()) {
+                    String paragraphText = paragraph.getText();
+                    if (!paragraphText.isEmpty() && !paragraphText.contains(searchString)) {
+                        foundInAllParagraphs = false;
+                        break;
+                    }
+                }
+                if (!foundInAllParagraphs) {
                     return false;
                 }
             }
@@ -343,28 +351,13 @@ public class HelperClassDocxCreation {
     }
 
     /**
-     * Removes paragraphs in tables that contain the search string.
-     *
+     * Removes paragraphs in tables that contain the search string (if there are multiple paragraphs in one cell).
+     * (This method is used to delete not used bullet points from table cells)
      * @param document    The XWPFDocument to be modified.
      * @param searchString The string to search for in paragraphs.
      */
-    public static void removeParagraphsWithSearchString(XWPFDocument document, String searchString) {
+    public static void removeParagraphsWithSearchStringFromTables(XWPFDocument document, String searchString) {
 
-        // Remove paragraphs in the document body
-        /*
-        List<XWPFParagraph> paragraphsToRemove = new ArrayList<>();
-        for (XWPFParagraph paragraph : document.getParagraphs()) {
-            if (paragraph.getText().contains(searchString)) {
-                paragraphsToRemove.add(paragraph);
-            }
-        }
-        for (XWPFParagraph paragraph : paragraphsToRemove) {
-            int pos = document.getPosOfParagraph(paragraph);
-            if (pos != -1) {
-                document.removeBodyElement(pos);
-            }
-        }
-        */
         // Remove paragraphs in tables
         for (XWPFTable table : document.getTables()) {
             for (XWPFTableRow row : table.getRows()) {
@@ -377,35 +370,27 @@ public class HelperClassDocxCreation {
                         }
                     }
                     for (int i = indicesToRemove.size() - 1; i >= 0; i--) {
-                        cell.removeParagraph(indicesToRemove.get(i));
-                    }
-                    if (cell.getParagraphs().isEmpty()) {
-                        XWPFParagraph placeholderParagraph = cell.addParagraph();
-                        placeholderParagraph.createRun().setText(" ");
+
+                        //in case a cell would be empty after deleting the paragraph, we want our search string to be placed to indicate missing data and not delete the paragraph.
+                        if (paragraphs.size() == 1) {
+                            XWPFParagraph paragraph = paragraphs.get(0);
+                            List<XWPFRun> runs = paragraph.getRuns();
+                            if (!runs.isEmpty()) {
+                                runs.get(0).setText(searchString, 0); // Set the text of the first run
+                                // Remove all other runs
+                                for (int j = runs.size() - 1; j > 0; j--) {
+                                    paragraph.removeRun(j);
+                                }
+                            }
+                        } else {
+                            cell.removeParagraph(indicesToRemove.get(i));
+                        }
+
                     }
                 }
             }
         }
     }
-
-    //Remove empty paragraphs if they are left after removing of empty tables
-    //this is not working as intended yet. Removes all grouped empty paragraphs .....
-    public static void removeConsecutiveEmptyParagraphs(XWPFDocument document) {
-        List<XWPFParagraph> paragraphs = document.getParagraphs();
-        for (int i = paragraphs.size() - 1; i > 0; i--) {
-            XWPFParagraph currentParagraph = paragraphs.get(i);
-            XWPFParagraph previousParagraph = paragraphs.get(i - 1);
-            if (isParagraphEmpty(currentParagraph) && isParagraphEmpty(previousParagraph)) {
-                document.removeBodyElement(document.getPosOfParagraph(currentParagraph));
-            }
-        }
-    }
-
-    private static boolean isParagraphEmpty(XWPFParagraph paragraph) {
-        return paragraph.getText().trim().isEmpty();
-    }
-
-
 
     /**
      * Prints the text of each run within a paragraph, including their index within the paragraph.
@@ -550,28 +535,16 @@ public class HelperClassDocxCreation {
         String ongoingDateString = ongoingDate.format(inputFormatter);
         if (dateStr.equals(ongoingDateString)) {
             return "ongoing";
+        } else if (dateStr.isEmpty()) {
+            return "        ";
         }
         LocalDate date = LocalDate.parse(dateStr, inputFormatter);
         return date.format(outputFormatter);
     }
 
-    /* //for debugging only
-    public static void printDocumentElements(XWPFDocument document) {
-        List<IBodyElement> bodyElements = document.getBodyElements();
-        System.out.println("##################Document Elements are:####################################");
-        for (int i = 0; i < bodyElements.size(); i++) {
-            IBodyElement element = bodyElements.get(i);
-            if (element instanceof XWPFParagraph) {
-                XWPFParagraph paragraph = (XWPFParagraph) element;
-                System.out.println("Index: " + i + " - Paragraph: " + paragraph.getText());
-            } else if (element instanceof XWPFTable) {
-                System.out.println("Index: " + i + " - [Table]");
-            } else {
-                System.out.println("Index: " + i + " - [Other Element]");
-            }
-        }
-        System.out.println();
-    }*/
-
+    //use this overloaded Method for our default date settings:
+    public static String changeDateFormat(String dateStr){
+        return changeDateFormat(dateStr, "yyyy-MM-dd", "MMM yyyy");
+    }
 
 }

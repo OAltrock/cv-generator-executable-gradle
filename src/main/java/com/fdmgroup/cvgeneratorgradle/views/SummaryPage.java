@@ -4,6 +4,7 @@ import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 import com.fdmgroup.cvgeneratorgradle.models.Education;
 import com.fdmgroup.cvgeneratorgradle.models.Experience;
 import com.fdmgroup.cvgeneratorgradle.models.Stream;
+import com.fdmgroup.cvgeneratorgradle.utils.HelperClassDocxCreation;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -133,12 +134,15 @@ public class SummaryPage extends FDMPage {
         fdmSkills.setItems(competencesList);
         if (cvTemplate.getStream() == null)
             cvTemplate.setStream(new Stream("", "", "", new ArrayList<>(), new HashSet<>()));
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMM yyyy");
-        if (cvTemplate.getStream().getStartDate().isEmpty()) cvTemplate.getStream().setStartDate("9999-01-01");
-        if (cvTemplate.getStream().getEndDate().isEmpty()) cvTemplate.getStream().setEndDate("9999-01-01");
-        Label streamDur = new Label(LocalDate.parse(cvTemplate.getStream().getStartDate()).format(dateTimeFormatter)
-                + " - "
-                + LocalDate.parse(cvTemplate.getStream().getEndDate()).format(dateTimeFormatter));
+        //DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMM yyyy");
+        //if (cvTemplate.getStream().getStartDate().isEmpty()) cvTemplate.getStream().setStartDate("9999-01-01");
+        //if (cvTemplate.getStream().getEndDate().isEmpty()) cvTemplate.getStream().setEndDate("9999-01-01");
+        String labelText = HelperClassDocxCreation.changeDateFormat(cvTemplate.getStream().getStartDate())
+               + " - " + HelperClassDocxCreation.changeDateFormat(cvTemplate.getStream().getEndDate());
+        //Label streamDur = new Label(LocalDate.parse(cvTemplate.getStream().getStartDate()).format(dateTimeFormatter)
+        //        + " - "
+        //        + LocalDate.parse(cvTemplate.getStream().getEndDate()).format(dateTimeFormatter));
+        Label streamDur = new Label(labelText);
         streamDur.setStyle("-fx-font-size: 12px");
 
         ObservableList<String> keySkillsList = FXCollections.observableArrayList((cvTemplate.getKeySkills() != null) ? cvTemplate.getKeySkills() : new ArrayList<>());

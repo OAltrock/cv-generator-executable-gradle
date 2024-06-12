@@ -176,13 +176,11 @@ public class SaveObjectToDocument {
                     //HelperClass.debugParagraphs(document);
                     //HelperClassDocxCreation.displayTableContent(document);
                     HelperClassDocxCreation.replaceNotFoundPlaceholders(document, replacementString);//change remaining placeholders to chosen string
-                    //HelperClassDocxCreation.removeEmptyRows(document);
                     //HelperClassDocxCreation.displayTableContent(document);
 
 
                     HelperClassDocxCreation.removeTablesWithNoData(document, replacementString);
-                    HelperClassDocxCreation.removeParagraphsWithSearchString(document, replacementString);
-                    //HelperClassDocxCreation.removeConsecutiveEmptyParagraphs(document);
+                    HelperClassDocxCreation.removeParagraphsWithSearchStringFromTables(document, replacementString);
 
                     if (createPdfLater) {//fix row heights, if this docx file is created to generate a pdf out of it.
                         HelperClassDocxCreation.calculateAndSetTableRowHeights(document);
