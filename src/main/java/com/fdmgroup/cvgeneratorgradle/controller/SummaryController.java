@@ -59,7 +59,7 @@ public class SummaryController extends FDMController{
             File selectedFilePDF = selectFileFromFileChooser("Save", "PDF File", "*.pdf", stage);
             if (selectedFilePDF!=null) {
                 try {
-                    SaveObjectToDocument.createDocument(cvTemplate, "PDF", selectedFilePDF.getPath(), main);
+                    SaveObjectToDocument.createDocument(cvTemplate, "PDF", selectedFilePDF.getPath(), main, treeView, stage, recent, mainController);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -71,7 +71,7 @@ public class SummaryController extends FDMController{
             File selectedFileWord = selectFileFromFileChooser( "Save", "Word File", "*.docx", stage);
             if (selectedFileWord != null) {
                 try {
-                    SaveObjectToDocument.createDocument(cvTemplate, "docx", selectedFileWord.getPath(),main);
+                    SaveObjectToDocument.createDocument(cvTemplate, "docx", selectedFileWord.getPath(),main, treeView,stage,recent, mainController);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

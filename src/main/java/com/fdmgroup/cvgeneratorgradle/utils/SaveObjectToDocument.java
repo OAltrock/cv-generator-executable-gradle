@@ -1,12 +1,21 @@
 package com.fdmgroup.cvgeneratorgradle.utils;
 
 import com.fdmgroup.cvgeneratorgradle.Main;
+import com.fdmgroup.cvgeneratorgradle.controller.MainController;
+import com.fdmgroup.cvgeneratorgradle.controller.ProfileController;
+import com.fdmgroup.cvgeneratorgradle.controller.SummaryController;
 import com.fdmgroup.cvgeneratorgradle.models.CVTemplate;
 
+import com.fdmgroup.cvgeneratorgradle.views.FDMCenterVBoxWrapper;
+import javafx.concurrent.Task;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.apache.poi.xwpf.usermodel.*;
 
 import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
@@ -16,6 +25,7 @@ import java.io.*;
 import java.util.*;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class SaveObjectToDocument {
 
@@ -34,17 +44,29 @@ public class SaveObjectToDocument {
      * @throws IOException              If an I/O error occurs while creating the auto-save file or generating the document.
      * @throws IllegalArgumentException If an unsupported document format is provided.
      */
-    public static void createDocument(CVTemplate cvTemplate, String format, String outputPath, BorderPane main) throws IOException {
+    public static void createDocument(CVTemplate cvTemplate, String format, String outputPath, BorderPane main,
+                                      TreeView<String> treeView, Stage stage, Menu recent, MainController mainController) throws IOException {
         //creating an auto save in json format:
         String saveFilePath = SaveObjectToJson.savePath + File.separator + "autosave_fullCV.json";
         SaveObjectToJson.saveObjectAsJson(cvTemplate, saveFilePath);
+        try {
+            if ("docx".equalsIgnoreCase(format) || "word".equalsIgnoreCase(format)) {
+                saveObjectAsWord(cvTemplate, outputPath, false, main);
 
-        if ("docx".equalsIgnoreCase(format) || "word".equalsIgnoreCase(format)) {
-            saveObjectAsWord(cvTemplate, outputPath, false, main);
-        } else if ("PDF".equalsIgnoreCase(format)) {
-            saveObjectAsPDF(cvTemplate, outputPath, main);
-        } else {
-            throw new IllegalArgumentException("Unsupported document format: " + format);
+                showConfirmation(cvTemplate, main, treeView, stage, recent, "docx", mainController);
+
+            } else if ("PDF".equalsIgnoreCase(format)) {
+                saveObjectAsPDF(cvTemplate, outputPath, main, treeView, stage, recent);
+                showConfirmation(cvTemplate, main, treeView, stage, recent, "PDF", mainController);
+            } else {
+                throw new IllegalArgumentException("Unsupported document format: " + format);
+            }
+        } catch (InterruptedException e) {
+            try {
+                showConfirmation(cvTemplate, main, treeView, stage, recent, e.getMessage(), mainController);
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 
@@ -84,7 +106,7 @@ public class SaveObjectToDocument {
         Map<String, String> cVHashMap = HelperClass.convertCVObjectToHashMap(cvTemplate);
         //System.out.println(cVHashMap);
         HelperClass.printHashMap(cVHashMap);
-        String documentsFolderPath = System.getProperty("user.home") + File.separator + "Documents"+ File.separator + "CVgenerator";
+        String documentsFolderPath = System.getProperty("user.home") + File.separator + "Documents" + File.separator + "CVgenerator";
         //String outputPath = documentsFolderPath + File.separator + "CvAutoSave.docx";
         String outputPathTestFile = documentsFolderPath + File.separator + "paragraphsFound.txt";
         String outputPathTestFile2 = documentsFolderPath + File.separator + "replacementsRecord.txt";
@@ -282,7 +304,7 @@ public class SaveObjectToDocument {
      * @param outputPath The path where the generated PDF document should be saved.
      * @throws IOException If an I/O error occurs while reading/writing files or during the conversion process.
      */
-    public static void saveObjectAsPDF(CVTemplate cvTemplate, String outputPath, BorderPane main) throws IOException {
+    public static void saveObjectAsPDF(CVTemplate cvTemplate, String outputPath, BorderPane main, TreeView<String> treeView, Stage stage, Menu recent) throws IOException {
         String wordTempPath = System.getProperty("java.io.tmpdir") + "tempCvDocument.docx";
         saveObjectAsWord(cvTemplate, wordTempPath, true, main);
 
@@ -302,8 +324,35 @@ public class SaveObjectToDocument {
             HBox newHBox = new HBox(errLabel);
             main.setCenter(newHBox);
         } finally {
-            System.out.println((new File(wordTempPath).delete() ? "deleted!" : wordTempPath+" couldn't be deleted"));
+            System.out.println((new File(wordTempPath).delete() ? "deleted!" : wordTempPath + " couldn't be deleted"));
         }
+    }
+
+    private static void showConfirmation(CVTemplate cvTemplate, BorderPane main, TreeView<String> treeView, Stage stage, Menu recent, String type, MainController mainController) throws InterruptedException {
+        Label errLabel = new Label();
+        if (type.contains("docx") || type.contains("PDF")) {
+             errLabel.setText(type + " successfully saved!");
+        }
+        else errLabel.setText("Error:\n"+type);
+        errLabel.setWrapText(true);
+        FDMCenterVBoxWrapper newHBox = new FDMCenterVBoxWrapper(errLabel);
+        newHBox.setDesign();
+        main.setCenter(newHBox);
+        //TimeUnit.SECONDS.sleep(15);
+        delay(5000, ()->new SummaryController(cvTemplate, treeView, stage, recent).initialize(main, mainController));
+    }
+
+    public static void delay(long millis, Runnable continuation) {
+        Task<Void> sleeper = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try { Thread.sleep(millis); }
+                catch (InterruptedException e) { }
+                return null;
+            }
+        };
+        sleeper.setOnSucceeded(event -> continuation.run());
+        new Thread(sleeper).start();
     }
 
 }
