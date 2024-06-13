@@ -168,3 +168,9 @@
     -fx-background-color: -fx-fdm-darkGrey;
 }
 
+.list-view {
+    -fx-min-height: 200px;
+    -fx-pref-height: 200px;
+    -fx-pref-width: 700px;
+}
+

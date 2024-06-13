@@ -49,7 +49,7 @@ public class SkillsPage extends FDMPage implements HasAddableTextFields {
         competencesLabel = new Label("Add " + location.getMinCompetence() + " to " + location.getMaxCompetence() + " key skills");
         List<TextInputControl> competencesToAdd = new ArrayList<>();
 
-        List<String> competencesTemp = (cvTemplate.getKeySkills() == null) ? new ArrayList<>() : cvTemplate.getKeySkills();
+        AbstractSet<String> competencesTemp = (cvTemplate.getKeySkills() == null) ? new LinkedHashSet<>() : cvTemplate.getKeySkills();
         competencesTemp.forEach(competence -> competencesToAdd.add(new TextField(competence)));
 
         competenceGridPane = new GridPane(3, competencesToAdd.size());

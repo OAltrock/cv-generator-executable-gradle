@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 
@@ -146,7 +147,7 @@ public class CVTemplateExampleValues {
         interests.add("Traveling");
 
         // Create a new CVTemplate object with the example values
-        CVTemplate cvTemplate = new CVTemplate(user, location, stream, null, experiences, educations, competences, new ArrayList<>(), certificates, languages, interests);
+        CVTemplate cvTemplate = new CVTemplate(user, location, stream, null, experiences, educations, competences, new LinkedHashSet<>(), certificates, languages, interests);
         cvTemplate.setProfile("This is the profile Text for the generated CV. Hire me, I am the best.");
 
         return cvTemplate;

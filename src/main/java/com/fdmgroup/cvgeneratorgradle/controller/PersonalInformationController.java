@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 import static com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson.saveObjectAsJson;
 
@@ -84,7 +85,8 @@ public class PersonalInformationController extends FDMController
             }
         };
 
-        addValidationToSaveButtons(textFields, List.of(page.getStreamChooser(), page.getLocationChooser()), string -> !string.matches("^.*[a-zA-Z]+.*$"), buttons);
+
+        addValidationToSaveButtons(textFields, List.of(page.getStreamChooser(),page.getLocationChooser()), input -> !input.matches("^.*[a-zA-Z]+.*$"), start, end, checkDate, checkBox, page.getNextBtn());
 
         textFields.addAll(List.of(page.getFirstName(), page.getLastName(), page.getEmail()));
 

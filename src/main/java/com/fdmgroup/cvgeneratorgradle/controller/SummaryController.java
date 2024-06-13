@@ -20,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 import static com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson.saveObjectAsJson;
 import static com.fdmgroup.cvgeneratorgradle.utils.SaveObjectToJson.selectFileFromFileChooser;
@@ -84,7 +85,7 @@ public class SummaryController extends FDMController{
         cvTemplate.setUser((cvTemplate.getUser()!=null) ? cvTemplate.getUser() : new User());
         cvTemplate.setLocation((cvTemplate.getLocation()!=null) ? cvTemplate.getLocation() : new Location());
         cvTemplate.setStream((cvTemplate.getStream()!=null) ? cvTemplate.getStream() : new Stream());
-        cvTemplate.setKeySkills((cvTemplate.getKeySkills()!=null) ? cvTemplate.getKeySkills() : new ArrayList<>());
+        cvTemplate.setKeySkills((cvTemplate.getKeySkills()!=null) ? cvTemplate.getKeySkills() : new LinkedHashSet<>());
         cvTemplate.setCertificates((cvTemplate.getCertificates()!=null) ? cvTemplate.getCertificates() : new HashSet<>());
         cvTemplate.setInterests((cvTemplate.getInterests()!=null) ? cvTemplate.getInterests() : new HashSet<>());
         cvTemplate.setExperiences((cvTemplate.getExperiences()!=null) ? cvTemplate.getExperiences() : new ArrayList<>());

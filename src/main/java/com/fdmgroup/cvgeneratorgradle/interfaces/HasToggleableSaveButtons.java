@@ -1,5 +1,6 @@
 package com.fdmgroup.cvgeneratorgradle.interfaces;
 
+import com.sun.javafx.binding.SelectBinding;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.binding.*;
@@ -25,7 +26,8 @@ public interface HasToggleableSaveButtons {
      * @param checkText {@link Predicate} to validate given {@link  TextInputControl}s by
      * @param buttons   {@link Button} that should be disabled when not all given {@link TextInputControl}s are validated
      */
-    default void addValidationToSaveButtons(ObservableList<TextInputControl> list, Predicate<String> checkText, Button... buttons) {
+    default void addValidationToSaveButtons(ObservableList<TextInputControl> list, Predicate<String> checkText,
+                                            Button... buttons) {
         Arrays.stream(buttons).forEach(button -> {
             list.addListener(new InvalidationListener() {
                 @Override
@@ -38,7 +40,8 @@ public interface HasToggleableSaveButtons {
     }
 
     default void addValidationToSaveButtons(ObservableList<TextInputControl> list, List<ChoiceBox<String>> choiceBoxes,
-                                            Predicate<String> checkText,
+                                            Predicate<String> checkText, DatePicker start,
+                                            DatePicker end, BiPredicate<LocalDate, LocalDate> checkDate, CheckBox ongoing,
                                             Button... buttons) {
         Arrays.stream(buttons).forEach(button -> {
             choiceBoxes.forEach(choiceBox -> {
@@ -52,10 +55,11 @@ public interface HasToggleableSaveButtons {
                                 .get();
                         BooleanBinding oneChoiceBoxIsEmpty = choiceBoxes.stream()
                                 .map(ChoiceBox::getValue)
-                                .map(string -> Bindings.createBooleanBinding(()->!string.isEmpty()))
-                                .reduce(Bindings::and)
+                                .map(string -> Bindings.createBooleanBinding(string::isEmpty))
+                                .reduce(Bindings::or)
                                 .get();
-                        button.disableProperty().bind(allVboxFieldsValidated.or(oneChoiceBoxIsEmpty.not()));
+                        BooleanBinding datesCorrect = Bindings.createBooleanBinding(() -> checkDate.test(start.getValue(), end.getValue()), end.valueProperty()).not();
+                        button.disableProperty().bind((allVboxFieldsValidated.or(oneChoiceBoxIsEmpty).or(datesCorrect)));
                     }
                 });
 
@@ -65,14 +69,85 @@ public interface HasToggleableSaveButtons {
                         BooleanBinding allVboxFieldsValidated = validateTextFields(list, checkText);
                         BooleanBinding oneChoiceBoxIsEmpty = choiceBoxes.stream()
                                 .map(ChoiceBox::getValue)
-                                .map(string -> Bindings.createBooleanBinding(()->!string.isEmpty()))
+                                .map(string -> Bindings.createBooleanBinding(string::isEmpty))
                                 .reduce(Bindings::or)
                                 .get();
-                        button.disableProperty().bind(allVboxFieldsValidated.or(oneChoiceBoxIsEmpty.not()));
+                        BooleanBinding datesCorrect = Bindings.createBooleanBinding(() -> checkDate.test(start.getValue(), end.getValue()), end.valueProperty()).not();
+                        button.disableProperty().bind(allVboxFieldsValidated.or(oneChoiceBoxIsEmpty).or(datesCorrect));
                     }
                 });
             });
+            end.valueProperty().addListener(new ChangeListener<LocalDate>() {
+                                                @Override
+                                                public void changed(ObservableValue<? extends LocalDate> observableValue, LocalDate localDate, LocalDate t1) {
+                                                    BooleanBinding allVboxFieldsValidated = list.stream()
+                                                            .map(TextInputControl::textProperty)
+                                                            .map(stringProperty -> Bindings.createBooleanBinding(
+                                                                    () -> checkText.test(stringProperty.get()), stringProperty))
+                                                            .reduce(Bindings::or)
+                                                            .get();
+                                                    BooleanBinding oneChoiceBoxIsEmpty = choiceBoxes.stream()
+                                                            .map(ChoiceBox::getValue)
+                                                            .map(string -> Bindings.createBooleanBinding(string::isEmpty))
+                                                            .reduce(Bindings::or)
+                                                            .get();
+                                                    BooleanBinding datesCorrect = Bindings.createBooleanBinding(() -> checkDate.test(start.getValue(), end.getValue()), end.valueProperty()).not();
+                                                    button.disableProperty().bind(allVboxFieldsValidated.or(datesCorrect).or(oneChoiceBoxIsEmpty));
+                                                }
+                                            }
+            );
+            list.addListener(new InvalidationListener() {
+                @Override
+                public void invalidated(Observable observable) {
+                    BooleanBinding allVboxFieldsValidated = validateTextFields(list, checkText);
+                    BooleanBinding oneChoiceBoxIsEmpty = choiceBoxes.stream()
+                            .map(ChoiceBox::getValue)
+                            .map(string -> Bindings.createBooleanBinding(string::isEmpty))
+                            .reduce(Bindings::or)
+                            .get();
+                    BooleanBinding datesCorrect = Bindings.createBooleanBinding(() -> checkDate.test(start.getValue(), end.getValue()), start.valueProperty(), end.valueProperty()).not();
+                    button.disableProperty().bind(allVboxFieldsValidated.or(datesCorrect).or(oneChoiceBoxIsEmpty));
+                }
+            });
+
+            start.valueProperty().addListener(new ChangeListener<LocalDate>() {
+                @Override
+                public void changed(ObservableValue<? extends LocalDate> observableValue, LocalDate localDate, LocalDate t1) {
+                    BooleanBinding allVboxFieldsValidated = list.stream()
+                            .map(TextInputControl::textProperty)
+                            .map(stringProperty -> Bindings.createBooleanBinding(() -> checkText.test(stringProperty.get()), stringProperty))
+                            .reduce(Bindings::or)
+                            .get();
+                    BooleanBinding oneChoiceBoxIsEmpty = choiceBoxes.stream()
+                            .map(ChoiceBox::getValue)
+                            .map(string -> Bindings.createBooleanBinding(string::isEmpty))
+                            .reduce(Bindings::or)
+                            .get();
+                    BooleanBinding datesCorrect = Bindings.createBooleanBinding(() -> checkDate.test(start.getValue(), end.getValue()), end.valueProperty()).not();
+                    button.disableProperty().bind(allVboxFieldsValidated.or(datesCorrect).or(oneChoiceBoxIsEmpty));
+                }
+            });
+
+            ongoing.selectedProperty().addListener(new ChangeListener<Boolean>() {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                    BooleanBinding allVboxFieldsValidated = list.stream()
+                            .map(TextInputControl::textProperty)
+                            .map(stringProperty -> Bindings.createBooleanBinding(() -> checkText.test(stringProperty.get()), stringProperty))
+                            .reduce(Bindings::or)
+                            .get();
+                    BooleanBinding oneChoiceBoxIsEmpty = choiceBoxes.stream()
+                            .map(ChoiceBox::getValue)
+                            .map(string -> Bindings.createBooleanBinding(string::isEmpty))
+                            .reduce(Bindings::or)
+                            .get();
+                    BooleanBinding datesCorrect = Bindings.createBooleanBinding(() -> checkDate.test(start.getValue(), end.getValue()), end.valueProperty()).not();
+                    end.disableProperty().bind(ongoing.selectedProperty());
+                    button.disableProperty().bind(allVboxFieldsValidated.or(datesCorrect).or(oneChoiceBoxIsEmpty));
+                }
+            });
         });
+
     }
 
     /**
@@ -89,6 +164,12 @@ public interface HasToggleableSaveButtons {
     default void addValidationToSaveButtons(ObservableList<TextInputControl> list, Predicate<String> checkText, DatePicker start,
                                             DatePicker end, BiPredicate<LocalDate, LocalDate> checkDate, CheckBox ongoing, Button... buttons) {
         Arrays.stream(buttons).forEach(button -> {
+            addDateValidation(list, checkText, start, end, checkDate, ongoing, button);
+        });
+
+    }
+
+    private void addDateValidation(ObservableList<TextInputControl> list, Predicate<String> checkText, DatePicker start, DatePicker end, BiPredicate<LocalDate, LocalDate> checkDate, CheckBox ongoing, Button button) {
             end.valueProperty().addListener(new ChangeListener<LocalDate>() {
                                                 @Override
                                                 public void changed(ObservableValue<? extends LocalDate> observableValue, LocalDate localDate, LocalDate t1) {
@@ -138,9 +219,6 @@ public interface HasToggleableSaveButtons {
                     button.disableProperty().bind(allVboxFieldsValidated.or(datesCorrect));
                 }
             });
-
-        });
-
     }
 
     //creates BooleanBindings since both default and overloaded method using them

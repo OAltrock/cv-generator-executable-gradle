@@ -17,9 +17,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 import java.util.function.Predicate;
 
@@ -101,7 +99,7 @@ public class SkillsController extends FDMController implements HasToggleableSave
     //model should be set but not necessarily saved to file, therefore assign input is separated from saving
     private void assignToModel() {
         List<TextInputControl> competencesInput = findAllTextFields(page.getCompetenceGridPane());
-        List<String> competencesToAdd = new ArrayList<>();
+       AbstractSet<String> competencesToAdd = new LinkedHashSet<>();
         competencesInput.forEach(competence -> {
             competencesToAdd.add(competence.getText());
         });

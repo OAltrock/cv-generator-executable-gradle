@@ -128,9 +128,8 @@ public class SummaryPage extends FDMPage {
         }
         education.setItems(educationList);
 
-        fdmSkills.setMinHeight(200);
-        fdmSkills.setMinWidth(250);
-        fdmSkills.setPrefWidth(700);
+        /*fdmSkills.setMinWidth(250);
+        fdmSkills.setPrefWidth(700);*/
         ObservableList<String> competencesList = FXCollections.observableArrayList((cvTemplate.getFdmSkills() != null) ? cvTemplate.getFdmSkills() : new ArrayList<>());
         fdmSkills.setItems(competencesList);
         if (cvTemplate.getStream() == null)
@@ -149,17 +148,17 @@ public class SummaryPage extends FDMPage {
         ObservableList<String> keySkillsList = FXCollections.observableArrayList((cvTemplate.getKeySkills() != null) ? cvTemplate.getKeySkills() : new ArrayList<>());
         keySkills.setItems(keySkillsList);
 
-        certificates.setMinHeight(200);
+
         certificates.setMinWidth(250);
         certificates.setPrefWidth(700);
         ObservableList<String> certificatesList = FXCollections.observableArrayList((cvTemplate.getCertificates() != null) ? cvTemplate.getCertificates() : new ArrayList<>());
         certificates.setItems(certificatesList);
 
-        interests.setMinHeight(200);
+
         ObservableList<String> interestsList = FXCollections.observableArrayList((cvTemplate.getInterests() != null) ? cvTemplate.getInterests() : new ArrayList<>());
         interests.setItems(interestsList);
 
-        languages.setMinHeight(200);
+
         ObservableList<String> languagesList = FXCollections.observableArrayList();
         if (cvTemplate.getLanguages() == null) cvTemplate.setLanguages(new HashSet<>());
         cvTemplate.getLanguages().forEach(language -> {
@@ -179,6 +178,7 @@ public class SummaryPage extends FDMPage {
         summaryGrid.add(interests, 1, 4);
         summaryGrid.add(languagesLabel, 0, 5);
         summaryGrid.add(languages, 0, 6);
+        summaryGrid.setId("summaryGrid");
 
         centerBox = new FDMCenterVBoxWrapper(profileLabel, profile, personalInformationLabel, personalInformation,
                 experienceLabel);
