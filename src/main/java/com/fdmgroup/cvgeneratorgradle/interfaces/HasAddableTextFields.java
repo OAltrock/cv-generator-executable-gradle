@@ -41,9 +41,9 @@ public interface HasAddableTextFields {
         addBtn.setOnMousePressed(event -> {
             MenuButton languageLevelButton = null;
             if (parent.getChildren().size() / 2 + 1 <= limit) {
-                javafx.scene.control.TextField textFieldToAdd = new javafx.scene.control.TextField();
+                javafx.scene.control.TextArea textFieldToAdd = new javafx.scene.control.TextArea();
                 int rowCount = parent.getRowCount() + 1;
-                textFieldToAdd.setStyle("-fx-pref-width: 300;");
+                textFieldToAdd.setWrapText(true);
                 textFieldToAdd.setPromptText(promptMessage);
                 textFieldToAdd.setId(String.valueOf(parent.getRowCount() + 1));
                 FDMButton removeButton = new FDMButton(removeBtnMessage);
@@ -201,7 +201,7 @@ public interface HasAddableTextFields {
         addBtn.minWidth(80);
         addBtn.maxWidth(80);
         if (keyProperty.isEmpty()) {
-            TextField newTextField = new TextField();
+            TextArea newTextField = new TextArea();
             newTextField.setPromptText(textFieldPromptMsg);
             newTextField.setId("bottom");
             gridPane.add(newTextField, 0, 0);

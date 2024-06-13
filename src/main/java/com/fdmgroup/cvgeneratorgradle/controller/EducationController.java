@@ -41,7 +41,7 @@ public class EducationController extends FDMController implements HasToggleableS
     private DatePicker start;
     private DatePicker end;
 
-    Predicate<String> predicate = input -> !input.matches("^.*[a-zA-Z]+.*$");
+    Predicate<String> predicate = input -> !input.matches("^.*[a-zA-Z]+.*\\s*$");
 
 
     /**

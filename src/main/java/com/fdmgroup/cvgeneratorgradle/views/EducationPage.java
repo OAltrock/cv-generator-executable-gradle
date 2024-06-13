@@ -88,7 +88,7 @@ public class EducationPage extends FDMPage implements HasAddableTextFields/*, Ha
         }
 
         education.getKeyModules().forEach(keyModule -> {
-            TextField textField = new TextField(keyModule);
+            TextArea textField = new TextArea(keyModule);
             textField.setId(keyModule);
             keyModules.add(textField);
         });

@@ -69,6 +69,7 @@ public class SummaryPage extends FDMPage {
     private void initialize() {
         profile.setText((cvTemplate.getProfile() != null) ? cvTemplate.getProfile() : "");
         profile.setWrapText(true);
+        profile.setId("profileTextArea");
 
         personalInformation.setMinHeight(130);
 

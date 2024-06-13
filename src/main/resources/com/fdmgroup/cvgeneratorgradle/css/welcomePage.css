@@ -169,8 +169,19 @@
 }
 
 .list-view {
-    -fx-min-height: 200px;
-    -fx-pref-height: 200px;
+    -fx-min-height: 400px;
+    -fx-pref-height: 400px;
     -fx-pref-width: 700px;
+}
+
+.text-area {
+    -fx-min-height: 100px;
+    -fx-pref-width: 700px;
+    -fx-pref-height: 200px;
+    -fx-wrap-text: true;
+}
+
+#profileTextArea {
+    -fx-min-height: 400px;
 }
 

@@ -47,7 +47,7 @@ public class ProfileController extends FDMController implements HasToggleableSav
         FDMCenterVBoxWrapper centerBox = page.getCenterBox();
         FDMButton saveBtn = page.getNext();
 
-        Predicate<String> atLeast50Chars = (string -> string.length() >= 50 && string.matches("^.*\\w+.*$"));
+        Predicate<String> atLeast50Chars = (string -> string.length() >= 50 && string.matches("^.*\\w+.*\\R*.*$"));
 
         addValidationToSaveButtons(textAreas, atLeast50Chars, saveBtn);
         textAreas.addListener(new InvalidationListener() {

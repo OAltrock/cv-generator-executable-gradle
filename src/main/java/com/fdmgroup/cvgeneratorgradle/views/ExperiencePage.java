@@ -83,7 +83,7 @@ public class ExperiencePage extends FDMPage implements HasAddableTextFields {
         dateWrapper.setDesign();
 
         experience.getPositionFeatures().forEach(positionFeature -> {
-            javafx.scene.control.TextField textField = new javafx.scene.control.TextField(positionFeature);
+            javafx.scene.control.TextArea textField = new javafx.scene.control.TextArea(positionFeature);
             textField.setId(positionFeature);
             keySkills.add(textField);
         });
