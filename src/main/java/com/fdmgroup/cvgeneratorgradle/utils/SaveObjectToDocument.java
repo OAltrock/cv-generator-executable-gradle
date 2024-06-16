@@ -27,6 +27,50 @@ import java.util.*;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+
+/**
+ * In English:
+ * This class (including the helper classes) contains the code for document creation (PDF, Docx).
+ * The creation of the docx file is initiated by the method: saveObjectAsWord(...), the PDF file is generated accordingly via saveObjectAsPDF(...).
+ * We used createDocument(...) as a kind of wrapper method that is called by the UI.
+ * It calls saveObjectAsWord(...) or saveObjectAsPdf(...) depending on the case and performs certain additional operations.
+
+ * The arguments [BorderPane main, TreeView<String> treeView, Stage stage, Menu recent, MainController mainController] are used to return a status message to the UI.
+ * Oliver Altrock can provide more detailed information.
+
+ *  Additional (hopefully useful) information
+ *  we first create a HashMap from the cvTemplate object (Helperclass.convertCVObjectToHashMap(...)) to avoid problems with the object structure later on.
+ *  In this method, we define unique placeholders for each variable that we take from the cvTemplate object.
+ *  If variables of the cvTemplate object are changed or added later, a change must also be made in this method.
+ *  New placeholders can be created and used in the docx template in this way.
+ *  The names of the placeholders follow the variable names in the cvTemplate object and are marked with {...}. indices in [..] are used for lists.
+ *  An example list is saved in resources/templates/placeholderExamples.txt.
+
+ *  The class utils/CVTemplateExampleValues was written for testing and debugging purposes.
+
+
+ * In German:
+ * Diese Klasse (einschließlich der helper Klassen) enthält den Code zu Dokumentenerstellung (PDF, Docx).
+ * Das erstellen der docx Datei wird initiiert durch die Methode: saveObjectAsWord(...), die PDF Datei wird entsprechnend generiert über saveObjectAsPDF(...).
+ * Wir benutzten createDocument(...) als eine Art wrapper Methode, die von der UI aufgerufen wird,
+ * je nach Fall saveObjectAsWord(...) oder saveObjectAsPdf(...) aufruft und gewisse zusatz Operationen durchführt.
+
+ * Die Argumente [BorderPane main, TreeView<String> treeView, Stage stage, Menu recent, MainController mainController] dienen dazu eine Statusmeldung an das UI zurückzugeben.
+ * genauere Information kann Oliver Altrock geben.
+
+ * Zusätzliche (hoffentlich nützliche) Informationen
+ * wir erzeugen zuerst eine HashMap aus dem cvTemplate Object (Helperclass.convertCVObjectToHashMap(...)) um spätere Probleme mit der Objektstrucktur zu vermeiden.
+ * Wir definieren in dieser Methode eindeutige Placeholder für jede Variable, die wir aus dem cvTemplate object nehmen.
+ * Sollten später Variablen des cvTemplate Objekts verändert oder hinzugefügt werden, muss auch eine Änderrung in dieser Methode erfolgen.
+ * Neue Placeholder können so erzeugt und im docx Template verwendet werden.
+ * Die Namen der Placeholder folgen den Varablennamen im cvTemplate Object und werden durch {...} markiert. für Listen werden indizes in  [..] verwendet.
+ * Eine Beispielliste ist in resources/templates/placeholderExamples.txt gepeichert.
+
+ * Zu test und debugging Zwecken wurde die Klasse utils/CVTemplateExampleValues geschrieben.
+ *
+ * @Author Thomas Elble, thomas.elble@fdmgroup.com
+ * @Version 1.0 (14th, June, 2024)
+ */
 public class SaveObjectToDocument {
 
     /**
@@ -70,22 +114,22 @@ public class SaveObjectToDocument {
         }
     }
 
-
-    public static void saveObjectAsWord(CVTemplate cvTemplate, BorderPane main) throws IOException {
+    // overloaded method, save docx file in home directory:
+    public static void saveObjectAsWord(CVTemplate cvTemplate) throws IOException {
         String documentsFolderPath = System.getProperty("user.home") + File.separator + "Documents" + File.separator + "CVgenerator";
         String outputPath = documentsFolderPath + File.separator + "CvAutoSave.docx";
-        saveObjectAsWord(cvTemplate, outputPath, main);
+        saveObjectAsWord(cvTemplate, outputPath);
     }
 
     /**
-     * Overloaded method call to save the CVTemplate object as a Word document to the specified output path.
+     * Overloaded method call to save the CVTemplate object as a Word (docx) document to the specified output path.
      *
      * @param cvTemplate The CVTemplate object containing the data to be populated in the Word document.
      * @param outputPath The path where the generated Word document should be saved.
      * @throws IOException If an I/O error occurs while saving the document.
      */
-    public static void saveObjectAsWord(CVTemplate cvTemplate, String outputPath, BorderPane main) throws IOException {
-        saveObjectAsWord(cvTemplate, outputPath, false, main);
+    public static void saveObjectAsWord(CVTemplate cvTemplate, String outputPath) throws IOException {
+        saveObjectAsWord(cvTemplate, outputPath, false,  new BorderPane());
     }
 
     /**
@@ -125,14 +169,6 @@ public class SaveObjectToDocument {
                 main.setCenter(container);
             }
         }
-
-        //System.out.println("saving word file under:");
-        //System.out.println(outputPath);
-
-        //String wordTemplatePath = "./src/main/resources/templates/fdm_cv_template_v1.docx";
-        /*String wordTemplatePath =
-             //   "./src/main/resources/com/fdmgroup/cvgeneratorgradle/templates/fdm_cv_template_test4.docx";
-                new File(Main.class.getResource("templates/fdm_cv_template_international_v1.docx").getPath()).getCanonicalPath();*/
 
         try {
             try (InputStream templateInputStream = Main.class
@@ -200,7 +236,6 @@ public class SaveObjectToDocument {
                     HelperClassDocxCreation.replaceNotFoundPlaceholders(document, replacementString);//change remaining placeholders to chosen string
                     //HelperClassDocxCreation.displayTableContent(document);
 
-
                     HelperClassDocxCreation.removeTablesWithNoData(document, replacementString);
                     HelperClassDocxCreation.removeParagraphsWithSearchStringFromTables(document, replacementString);
 
@@ -246,12 +281,12 @@ public class SaveObjectToDocument {
 
             //call helper methods:
             List<Integer> statusList = HelperClassDocxCreation.analyzeRuns(paragraph);
-            List<Boolean> runContainsPlaceholder = HelperClassDocxCreation.rearrangeRuns(paragraph, statusList);
+            List<Boolean> runContainsPlaceholder = HelperClassDocxCreation.rearrangeRuns(paragraph, statusList);//runContainsPlaceholder still contains wrong entries, so don't use it!!!!
 
             // for debugging: Check if the number of runs matches the size of runContainsPlaceholder
-            if (paragraph.getRuns().size() != runContainsPlaceholder.size()) {
-                throw new IllegalStateException("Mismatch between the number of runs and runContainsPlaceholder list.");
-            }
+            //if (paragraph.getRuns().size() != runContainsPlaceholder.size()) {
+            //    throw new IllegalStateException("Mismatch between the number of runs and runContainsPlaceholder list.");
+            //}
 
             // Iterate over the runs and replace placeholders if possible
             boolean alreadyShown = false;//We use this to display every warning only once and do not spam the console
@@ -263,18 +298,21 @@ public class SaveObjectToDocument {
                 }
 
                 //check for debugging purposes only:
-                if (!alreadyShown && !runContainsPlaceholder.get(i) && runText.contains("{")) {
-                    System.out.println();
-                    System.out.println("***********WRONG VALUE IN RUNCONTAINSPLACEHOLDER LIST!!!!!!!!**************");
-                    System.out.println("(Don't worry: the error is intercepted and has no effect!");
-                    HelperClassDocxCreation.printRunsWithIndex(paragraph);
-                    System.out.println("### " + runContainsPlaceholder);
-                    System.out.println();
-                    alreadyShown = true;
+                if (false) {//deactivated part
+                    if (!alreadyShown && !runContainsPlaceholder.get(i) && runText.contains("{")) {
+                        System.out.println();
+                        System.out.println("***********WRONG VALUE IN RUNCONTAINSPLACEHOLDER LIST!!!!!!!!**************");
+                        System.out.println("(Don't worry: the error is intercepted and has no effect!");
+                        HelperClassDocxCreation.printRunsWithIndex(paragraph);
+                        System.out.println("### " + runContainsPlaceholder);
+                        System.out.println();
+                        alreadyShown = true;
+                    }
                 }
 
                 //since the runContainsPlaceholder list contains wrong values, we just check the run text for brackets...
-                if (/*runContainsPlaceholder.get(i)*/ runText.contains("{") && runText.contains("}")) {
+                if (/*runContainsPlaceholder.get(i)){*/ runText.contains("{") && runText.contains("}")) {
+                    //find placeholder text in replacements HashMap
                     for (Map.Entry<String, String> entry : replacements.entrySet()) {
                         String key = entry.getKey();
                         if (runText.contains(key)) {
@@ -292,6 +330,11 @@ public class SaveObjectToDocument {
                 }
             }
         }
+    }
+
+    //overloaded method, where you don't have to give the UI Arguments for user notifications
+    public static void saveObjectAsPDF(CVTemplate cvTemplate, String outputPath) throws IOException {
+        saveObjectAsPDF(cvTemplate, outputPath,  new BorderPane(), new TreeView<>(), new Stage(), new Menu());
     }
 
     /**

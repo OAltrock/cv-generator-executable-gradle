@@ -87,21 +87,6 @@ public class HelperClass {
             }
 
         }
-/*
-        //Extract Stream Modules from HashSet in PersonalInfoControler:
-        {
-            HashSet<String> streamSkillSet = new HashSet<>();
-            if (obj.getStream().getStreamName().equalsIgnoreCase("technical")) {
-                streamSkillSet = PersonalInformationController.TECHNICAL;
-            } else if (obj.getStream().getStreamName().equalsIgnoreCase("business")) {
-                streamSkillSet = PersonalInformationController.BUSINESS;
-            }
-            int i = 0;
-            for (String skill : streamSkillSet) {
-                hashMap.put("{stream.Skills[" + i + "]}", skill);
-                i++;
-            }
-        }*/
 
         // Extract competences key skills
         if (obj.getFdmSkills() != null) {

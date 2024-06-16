@@ -1,0 +1,65 @@
+(for documentation only)
+**************************************
+**** Example Placeholder key List ****
+**************************************
+
+keys only get created if the corresponding data are available in the
+given cvTemplate object. We start with the index [0] (as java does it).
+The maximum index depends on the number of given values in the object
+If you want to change or add key to this list use the method utils/HelperClass.convertCVObjectToHashMap(CVTemplate obj).
+the method utils/HelperClass.printHashMap(Map<String, String> hashMap) can be used to print available Placeholders to the console.
+
+
+The List:
+
+{user.email}
+{languages[1].languageLevel}
+{educations[0].endDate}
+{educations[0].studyTitle}
+{location.locationName}
+{educations[0].universityPlace}
+{educations[0].keyModules[1]}
+{educations[0].degree}
+{certificates[0]}
+{stream.Skills[5]}
+{experiences[0].positionFeature[0]}
+{keySkills[0]}
+{stream.Skills[3]}
+{stream.startDate}
+{stream.Skills[1]}
+{educations[0].universityName}
+{keySkills[4]}
+{keySkills[2]}
+{achievements[2]}
+{achievements[0]}
+{stream.Skills[7]}
+{experiences[0].positionFeature[2]}
+{experiences[0].startDate}
+{educations[0].startDate}
+{languages[0].languageType}
+{profile}
+{experiences[0].jobTitle}
+{experiences[0].companyName}
+{stream.streamName}
+{educations[0].keyModules[2]}
+{educations[0].keyModules[0]}
+{languages[2].languageLevel}
+{experiences[0].description}
+{certificates[1]}
+{languages[0].languageLevel}
+{stream.endDate}
+{languages[2].languageType}
+{stream.Skills[4]}
+{experiences[0].positionFeature[1]}
+{stream.Skills[2]}
+{stream.Skills[0]}
+{keySkills[3]}
+{keySkills[1]}
+{experiences[0].endDate}
+{achievements[3]}
+{achievements[1]}
+{stream.Skills[6]}
+{languages[1].languageType}
+{user.lastName}
+{educations[0].thesisTitle}
+{user.firstName}
