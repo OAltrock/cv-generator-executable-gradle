@@ -41,7 +41,7 @@ import java.util.concurrent.TimeUnit;
  *  Additional (hopefully useful) information
  *  we first create a HashMap from the cvTemplate object (Helperclass.convertCVObjectToHashMap(...)) to avoid problems with the object structure later on.
  *  In this method, we define unique placeholders for each variable that we take from the cvTemplate object.
- *  If variables of the cvTemplate object are changed or added later, a change must also be made in this method.
+ *  If variables of the cvTemplate object are changed or added later (by the developer), a change must also be made in this method (Helperclass.convertCVObjectToHashMap(...)).
  *  New placeholders can be created and used in the docx template in this way.
  *  The names of the placeholders follow the variable names in the cvTemplate object and are marked with {...}. indices in [..] are used for lists.
  *  An example list is saved in resources/templates/placeholderExamples.txt.
